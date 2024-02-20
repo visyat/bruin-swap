@@ -1,6 +1,9 @@
+// import styles from 'globals.css';
+
 export default function Home() {
   return (
-    <p>next app</p>
-
+    <main className={ StyleSheet.main }>
+      Homepage
+    </main>
   );
 }
