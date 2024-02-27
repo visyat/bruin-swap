@@ -1,9 +1,12 @@
 import styles from './globals.css';
+import React from 'react';
 
-export default function Home() {
+const Home = () => {
   return (
     <main className={ styles.main }>
-      Homepage
+      Base
     </main>
   );
 }
+
+export default Home;

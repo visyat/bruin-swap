@@ -1,11 +1,11 @@
 import RootLayout from '../app/layout';
 
-const Account = () => {
+const Search = () => {
   return (
     <RootLayout>
-      <div>Account</div>
+      <div>Search</div>
     </RootLayout>
   )
 }
 
-export default Account;
+export default Search;

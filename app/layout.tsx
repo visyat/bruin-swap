@@ -1,22 +1,18 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from '../components/navbar/Navbar';
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Course Marketplace",
-  description: "Development version of course marketplace",
-};
 
 const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>): JSX.Element => (
-  <html lang="en">
-    <body className={inter.className}>{children}</body>
-  </html>
+  <div>
+      <Navbar />
+      {children}
+  </div>
 );
 
 export default RootLayout;

@@ -1,20 +1,19 @@
-import {
-    FluentProvider,
-    webLightTheme,
-    Button
-} from '@fluentui/react-components';
-import { Fabric } from '@fluentui/react';
+import { metadata } from '../constants/metadata'; 
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 
+const viewportContent: string | undefined = metadata.description !== null ? metadata.description : undefined;
+const pageTitle: string | undefined = typeof metadata.title === 'string' ? metadata.title : undefined;
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Fabric>
+    <>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{pageTitle}</title>
+        <meta name="viewport" content={viewportContent} />
         <title>Next.js + Fluent UI Example</title>
       </Head>
       <Component {...pageProps} />
-    </Fabric>
+    </>
   )
 }
