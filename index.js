@@ -16,9 +16,9 @@ app.get('/', (request, response) => {
     response.json({ info: 'Course Swapper' })
 })
 
-app.post('/transactions', db.getTransactions)
-app.put('/transactions/:id', db.getTransactionsByUser)
-app.delete('/classes/', db.getClasses)
+app.get('/transactions', db.getTransactions)
+app.get('/transactions/:id', db.getTransactionsByUser)
+app.get('/classes/', db.getClasses)
 
 
 app.listen(port, () => {
