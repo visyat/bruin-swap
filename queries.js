@@ -6,9 +6,10 @@ const pool = new Pool({
     port: 5432,
 })
 
-const getUserInfo = (request, response) => {
+const authentication = (request, response) => {
     const id = request.params.id
-    pool.query('SELECT * FROM users WHERE user_id=$1;', [id], (error, results) => {
+    const passwd = request.params.passwd
+    pool.query('SELECT * FROM users WHERE user_id=$1 AND passwd=$2;', [id, passwd], (error, results) => {
         if (error) {
             throw error
         }

@@ -16,7 +16,6 @@ app.get('/', (request, response) => {
     response.json({ info: 'Course Swapper' })
 })
 
-app.get('/users/:id', db.getUserInfo)
 app.post('/transactions', db.getTransactions)
 app.put('/transactions/:id', db.getTransactionsByUser)
 app.delete('/classes/', db.getClasses)
