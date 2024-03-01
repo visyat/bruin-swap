@@ -1,6 +1,6 @@
-# BruinSwap
+# Express (Node.js) Backend
 
-Idea: Forum to allow students to post classes that they intend to drop and to help coordinate class swaps with other students. 
+## Installation/Setup
 
 To download and test working queries, run the following commands: 
 
@@ -12,11 +12,12 @@ npm start
 ```
 Access the server on ```http:/localhost:3000/```
 
-Currently supports the following: 
 
-**GET Requests:**
+## Currently supports the following: 
 
-```/users``` - Provides list of all users' ID's and names (meant for user directories)
+### GET Requests:
+
+```/users``` - Provides a list of all users' IDs and names (meant for user directories)
 
 ```/check-user/:user_id``` - Determines whether a given user ID is valid; user exists in the DB
 
@@ -24,18 +25,18 @@ Currently supports the following:
 
 ```/login/:user_id/:passwd``` - Takes in user ID and password; meant for authentication (IN PROGRESS)
 
-```/transactions``` - Provides all active transactions (for main page)
+```/transactions``` - Provides all active transactions (for the main page)
 
 ```/transactions-by-user/:user_id``` - Provides all transactions posted by a specific user (for user profile)
 
 ```/transactions-by-tid/:transaction_id``` - Provides transaction information for a specific transaction ID (searching)
 
-```/classes``` - Provides list of all classes stored in DB
+```/classes``` - Provides a list of all classes stored in DB
 
 ```/classes/:course_code``` - Provides class information for a specific course code
 
 
-**POST Requests:**
+### POST Requests: 
 
 ```/users``` - Inserts new user into DB; Request Body: {user_id, user_name, passwd, year, email}
 
@@ -44,7 +45,7 @@ Currently supports the following:
 ```/transactions``` - Inserts new transaction; RB: {t_id, user_id, class_wanted, class_dropped}
 
 
-**PUT Requests:**
+### PUT Requests: 
 
 ```/users/:user_id``` - Updates information for a specific user; RB: {user_name, passwd, year_level, email}
 
@@ -55,7 +56,7 @@ Currently supports the following:
 ```/transactions/:transaction_id``` - Updates information for specific transaction; RB: {class_wanted, class_to_drop}
 
 
-**DELETE Requests:**
+### DELETE Requests: 
 
 ```/users/:user_id``` - Deletes a user (will delete all transactions they posted)
 
@@ -63,13 +64,15 @@ Currently supports the following:
 
 ```/transactions/:transaction_id``` - Deletes a transaction
 
+## Testing
 
-GET requests can be tested in the search browser directly. POST, PUT and DELETE requests can be tested with Postman (to insert request bodies). 
+GET requests can be tested in the search browser directly. POST, PUT, and DELETE requests can be tested with Postman (to insert request bodies). 
 
 Here is an example: 
 ![Postman Example](./postman_demo.png)
 
-Active TODO's: 
-1. Proper handling of invalid inputs (error messages), instead of crashing the server or returning empty set. 
+## TODO's
+
+1. Properly handle invalid inputs (error messages), instead of crashing the server or returning empty set. 
 2. Sanitize inputs (e.g. account for empty strings)
 3. Finish authentication (e.g. storing user_id in local cookie for repeated insertion into requests?)
