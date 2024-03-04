@@ -1,0 +1,54 @@
+.profileButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+}
+
+.profileButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
+
+.currentButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+    
+}
+.currentButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
+
+.wishlistButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+}
+.wishlistButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
+
+
+  
+  .divider {
+    border-left: 10px solid #FFD100;
+    height: 5000px;
+    position: fixed;
+    left: 12%;
+    top: 70px;
+  }
+
