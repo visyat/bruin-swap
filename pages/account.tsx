@@ -55,7 +55,17 @@ const Account = () => {
         </div>
       </div>
     );
-  } else {
+  } 
+
+  else if(output === 'Current Classes'){
+    content = (
+      <div className={styles.courseCard}>
+        <div className={styles.courseName}>HIST 11B</div>
+      </div>
+    );
+  }
+  
+  else {
     content = <div>No content selected</div>;
   }
 
