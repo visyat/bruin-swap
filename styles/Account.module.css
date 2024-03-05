@@ -13,6 +13,19 @@
     cursor: pointer;
 }
 
+.inputForm{
+    border-radius: 20px; 
+    padding: 3px; 
+    border: 10px solid #ccc; 
+    outline: #2774AE; 
+    color: black
+}
+.spacing{
+    margin-top: 10px
+}
+
+
+
 .currentButton{
     background-color: #2774AE;
     color: white;
@@ -42,13 +55,17 @@
     cursor: pointer;
 }
 
-
-  
-  .divider {
+.divider {
     border-left: 10px solid #FFD100;
-    height: 5000px;
-    position: fixed;
+    height: 700px;
+    position: absolute;
     left: 12%;
     top: 70px;
   }
+
+.outputContainer{
+    left: 15%;
+    position: absolute;
+    top: 80px;
+}
 
