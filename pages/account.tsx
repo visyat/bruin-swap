@@ -26,7 +26,7 @@ const Account = () => {
   let content;
   if (output === 'Profile Information') {
     content = (
-      <div>
+      <div id="wrapper">
         <h2>Profile Information</h2>
         <div>
           <label>Email: </label>
@@ -59,12 +59,36 @@ const Account = () => {
 
   else if(output === 'Current Classes'){
     content = (
-      <div className={styles.courseCard}>
-        <div className={styles.courseName}>HIST 11B</div>
+      <div className={styles.courseCard} id="wrapper">
+        <div className={styles.courseName}>HIST 1A</div>
+        <div className={styles.courseName}>Introduction to Western Civilization: Ancient Civilizations from Prehistory to Circa A.D. 843</div>
+        <div className={styles.professor}>
+          Professor:
+          <p>Adriana Vasquez</p>
+        </div>
+        <div>
+           <h1 className={styles.discussion}>Discussion Section: </h1>
+          <p className={styles.sectionHighlight}>1E</p>
+          </div>
       </div>
     );
   }
-  
+  else if (output === 'Wishlist Classes'){
+    content = (
+      <div className={styles.courseCard} id="wrapper">
+        <div className={styles.courseName}>HIST 1A</div>
+        <div className={styles.courseName}>Introduction to Western Civilization: Ancient Civilizations from Prehistory to Circa A.D. 843</div>
+        <div className={styles.professor}>
+          Professor:
+          <p>Adriana Vasquez</p>
+        </div>
+        <div>
+           <h1 className={styles.discussion}>Discussion Section: </h1>
+          <p className={styles.sectionHighlight}>1E</p>
+          </div>
+      </div>
+    );
+  }
   else {
     content = <div>No content selected</div>;
   }
@@ -72,7 +96,7 @@ const Account = () => {
 
   return (
     <RootLayout >
-      <div>
+      <div id="wrapper">
             <div>
                 <button className={styles.profileButton} onClick={() => handleButtonClick('Profile Information')}>Profile Information</button>
                 
