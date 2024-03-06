@@ -1,91 +1,67 @@
 import { useState } from 'react';
 import RootLayout from '../app/layout';
 import styles from '../styles/Account.module.css';
+import CourseCard from '../components/CourseCard';
+import ProfileForm from '../components/ProfileForm';
+import WishlistCourseCard from '../components/WishlistCourseCard';
 
 
 const Account = () => {
   const [output, setOutput] = useState('');
-  const [profileInfo, setProfileInfo] = useState({
-    email: '',
-    fullName: '',
-    major: '',
-    graduationYear: ''
-  });
+
+  
 
   const handleButtonClick = (text: string) => {
     setOutput(text);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
-    setProfileInfo(prevProfileInfo => ({
-      ...prevProfileInfo,
-      [fieldName]: event.target.value
-    }));
-  };
+
+  
 
   let content;
   if (output === 'Profile Information') {
     content = (
-      <div id="wrapper">
-        <h2>Profile Information</h2>
-        <div>
-          <label>Email: </label>
-          <input type="email" className={styles.inputForm} value={profileInfo.email}  
-          onChange={(e) => handleInputChange(e, 'email')} 
-          placeholder='Enter Email...'/>
-        </div>
-        <div className={styles.spacing}>
-          <label>Full Name: </label>
-          <input type="text" className={styles.inputForm} value={profileInfo.fullName}  
-          onChange={(e) => handleInputChange(e, 'fullName')} 
-          placeholder = 'Full Name...'/>
-         
-        </div>
-        <div className={styles.spacing}>
-          <label>Major: </label>
-          <input type="text" className={styles.inputForm} value={profileInfo.major} 
-          onChange={(e) => handleInputChange(e, 'major')} 
-          placeholder = 'Enter Major...' />
-        </div>
-        <div className={styles.spacing}> 
-          <label>Graduation Year: </label>
-          <input type="number" className={styles.inputForm} 
-          value={profileInfo.graduationYear} onChange={(e) => handleInputChange(e, 'graduationYear')}
-          placeholder = 'Enter Grad Year...' />
-        </div>
-      </div>
+        <ProfileForm></ProfileForm>
     );
   } 
 
+  
+
   else if(output === 'Current Classes'){
     content = (
-      <div className={styles.courseCard} id="wrapper">
-        <div className={styles.courseName}>HIST 1A</div>
-        <div className={styles.courseName}>Introduction to Western Civilization: Ancient Civilizations from Prehistory to Circa A.D. 843</div>
-        <div className={styles.professor}>
-          Professor:
-          <p>Adriana Vasquez</p>
-        </div>
-        <div>
-           <h1 className={styles.discussion}>Discussion Section: </h1>
-          <p className={styles.sectionHighlight}>1E</p>
-          </div>
+      <div>
+      <p>Current Classes</p>
+      <CourseCard
+                    courseName="CS 35L"
+                    description="Software Construction Laboratory"
+                    professor="Paul Eggert"
+                    discussionSection="1E"
+                />
+                <CourseCard
+                    courseName="MATH 101"
+                    description="Introduction to Calculus"
+                    professor="Jane Doe"
+                    discussionSection="2A"
+                />
       </div>
     );
   }
   else if (output === 'Wishlist Classes'){
     content = (
-      <div className={styles.courseCard} id="wrapper">
-        <div className={styles.courseName}>HIST 1A</div>
-        <div className={styles.courseName}>Introduction to Western Civilization: Ancient Civilizations from Prehistory to Circa A.D. 843</div>
-        <div className={styles.professor}>
-          Professor:
-          <p>Adriana Vasquez</p>
-        </div>
-        <div>
-           <h1 className={styles.discussion}>Discussion Section: </h1>
-          <p className={styles.sectionHighlight}>1E</p>
-          </div>
+      <div>
+        <p>Wishlist Classes</p>
+        <WishlistCourseCard
+                    courseName="CS 35L"
+                    description="Software Construction Laboratory"
+                    professor="Paul Eggert"
+                    discussionSection="1E"
+                />
+                <WishlistCourseCard
+                    courseName="MATH 101"
+                    description="Introduction to Calculus"
+                    professor="Jane Doe"
+                    discussionSection="2A"
+                />
       </div>
     );
   }
@@ -111,7 +87,7 @@ const Account = () => {
             </div>
 
             <div>
-                <span className={styles.divider}></span>
+                <span className={`{styles.divider} ${styles.flexContainer}`}></span>
             </div>
 
             <div>

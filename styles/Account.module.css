@@ -52,6 +52,7 @@
     position: absolute;
     height: auto;
     width: 500px;
+    
 }
 .courseName{
     display: inline-block;
@@ -61,19 +62,22 @@
     font-size: 13px;
     background-color: #2774AE;
     border-radius: 4px;
-    margin-top: 5px; 
+    margin-top: 5px;
+    position: absolute;
+    
 }
 .discussion{
-    right: 10px;
+    position: right;
     color: black;
-    font: bold;
 }
 .sectionHighlight{
-    display: inline-block;
     background-color: #FFD100;
     color: black;
+    display: inline-block;
+   
 }
 .professor{
+    position: left;
     color: black;
 }
 
@@ -94,7 +98,7 @@
 
 .divider {
     border-left: 10px solid #FFD100;
-    height: 700px;
+    height: auto;
     position: absolute;
     left: 180px; /* Adjust as needed based on container layout */
     top: 70px; /* Adjust as needed based on container layout */
