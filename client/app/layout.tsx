@@ -6,17 +6,17 @@ import Footer from '../components/Footer';
 const inter = Inter({ subsets: ['latin'] });
 
 const RootLayout = ({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>): JSX.Element => (
-  <div>
-      <div className="content">
-        <Navbar />
-        {children}
-        <Footer />
-      </div>
-  </div>
+	<div>
+		<div className='content'>
+			<Navbar />
+			{children}
+			<Footer />
+		</div>
+	</div>
 );
 
 export default RootLayout;

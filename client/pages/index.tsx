@@ -1,11 +1,18 @@
-import { Button } from '@fluentui/react';
+import { Button } from '@fluentui/react-components';
 
 const Page = () => {
-  return (
-      <div>
-            <Button color="primary">Click me!</Button>
-      </div>
-  )
-}
+	return (
+		<div>
+			<h1>Hello, Fluent UI!</h1>
+			<Button
+				onClick={() => {
+					alert('clicked');
+				}}
+			>
+				Click me
+			</Button>
+		</div>
+	);
+};
 
 export default Page;
