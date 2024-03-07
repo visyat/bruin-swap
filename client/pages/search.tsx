@@ -1,10 +1,10 @@
-import RootLayout from '../app/layout';
+import styles from '../app/globals.css' ;
 
 const Search = () => {
   return (
-    <RootLayout>
-      <div>Search</div>
-    </RootLayout>
+      <main className={ styles.main }>
+        Search
+      </main>
   )
 }
 

@@ -38,6 +38,12 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    min-height: 100vh;
+}
+
+.content {
+  display:flex;
+  flex-direction: column;
 }
 
 @layer utilities {
