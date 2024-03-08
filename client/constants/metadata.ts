@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "BruinSwap",
-    description: "Development version of BruinSwap",
+	title: 'BruinSwap',
+	description: 'Development version of BruinSwap',
 };
