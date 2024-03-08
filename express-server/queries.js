@@ -1,6 +1,7 @@
-const Pool = require('pg').Pool
-var crypto = require('crypto')
-var shasum = crypto.createHash('sha1')
+import pkg from 'pg';
+import crypto from 'crypto';
+const { Pool } = pkg;
+// var shasum = crypto.createHash('sha1')
 
 const pool = new Pool({
     user: 'vishalyathish',
@@ -194,7 +195,7 @@ const deleteTransaction = (request, response) => {
     })
 }
 
-module.exports = {
+export {
     //GET Requests
     getAllUsers,
     checkValidUser, 
