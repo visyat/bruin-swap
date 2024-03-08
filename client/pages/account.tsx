@@ -1,11 +1,5 @@
-import RootLayout from '../app/layout';
-
 const Account = () => {
-  return (
-    <RootLayout>
-      <div>Account</div>
-    </RootLayout>
-  )
-}
+	return <div>Account</div>;
+};
 
 export default Account;
