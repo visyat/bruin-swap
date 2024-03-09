@@ -12,10 +12,10 @@ import {
 	Theme,
 } from '@fluentui/react-components';
 import { ArrowSwapFilled } from '@fluentui/react-icons';
-import { IListing } from '@/.next/types/listing';
+import { IListing } from '../types/listing';
 import { useRouter } from 'next/router';
 import { createContext, useContext, useState } from 'react';
-import { ListingProvider } from '@/.next/context/listingContext';
+import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	card: {

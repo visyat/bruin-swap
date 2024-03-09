@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { IListing } from '@/.next/types/listing';
+import { IListing } from '../../types/listing';
 import { LISTINGS } from '../../constants/temp_data';
 import { useEffect, useState } from 'react';
 import {
@@ -12,6 +12,7 @@ import {
     LargeTitle,
 } from '@fluentui/react-components';
 import { tokens } from '@fluentui/react-theme';
+import React from 'react'; // TODO: get rid of this line
 
 const useStyles = makeStyles({
     container: {
