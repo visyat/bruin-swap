@@ -3,8 +3,8 @@ import { OpenCardMode } from '@fluentui/react';
 import ClassCard from '../../components/classcard';
 import { LISTINGS } from '../../constants/temp_data';
 import { useRouter } from 'next/router';
-import { IListing } from '@/.next/types/listing';
-import { ListingProvider } from '@/.next/context/listingContext';
+import { IListing } from '../../types/listing';
+import React from 'react';
 
 const useStyles = makeStyles({
 	searchTitle: {
@@ -40,20 +40,18 @@ const Search = () => {
 	const styles = useStyles();
 
 	return (
-		<ListingProvider>
-			<div>
-				<div className={styles.searchTitle}>
-					<h1>Listings</h1>
-				</div>
-				<div className={styles.classes}>
-					{LISTINGS.map((listing: IListing) => (
-						<div className={styles.card} key={listing.transaction_id}>
-							<ClassCard data={listing} />
-						</div>
-					))}
-				</div>
+		<div>
+			<div className={styles.searchTitle}>
+				<h1>Listings</h1>
 			</div>
-		</ListingProvider>
+			<div className={styles.classes}>
+				{LISTINGS.map((listing: IListing) => (
+					<div className={styles.card} key={listing.transaction_id}>
+						<ClassCard data={listing} />
+					</div>
+				))}
+			</div>
+		</div>
 	);
 };
 
