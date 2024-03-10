@@ -1,16 +1,9 @@
-import { makeStyles, shorthands } from "@fluentui/react-components";
+import { makeStyles, shorthands } from '@fluentui/react-components';
 import { OpenCardMode } from '@fluentui/react';
-import ClassCard from '../components/classcard';
-import { CLASSES } from '../constants/temp_data';
-
-interface Class {
-    id: number;
-    classDept: string;
-    classNum: string;
-    classTitle: string
-    instructor: string;
-    lecture: string;
-};
+import ClassCard from '../../components/classcard';
+import { LISTINGS } from '../../constants/temp_data';
+import { useRouter } from 'next/router';
+import { IListing } from '../../types/listing';
 
 const useStyles = makeStyles({
 	searchTitle: {
@@ -18,17 +11,19 @@ const useStyles = makeStyles({
 		marginBottom: '10px',
 		textAlign: 'center',
 		fontSize: '30px',
-	}, classes: {
+	},
+	classes: {
 		width: '100%',
 		height: '100%',
 		marginLeft: '0 auto',
 		marginRight: '0 auto',
 		display: 'grid',
 		gridTemplateColumns: '2fr 2fr 2fr',
-		placeItems: 'center',
+		// placeItems: 'center',
 		alignItems: 'center',
 		gridGap: '100px',
-	}, card: {
+	},
+	card: {
 		cursor: 'pointer',
 		width: '100%',
 		minHeight: '100px',
@@ -37,7 +32,7 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-	}
+	},
 });
 
 const Search = () => {
@@ -46,17 +41,17 @@ const Search = () => {
 	return (
 		<div>
 			<div className={styles.searchTitle}>
-				<h1>Results</h1>
+				<h1>Listings</h1>
 			</div>
 			<div className={styles.classes}>
-				{CLASSES.map((listing: Class) => (
-					<div className={styles.card} key={listing.id}>
-						<ClassCard data={listing}/>
+				{LISTINGS.map((listing: IListing) => (
+					<div className={styles.card} key={listing.transaction_id}>
+						<ClassCard data={listing} />
 					</div>
 				))}
 			</div>
 		</div>
-	)
+	);
 };
 
 export default Search;
