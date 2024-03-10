@@ -4,10 +4,14 @@ const { Pool } = pkg;
 // var shasum = crypto.createHash('sha1')
 
 const pool = new Pool({
-    user: 'vishalyathish',
-    host: '127.0.0.1',
-    database: 'class_swaps',
-    port: 5432,
+    host: 'cs35l-course-swaps.czme8i86mreh.us-east-2.rds.amazonaws.com',
+    user: 'postgres',
+    password: 'comsci35lpassword', 
+    database: 'courseswaps', 
+    port: '5432',
+    ssl: {
+        rejectUnauthorized: false
+    }
 })
 
 //GET Requests
