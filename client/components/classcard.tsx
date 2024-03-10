@@ -16,7 +16,7 @@ import { IListing } from '../types/listing';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
 	card: {
 		// fill div
 		...shorthands.margin('auto'),
@@ -26,44 +26,35 @@ const useStyles = makeStyles((theme: Theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between', // ensure even footer
-		// backgroundColor: theme.colorNeutralBackground1,
-	},
-	details: {
+	}, details: {
 		// department, number, title, instructor
 		display: 'flex',
 		flexDirection: 'column',
-	},
-	header: {
+	}, header: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		flexGrow: 0,
-	},
-	preview: {
+	}, preview: {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		// padding: '10px',
 		flexGrow: 0,
-	},
-	footer: {
+	}, footer: {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		// padding: '10px',
 		flexGrow: 0,
-	},
-	swap: {
-		backgroundColor: 'transparent',
-		...shorthands.border('2px', 'solid', 'rgb(19, 19, 19)'),
+	}, swap: {
 		minWidth: '100px',
 		paddingLeft: '10px',
 		paddingRight: '10px',
 		paddingTop: '5px',
 		paddingBottom: '5px',
-		// borderRadius: '15px',
 	},
-}));  
+});  
 
 interface CardProps {
 	data: IListing;
@@ -76,7 +67,7 @@ const cardTokens = {
 
 const ClassCard: React.FC<CardProps> = ({ data }) => {
 	const { transaction_id, classDept, classNum, classTitle, instructor, lecture } = data;
-	const [transaction, setTransaction] = useState(null);
+	// const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
 	const styles = useStyles();
 
