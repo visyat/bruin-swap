@@ -1,17 +1,16 @@
 import { AppProps } from 'next/app';
 import '../app/globals.css'; // Or wherever your global styles are located
 import RootLayout from '../app/layout';
-import { Theme, FluentProvider, teamsLightTheme } from '@fluentui/react-components';
-import React from 'react';
+import { Theme, FluentProvider, webLightTheme } from '@fluentui/react-components';
 
 const customLightTheme: Theme = {
-	...teamsLightTheme,
+	...webLightTheme,
 	// borderRadius
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<FluentProvider theme={teamsLightTheme}>
+		<FluentProvider theme={customLightTheme}>
 			<RootLayout>
 				<Component {...pageProps} />
 			</RootLayout>

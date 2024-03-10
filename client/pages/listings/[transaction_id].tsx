@@ -7,35 +7,62 @@ import {
 	shorthands,
 	Body1,
 	Caption1,
+    Divider,
 	ToggleButton,
     Theme,
+    Title1,
     LargeTitle,
+    Display,
 } from '@fluentui/react-components';
 import { tokens } from '@fluentui/react-theme';
-import React from 'react'; // TODO: get rid of this line
 
 const useStyles = makeStyles({
     container: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        rowGap: '5px,'
     }, courseName: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         marginTop: tokens.spacingVerticalXL,
         marginBottom: tokens.spacingVerticalXL,
     }, contents: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         width: '100%',
         maxWidth: '100%',
         minWidth: '100%',
     }, left: {
-        flex: 1,
-        marginRight: tokens.spacingHorizontalS,
+        display: 'flex',
+        flexBasis: 0,
+        flexGrow: 20,
+        flexDirection: 'column',
+        textAlign: 'right',
+        alignItems: 'flex-end',
+        ...shorthands.flex('1'),
+        marginRight: tokens.spacingHorizontalL,
         ...shorthands.padding(tokens.spacingHorizontalM),
     }, right: {
-        flex: 1,
-        marginLeft: tokens.spacingHorizontalS,
+        display: 'flex',
+        flexBasis: 0,
+        flexGrow: 20,
+        flexDirection: 'column',
+        ...shorthands.flex('1'),
+        marginLeft: tokens.spacingHorizontalL,
         ...shorthands.padding(tokens.spacingHorizontalM),
+    }, divider: {
+        flexGrow: 1,
+        alignSelf: 'stretch',
+        marginLeft: 0,
+        marginRight: 0,
+    }, buttonContainer: {
+        display: 'flex',
+        flexBasis: 0,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
     }, button: {
         marginTop: tokens.spacingHorizontalM,
     },
@@ -88,13 +115,15 @@ const ListingPage = () => {
         return <div>Listing not found</div>
     }
 
-    const titleString = `${listing.classDept} ${listing.classNum} - ${listing.classTitle}`
+    const classCodeString = `${listing.classDept} ${listing.classNum}`
+    const classNameString = `${listing.classTitle}`
     const classesWanted = listing.classWanted.map((name, i) => (
         <ToggleButton 
             className={styles.button} 
             key={i} 
-            appearance="outline" 
+            appearance="subtle" 
             shape="circular"
+            size="large"
             onClick={() => setSelectedClassIndex(i)}
             checked={selectedClassIndex === i}
         >
@@ -105,20 +134,27 @@ const ListingPage = () => {
     return (
         <div className={styles.container}>
             <div className={styles.courseName}>
-                <LargeTitle>{titleString}</LargeTitle>
+                <Display>{classCodeString}</Display>
+                <LargeTitle>{classNameString}</LargeTitle>
             </div>
-            <div className={styles.left}>
-                <Body1>{`Instructor: ${listing.instructor}\n`}</Body1>
-                <Body1>{`Section: ${listing.lecture}`}</Body1>
-            </div>
-            <div className={styles.right}>
-                <Body1>In exchange for:</Body1>
-                {classesWanted}
+            <div className={styles.contents}>
+                <div className={styles.left}>
+                    <Body1>{`Instructor: ${listing.instructor}\n`}</Body1>
+                    <Body1>{`Section: ${listing.lecture}`}</Body1>
+                </div>
+                <div>
+                    <Divider vertical style={{ height: "100%" }} />
+                </div>
+                <div className={styles.right}>
+                    <Body1>The class holder wants to swap for one of the following classes:</Body1>
+                    <div className={styles.buttonContainer}>
+                        {classesWanted}
+                    </div>
+                </div>
             </div>
         </div>
     );
 
-    return<div>Listing {transaction_id}: {JSON.stringify(listing)}</div>
 };
 
 export default ListingPage;

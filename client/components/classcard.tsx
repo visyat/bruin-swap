@@ -14,8 +14,7 @@ import {
 import { ArrowSwapFilled } from '@fluentui/react-icons';
 import { IListing } from '../types/listing';
 import { useRouter } from 'next/router';
-import { createContext, useContext, useState } from 'react';
-import React from 'react';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
 	card: {
@@ -80,12 +79,10 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 	const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
 	const styles = useStyles();
-	const listing = createContext(data);
 
 	const handleSwapClick = () => router.push(`${transaction_id}`);
 
 	return (
-		// <ListingContext.Provider value={{ transaction, setTransaction }}>
 			<Card className={styles.card} appearance='filled' as='div' size='small'>
 				<CardHeader
 					className={styles.header}
@@ -115,7 +112,6 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 					<Caption1>Lecture: {lecture}</Caption1>
 				</CardFooter>
 			</Card>
-		// </ListingContext.Provider>
 	);
 };
 
