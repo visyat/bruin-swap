@@ -12,30 +12,24 @@ CREATE TABLE users (
     user_name       varchar(50), 
     passwd          varchar(40), --for authentication
     year_level      decimal(1,0), 
-    email           varchar(50),
-
-    --currently enrolled courses (limit to 7)
-    course_1        varchar(9) REFERENCES classes(section_code),
-    course_2        varchar(9) REFERENCES classes(section_code),
-    course_3        varchar(9) REFERENCES classes(section_code),
-    course_4        varchar(9) REFERENCES classes(section_code),
-    course_5        varchar(9) REFERENCES classes(section_code),
-    course_6        varchar(9) REFERENCES classes(section_code),
-    course_7        varchar(9) REFERENCES classes(section_code),
-
-    -- class wishlist (limit to 5)
-    wish_1          varchar(9) REFERENCES classes(section_code), 
-    wish_2          varchar(9) REFERENCES classes(section_code),
-    wish_3          varchar(9) REFERENCES classes(section_code),
-    wish_4          varchar(9) REFERENCES classes(section_code),
-    wish_5          varchar(9) REFERENCES classes(section_code)
+    email           varchar(50)
 );
 
 CREATE TABLE active_transactions (
     transaction_id  smallint PRIMARY KEY, 
-    user_id         varchar(15) REFERENCES users(user_id), 
-    class_wanted    varchar (9) REFERENCES classes(section_code),
-    class_to_drop   varchar (9) REFERENCES classes(section_code)
+    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE, 
+    class_wanted    varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE,
+    class_to_drop   varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE
+);
+
+CREATE TABLE wishlist (
+    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE, 
+    section_code    varchar(9) REFERENCES classes(section_code) ON DELETE CASCADE
+);
+
+CREATE TABLE currently_enrolled (
+    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE,
+    section_code    varchar(9) REFERENCES classes(section_code) ON DELETE CASCADE
 );
 
 -- test code for insertion and updating
