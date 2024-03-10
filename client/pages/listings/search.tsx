@@ -4,7 +4,6 @@ import ClassCard from '../../components/classcard';
 import { LISTINGS } from '../../constants/temp_data';
 import { useRouter } from 'next/router';
 import { IListing } from '../../types/listing';
-import React from 'react';
 
 const useStyles = makeStyles({
 	searchTitle: {
