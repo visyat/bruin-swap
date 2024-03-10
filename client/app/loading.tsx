@@ -1,6 +1,6 @@
 // TODO: add suspense
-// const Loading = () => {
-//     return <LoadingSkeleton />
-// }
+const Loading = () => {
+    return <div>Loading...</div>
+}
 
-// export default Loading;
+export default Loading;
