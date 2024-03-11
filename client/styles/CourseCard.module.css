@@ -1,0 +1,100 @@
+.currentButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+    display: flex;
+    
+}
+.currentButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
+.deleteButton:hover{
+    background-color: red;
+    cursor: pointer;
+}
+
+.courseCard {
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    padding: 22px;
+    justify-content: space-between;
+    font-family: "Muli",sans-serif;
+    background: #ffffffff;
+    border-radius: 8px;
+    box-shadow: 4px 4px 20px #0000001a;
+    flex-direction: column;
+}
+.flexContainer{
+    display: flex;
+    width: 100%;
+}
+.content{
+    justify-content: space-between;
+    align-items: center;
+}
+.courseName{
+    display: inline-block;
+    padding: 1px 5px;
+    color: #ffffffff;
+    font-weight: bold;
+    font-size: 13px;
+    background-color: #2774AE;
+    border-radius: 4px;
+    margin-top: 5px;
+    position: static;
+    
+}
+.discussion{
+    display: inline-block;
+    padding: 1px 5px;
+    color: black;
+    font-weight: bold;
+    font-size: 13px;
+    background-color: #FFD100;
+    border-radius: 4px;
+    margin-top: 5px;
+    position: static;
+
+}
+.sectionHighlight{
+    display: inline-block;
+    padding: 1px 5px;
+    color: black;
+    font-weight: bold;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-top: 5px;
+    position: static;
+   
+}
+.professor{
+    display: inline-block;
+    padding: 1px 5px;
+    color: black;
+    font-weight: bold;
+    font-size: 13px;
+    background-color: #FFD100;
+    border-radius: 4px;
+    margin-top: 5px;
+    position: static;
+}
+
+.wishlistButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+    display: flex;
+}
+.wishlistButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
