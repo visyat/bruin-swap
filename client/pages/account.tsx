@@ -1,22 +1,16 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import RootLayout from '../app/layout';
 import styles from '../styles/Account.module.css';
-import CourseCard from '../components/CourseCardAccount';
+import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
-import WishlistCourseCard from '../components/WishlistCourseCard';
+import ClassCardWishlist from '../components/ClassCardWishlist';
 
 const Account = () => {
 	const [output, setOutput] = useState('');
   
-	
-  
 	const handleButtonClick = (text: string) => {
 	  setOutput(text);
 	};
-  
-  
-	
   
 	let content;
 	if (output === 'Profile Information') {
@@ -30,43 +24,54 @@ const Account = () => {
 	  );
 	} 
   
-	
-  
 	else if(output === 'Current Classes'){
 	  content = (
 		<div>
 		<p>Current Classes</p>
-		<CourseCard
-					  courseName="CS 35L"
-					  description="Software Construction Laboratory"
-					  professor="Paul Eggert"
-					  discussionSection="1E"
-				  />
-				  <CourseCard
-					  courseName="MATH 101"
-					  description="Introduction to Calculus"
-					  professor="Jane Doe"
-					  discussionSection="2A"
-				  />
+			<ClassCardAccount
+				data={{
+					classDept: 'COM SCI',
+					classNum: '35L',
+					classTitle: 'Software Construction Labroatory',
+					instructor: 'Eggert, P.',
+					lecture: '3A',
+				}}
+			/>
+			<ClassCardAccount
+				data={{
+					classDept: 'COM SCI',
+					classNum: '32',
+					classTitle: 'Intro to CS II',
+					instructor: 'Eggert, P.',
+					lecture: '3A',
+				}}
+			/>
 		</div>
 	  );
 	}
+
 	else if (output === 'Wishlist Classes'){
 	  content = (
 		<div>
-		  <p>Wishlist Classes</p>
-		  <WishlistCourseCard
-					  courseName="CS 35L"
-					  description="Software Construction Laboratory"
-					  professor="Paul Eggert"
-					  discussionSection="1E"
-				  />
-				  <WishlistCourseCard
-					  courseName="MATH 101"
-					  description="Introduction to Calculus"
-					  professor="Jane Doe"
-					  discussionSection="2A"
-				  />
+		  	<p>Wishlist Classes</p>
+		  	<ClassCardWishlist
+				data={{
+					classDept: 'COM SCI',
+					classNum: '260B',
+					classTitle: 'Algorithmic Machine Learning',
+					instructor: 'Eggert, P.',
+					lecture: '3A',
+				}}
+			/>	
+			<ClassCardWishlist
+			  data={{
+				  classDept: 'COM SCI',
+				  classNum: '260C',
+				  classTitle: 'Algorithmic Machine Learning',
+				  instructor: 'Eggert, P.',
+				  lecture: '3A',
+			  }}
+		  />	
 		</div>
 	  );
 	}
@@ -76,7 +81,6 @@ const Account = () => {
   
   
 	return (
-	  <RootLayout >
 		<div id="wrapper">
 			  <div>
 				  <button className={styles.profileButton} onClick={() => handleButtonClick('Profile Information')}>Profile Information</button>
@@ -92,14 +96,13 @@ const Account = () => {
 			  </div>
   
 			  <div>
-				  <span className={`{styles.divider} ${styles.flexContainer}`}></span>
+				  <span className={[styles.divider, styles.flexContainer]}></span>
 			  </div>
   
 			  <div>
 				  <span className={styles.outputContainer}>{content}</span>
 			  </div>
 		  </div>
-	  </RootLayout>
 	)
   }
   

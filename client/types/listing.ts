@@ -8,3 +8,11 @@ export interface IListing {
     instructor: string,
     lecture: string,
 }
+
+export interface IClass {
+    classDept: string,
+    classNum: string,
+    classTitle: string,
+    instructor: string,
+    lecture: string,
+}

@@ -79,7 +79,7 @@ const ListingPage = () => {
     const styles = useStyles();
     const [isLoading, setIsLoading] = useState(true);
     const [listing, setListing] = useState<IListing | null>(null);
-    const [selectedClassIndex, setSelectedClassIndex] = useState(null);
+    const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(null);
     const [selectedClassNotFound, setSelectedClassNotFound] = useState(false);
     const { transaction_id } = router.query;
     var transaction_id_num = -1;
