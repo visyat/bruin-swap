@@ -192,50 +192,85 @@ const addNewClass = (request, response) => {
     const { section_code, department, course_num, course_name, professor, disc_section } = request.body
 
     if (section_code === null || section_code === undefined || section_code === '') {
-        response.status(400).json({msg: `INVALID USER ID: ${section_code}`});
+        response.status(400).json({msg: `INVALID SECTION CODE: ${section_code}`});
     } 
     else if (department === null || department === undefined || department === '') {
-        response.status(400).json({msg: `INVALID USER NAME: ${department}`});
+        response.status(400).json({msg: `INVALID DEPARTMENT NAME: ${department}`});
     }
     else if (course_num === null || course_num === undefined || course_num === '') {
-        response.status(400).json({msg: `INVALID PASSWORD: ${course_num}`});
+        response.status(400).json({msg: `INVALID COURSE NUMBER: ${course_num}`});
     }
     else if (course_name === null || course_name === undefined || course_name === '') {
-        response.status(400).json({msg: `INVALID YEAR: ${course_name}`});
+        response.status(400).json({msg: `INVALID COURSE NAME: ${course_name}`});
     }
     else if (professor === null || professor === undefined || professor === '') {
-        response.status(400).json({msg: `INVALID USER EMAIL: ${professor}`});
+        response.status(400).json({msg: `INVALID USER PROFESSOR NAME: ${professor}`});
     } 
     else if (disc_section === null || disc_section === undefined || disc_section === '') {
-        response.status(400).json({msg: `INVALID USER EMAIL: ${disc_section}`});
+        response.status(400).json({msg: `INVALID USER DISCUSSION SECTION: ${disc_section}`});
+    } 
+    else {
+        pool.query('INSERT INTO classes VALUES ($1, $2, $3, $4, $5, $6);', [section_code, department, course_num, course_name, professor, disc_section], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `CLASS INSERT SUCCESSFUL: ${section_code}`});
+        })
     }
-    pool.query('INSERT INTO classes VALUES ($1, $2, $3, $4, $5, $6);', [section_code, department, course_num, course_name, professor, disc_section], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `CLASS INSERT SUCCESSFUL: ${section_code}`});
-    })
+    
 }
 const addNewTransaction = (request, response) => {
-    const {t_id, user_jwt, class_wanted, class_dropped} = request.body
-    pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
-    })
+    const {t_id, user_jwt, class_wanted, class_dropped} = request.body 
+
+    if (t_id === null || t_id === undefined || t_id === '') {
+        response.status(400).json({msg: `INVALID TRANSACTION ID: ${t_id}`});
+    } 
+    else if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT TOKEN: ${user_jwt}`});
+    }
+    else if (class_wanted === null || class_wanted === undefined || class_wanted === '') {
+        response.status(400).json({msg: `INVALID CLASS WANTED: ${class_wanted}`});
+    }
+    else if (class_dropped === null || class_dropped === undefined || class_dropped === '') {
+        response.status(400).json({msg: `INVALID CLASS DROP: ${class_dropped}`});
+    }
+    else {
+        pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
+        })
+    }
+    
 }
 const addNewWishlistEntry = (request, response) => {
     const {user_jwt, class_wished} = request.body
-    pool.query('INSERT INTO wishlist VALUES ($1, $2);' [user_jwt, class_wished], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `WISHLIST INSERT SUCCESSFUL`})
-    })
+
+    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT TOKEN: ${user_jwt}`});
+    } 
+    else if (class_wished === null || class_wished === undefined || class_wished === '') {
+        response.status(400).json({msg: `INVALID CLASS WISH: ${class_wished}`});
+    }
+    else {
+        pool.query('INSERT INTO wishlist VALUES ($1, $2);' [user_jwt, class_wished], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `WISHLIST INSERT SUCCESSFUL`})
+        })
+    }
 }
 const addNewEnrollmentEntry = (request, response) => {
     const {user_jwt, class_enrolled} = request.body
+
+    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT TOKEN: ${user_jwt}`});
+    } 
+    else if (class_enrolled === null || class_enrolled === undefined || class_enrolled === '') {
+        response.status(400).json({msg: `INVALID CLASS ENROLLED: ${class_enrolled}`});
+    }
     pool.query('INSERT INTO enrollments VALUES ($1, $2);' [user_jwt, class_enrolled], (error, results) => {
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
