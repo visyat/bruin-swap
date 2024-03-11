@@ -8,27 +8,28 @@ CREATE TABLE classes (
 );
 
 CREATE TABLE users (
-    user_id         varchar(15) PRIMARY KEY, 
+    user_jwt        varchar(256) PRIMARY KEY, 
+    user_id         varchar(15) UNIQUE, 
     user_name       varchar(50), 
     passwd          varchar(40), --for authentication
     year_level      decimal(1,0), 
-    email           varchar(50)
+    email           varchar(50) UNIQUE
 );
 
 CREATE TABLE active_transactions (
     transaction_id  smallint PRIMARY KEY, 
-    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE, 
+    user_jwt         varchar(15) REFERENCES users(user_jwt) ON DELETE CASCADE, 
     class_wanted    varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE,
     class_to_drop   varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE
 );
 
 CREATE TABLE wishlist (
-    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE, 
+    user_jwt         varchar(15) REFERENCES users(user_jwt) ON DELETE CASCADE, 
     section_code    varchar(9) REFERENCES classes(section_code) ON DELETE CASCADE
 );
 
-CREATE TABLE currently_enrolled (
-    user_id         varchar(15) REFERENCES users(user_id) ON DELETE CASCADE,
+CREATE TABLE enrollments (
+    user_jwt         varchar(15) REFERENCES users(user_jwt) ON DELETE CASCADE,
     section_code    varchar(9) REFERENCES classes(section_code) ON DELETE CASCADE
 );
 
