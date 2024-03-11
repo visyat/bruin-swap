@@ -174,8 +174,8 @@ const addNewWishlistEntry = (request, response) => {
     })
 }
 const addNewEnrollmentEntry = (request, response) => {
-    const {user_id, class_wished} = request.body
-    pool.query('INSERT INTO currently_enrolled VALUES ($1, $2);' [user_id, class_wished], (error, results) => {
+    const {user_id, class_enrolled} = request.body
+    pool.query('INSERT INTO currently_enrolled VALUES ($1, $2);' [user_id, class_enrolled], (error, results) => {
         if (error) {
             throw error
         }
