@@ -1,6 +1,6 @@
 import pkg from 'pg';
-import crypto from 'crypto';
 const { Pool } = pkg;
+import crypto from 'crypto';
 // var shasum = crypto.createHash('sha1')
 
 const pool = new Pool({
