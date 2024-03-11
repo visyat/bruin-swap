@@ -131,7 +131,7 @@ const getAllClasses = (request, response) => {
     })
 }
 const getClassesBySC = (request, response) => {
-    const section_code = request.params.course_code
+    const section_code = request.params.section_code
     pool.query('SELECT * FROM classes WHERE section_code=$1;', [section_code], (error,results) => {
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
@@ -162,18 +162,53 @@ const getEnrollmentsByUser = (request, response) => {
 const addNewUser = (request, response) => {
     const { user_id, user_name, passwd, year, email } = request.body
 
-    var secret_key = 'secret-key'
-    const token = jwt.sign({ userID: user_id }, secret_key)
-
-    pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);', [token, user_id, user_name, passwd, year, email], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `USER INSERT SUCCESSFUL: ${user_id}`});
-    })
+    if (user_id === null || user_id === undefined || user_id === '') {
+        response.status(400).json({msg: `INVALID USER ID: ${user_id}`});
+    } 
+    else if (user_name === null || user_name === undefined || user_name === '') {
+        response.status(400).json({msg: `INVALID USER NAME: ${user_name}`});
+    }
+    else if (passwd === null || passwd === undefined || passwd === '') {
+        response.status(400).json({msg: `INVALID PASSWORD: ${passwd}`});
+    }
+    else if (year === null || year === undefined || year <= 0 || year > 6) {
+        response.status(400).json({msg: `INVALID YEAR: ${year}`});
+    }
+    else if (email === null || email === undefined || email === '') {
+        response.status(400).json({msg: `INVALID USER EMAIL: ${email}`});
+    }
+    else {
+        var secret_key = 'secret-key'
+        const token = jwt.sign({ userID: user_id }, secret_key)
+        pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);', [token, user_id, user_name, passwd, year, email], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `USER INSERT SUCCESSFUL: ${user_id}`});
+        })
+    }
 }
 const addNewClass = (request, response) => {
     const { section_code, department, course_num, course_name, professor, disc_section } = request.body
+
+    if (section_code === null || section_code === undefined || section_code === '') {
+        response.status(400).json({msg: `INVALID USER ID: ${section_code}`});
+    } 
+    else if (department === null || department === undefined || department === '') {
+        response.status(400).json({msg: `INVALID USER NAME: ${department}`});
+    }
+    else if (course_num === null || course_num === undefined || course_num === '') {
+        response.status(400).json({msg: `INVALID PASSWORD: ${course_num}`});
+    }
+    else if (course_name === null || course_name === undefined || course_name === '') {
+        response.status(400).json({msg: `INVALID YEAR: ${course_name}`});
+    }
+    else if (professor === null || professor === undefined || professor === '') {
+        response.status(400).json({msg: `INVALID USER EMAIL: ${professor}`});
+    } 
+    else if (disc_section === null || disc_section === undefined || disc_section === '') {
+        response.status(400).json({msg: `INVALID USER EMAIL: ${disc_section}`});
+    }
     pool.query('INSERT INTO classes VALUES ($1, $2, $3, $4, $5, $6);', [section_code, department, course_num, course_name, professor, disc_section], (error, results) => {
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
