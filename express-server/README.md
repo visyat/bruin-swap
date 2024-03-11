@@ -21,7 +21,7 @@ Access the server on ```http:/localhost:3000/```
 
 ```/check-valid/:user_id``` - Determines whether a given user ID is valid; user exists in the DB
 
-```check-user-exists/:user_id``` - Converse of above. Checks whether user is new (for registration), to prevent duplicate accounts. 
+```/check-user-exists/:user_id``` - Converse of above. Checks whether user is new (for registration), to prevent duplicate accounts. 
 
 ```/users-id/:user_id``` - Provides user information given user ID (hides secure/private information)
 

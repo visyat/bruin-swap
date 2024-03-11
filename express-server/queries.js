@@ -77,6 +77,8 @@ const authentication = (request, response) => {
     })
 }
 //Filtered out JWT tokens from results
+
+var num_transactions = 0;
 const getAllTransactions = (request, response) => {
     pool.query('SELECT transaction_id,user_id,class_wanted,class_to_drop FROM active_transactions JOIN users ON active_transactions.user_jwt=users.user_jwt;', (error, results) => {
         if (error) {
@@ -187,6 +189,10 @@ const addNewTransaction = (request, response) => {
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
+        const notifyUsers = (request, response) => {
+            const {}
+        }
+
         response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
     })
 }
