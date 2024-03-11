@@ -6,14 +6,14 @@ import {
 	makeStyles,
 	shorthands,
 	Body1,
-	Caption1,
-    Divider,
-	ToggleButton,
-    Theme,
-    Title1,
     LargeTitle,
     Display,
+    Subtitle2Stronger,
+    Divider,
+    Button,
+	ToggleButton,
 } from '@fluentui/react-components';
+import { ArrowSwapFilled } from '@fluentui/react-icons';
 import { tokens } from '@fluentui/react-theme';
 
 const useStyles = makeStyles({
@@ -42,7 +42,6 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         textAlign: 'right',
         alignItems: 'flex-end',
-        ...shorthands.flex('1'),
         marginRight: tokens.spacingHorizontalL,
         ...shorthands.padding(tokens.spacingHorizontalM),
     }, right: {
@@ -50,22 +49,29 @@ const useStyles = makeStyles({
         flexBasis: 0,
         flexGrow: 20,
         flexDirection: 'column',
-        ...shorthands.flex('1'),
         marginLeft: tokens.spacingHorizontalL,
         ...shorthands.padding(tokens.spacingHorizontalM),
+    }, buttonContainer: {
+        display: 'flex',
+        flexBasis: 0,
+        flexGrow: 0,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
     }, divider: {
         flexGrow: 1,
         alignSelf: 'stretch',
         marginLeft: 0,
         marginRight: 0,
-    }, buttonContainer: {
-        display: 'flex',
-        flexBasis: 0,
-        flexDirection: 'column',
-        alignItems: 'flex-start',
     }, button: {
         marginTop: tokens.spacingHorizontalM,
-    },
+    }, swap: {
+        marginTop: tokens.spacingHorizontalM,
+	}, swapContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: tokens.spacingHorizontalL,
+        marginBottom: tokens.spacingHorizontalXL,
+    }
 });
 
 const ListingPage = () => {
@@ -73,7 +79,8 @@ const ListingPage = () => {
     const styles = useStyles();
     const [isLoading, setIsLoading] = useState(true);
     const [listing, setListing] = useState<IListing | null>(null);
-    const [selectedClassIndex, setSelectedClassIndex] = useState(-1);
+    const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(null);
+    const [selectedClassNotFound, setSelectedClassNotFound] = useState(false);
     const { transaction_id } = router.query;
     var transaction_id_num = -1;
 
@@ -109,11 +116,20 @@ const ListingPage = () => {
         fetchListing();
     }, [transaction_id]); // Should not change
 
-    if (isLoading) {
-        return <div>Loading...</div>; // TOOD: improve loading page
-    } if (!listing) {
-        return <div>Listing not found</div>
+    const handleSwapRequestClick = () => {
+        if (!selectedClassIndex) {
+            console.log('No class was selected');
+            setSelectedClassNotFound(true);
+            return;
+        }
+        console.log('Swapping!');
+        // Add to 
     }
+
+    if (isLoading)
+        return <div>Loading...</div>; // TOOD: improve loading page
+    if (!listing)
+        return <div>Listing not found</div>
 
     const classCodeString = `${listing.classDept} ${listing.classNum}`
     const classNameString = `${listing.classTitle}`
@@ -121,7 +137,7 @@ const ListingPage = () => {
         <ToggleButton 
             className={styles.button} 
             key={i} 
-            appearance="subtle" 
+            appearance="outline" 
             shape="circular"
             size="large"
             onClick={() => setSelectedClassIndex(i)}
@@ -139,18 +155,36 @@ const ListingPage = () => {
             </div>
             <div className={styles.contents}>
                 <div className={styles.left}>
-                    <Body1>{`Instructor: ${listing.instructor}\n`}</Body1>
-                    <Body1>{`Section: ${listing.lecture}`}</Body1>
+                <Subtitle2Stronger>Instructor</Subtitle2Stronger>
+                    <Body1>{listing.instructor}</Body1>
+                    <br></br>
+                    <Subtitle2Stronger>Section</Subtitle2Stronger>
+                    <Body1>{listing.lecture}</Body1>
                 </div>
                 <div>
                     <Divider vertical style={{ height: "100%" }} />
                 </div>
                 <div className={styles.right}>
-                    <Body1>The class holder wants to swap for one of the following classes:</Body1>
+                    <Subtitle2Stronger>In exchange for:</Subtitle2Stronger>
                     <div className={styles.buttonContainer}>
                         {classesWanted}
                     </div>
                 </div>
+            </div>
+            <div className={styles.swapContainer}>
+                {(selectedClassNotFound)
+                    ? (<Body1>You haven't selected a class!</Body1>)
+                    : <></>}
+                <Button
+                    className={styles.button}
+                    icon={<ArrowSwapFilled />}
+                    onClick={() => handleSwapRequestClick()}
+                    as='button'
+                    appearance='primary'
+                    shape='circular'
+                >
+                    Request!
+                </Button>
             </div>
         </div>
     );

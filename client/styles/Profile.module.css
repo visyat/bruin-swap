@@ -1,0 +1,23 @@
+.profileButton{
+    background-color: #2774AE;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 100px;
+    margin-top: 30px;
+    position: static;
+    display: flex;
+}
+
+.profileButton:hover {
+    background-color: #FFD100;
+    cursor: pointer;
+}
+
+.inputForm{
+    border-radius: 20px; 
+    padding: 3px; 
+    border: 10px solid #ccc; 
+    outline: #2774AE; 
+    color: black
+}
