@@ -26,53 +26,61 @@ const Account = () => {
   
 	else if(output === 'Current Classes'){
 	  content = (
-		<div>
-		<p>Current Classes</p>
-			<ClassCardAccount
-				data={{
-					classDept: 'COM SCI',
-					classNum: '35L',
-					classTitle: 'Software Construction Labroatory',
-					instructor: 'Eggert, P.',
-					lecture: '3A',
-				}}
-			/>
-			<ClassCardAccount
-				data={{
-					classDept: 'COM SCI',
-					classNum: '32',
-					classTitle: 'Intro to CS II',
-					instructor: 'Eggert, P.',
-					lecture: '3A',
-				}}
-			/>
-		</div>
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div>
+                <p>Current Classes</p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <ClassCardAccount
+                    data={{
+                        classDept: 'COM SCI',
+                        classNum: '35L',
+                        classTitle: 'Software Construction Laboratory',
+                        instructor: 'Eggert, P.',
+                        lecture: '3A',
+                    }}
+                />
+                <ClassCardAccount
+                    data={{
+                        classDept: 'COM SCI',
+                        classNum: '32',
+                        classTitle: 'Intro to CS II',
+                        instructor: 'Eggert, P.',
+                        lecture: '3A',
+                    }}
+                />
+            </div>
+        </div>
 	  );
 	}
 
 	else if (output === 'Wishlist Classes'){
 	  content = (
-		<div>
-		  	<p>Wishlist Classes</p>
-		  	<ClassCardWishlist
-				data={{
-					classDept: 'COM SCI',
-					classNum: '260B',
-					classTitle: 'Algorithmic Machine Learning',
-					instructor: 'Eggert, P.',
-					lecture: '3A',
-				}}
-			/>	
-			<ClassCardWishlist
-			  data={{
-				  classDept: 'COM SCI',
-				  classNum: '260C',
-				  classTitle: 'Algorithmic Machine Learning',
-				  instructor: 'Eggert, P.',
-				  lecture: '3A',
-			  }}
-		  />	
-		</div>
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div>
+                <p>Current Classes</p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <ClassCardWishlist
+                    data={{
+                        classDept: 'COM SCI',
+                        classNum: '35L',
+                        classTitle: 'Software Construction Laboratory',
+                        instructor: 'Eggert, P.',
+                        lecture: '3A',
+                    }}
+                />
+                <ClassCardWishlist
+                    data={{
+                        classDept: 'COM SCI',
+                        classNum: '32',
+                        classTitle: 'Intro to CS II',
+                        instructor: 'Eggert, P.',
+                        lecture: '3A',
+                    }}
+                />
+            </div>
+        </div>
 	  );
 	}
 	else {
@@ -96,7 +104,7 @@ const Account = () => {
 			  </div>
   
 			  <div>
-				  <span className={[styles.divider, styles.flexContainer]}></span>
+			  		<span className={`${styles.divider} ${styles.flexContainer}`}></span>
 			  </div>
   
 			  <div>

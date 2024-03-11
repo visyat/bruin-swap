@@ -1,5 +1,6 @@
 import { useState } from "react";
-import styles from '../styles/Profile.module.css';
+import styles from '../styles/Edit.module.css';
+
 
 function ProfileForm(props: { email: any; fullName: any; major: any; gradYear: any; }) {
   const [editing, setEditing] = useState(false);
@@ -26,47 +27,56 @@ function ProfileForm(props: { email: any; fullName: any; major: any; gradYear: a
   };
 
   return (
-      <div id="wrapper">
-          <h2>Profile Information</h2>
-          <div>
-              <label>Email: </label>
-              {editing ? (
-                  <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onKeyPress={handleKeyPress} />
-              ) : (
-                  <p>{email}</p>
-              )}
-              <button onClick={handleEditClick}>Edit</button>
-          </div>
-          <div>
-              <label>Full Name: </label>
-              {editing ? (
-                  <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} onKeyPress={handleKeyPress} />
-              ) : (
-                  <p>{fullName}</p>
-              )}
-              <button onClick={handleEditClick}>Edit</button>
-          </div>
-          <div>
-              <label>Major: </label>
-              {editing ? (
-                  <input type="text" value={major} onChange={(e) => setMajor(e.target.value)} onKeyPress={handleKeyPress} />
-              ) : (
-                  <p>{major}</p>
-              )}
-              <button onClick={handleEditClick}>Edit</button>
-          </div>
-          <div>
-              <label>Graduation Year: </label>
-              {editing ? (
-                  <input type="text" value={gradYear} onChange={(e) => setGradYear(e.target.value)} onKeyPress={handleKeyPress} />
-              ) : (
-                  <p>{gradYear}</p>
-              )}
-              <button onClick={handleEditClick}>Edit</button>
-          </div>
-          {editing && <button onClick={handleSaveClick}>Save</button>}
-      </div>
-  );
+    <div id="wrapper" style={{ maxWidth: '600px', margin: 'auto' }}>
+        <h2 style={{ marginBottom: '20px' }}>Profile Information</h2>
+        <div className="profile-field-container" style={{ marginBottom: '20px' }}>
+            <div className="profile-field" style={{ display: 'flex', alignItems: 'center' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Email: </label>
+                {editing ? (
+                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} onKeyPress={handleKeyPress} />
+                ) : (
+                    <p style={{ margin: '0' }}>{email}</p>
+                )}
+                <button onClick={handleEditClick} className={styles.button} style={{ marginLeft: '10px' }}>Edit</button>
+            </div>
+        </div>
+        <div className="profile-field-container" style={{ marginBottom: '20px' }}>
+            <div className="profile-field" style={{ display: 'flex', alignItems: 'center' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Full Name: </label>
+                {editing ? (
+                    <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} onKeyPress={handleKeyPress} />
+                ) : (
+                    <p style={{ margin: '0' }}>{fullName}</p>
+                )}
+                <button onClick={handleEditClick} className={styles.button} style={{ marginLeft: '10px' }}>Edit</button>
+            </div>
+        </div>
+        <div className="profile-field-container" style={{ marginBottom: '20px' }}>
+            <div className="profile-field" style={{ display: 'flex', alignItems: 'center' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Major: </label>
+                {editing ? (
+                    <input type="text" value={major} onChange={(e) => setMajor(e.target.value)} onKeyPress={handleKeyPress} />
+                ) : (
+                    <p style={{ margin: '0' }}>{major}</p>
+                )}
+                <button onClick={handleEditClick} className={styles.button} style={{ marginLeft: '10px' }}>Edit</button>
+            </div>
+        </div>
+        <div className="profile-field-container" style={{ marginBottom: '20px' }}>
+            <div className="profile-field" style={{ display: 'flex', alignItems: 'center' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Graduation Year: </label>
+                {editing ? (
+                    <input type="text" value={gradYear} onChange={(e) => setGradYear(e.target.value)} onKeyPress={handleKeyPress} />
+                ) : (
+                    <p style={{ margin: '0' }}>{gradYear}</p>
+                )}
+                <button onClick={handleEditClick} className={styles.button} style={{ marginLeft: '10px' }}>Edit</button>
+            </div>
+        </div>
+        {editing && <button onClick={handleSaveClick}>Save</button>}
+    </div>
+);
+
 }
 
 export default ProfileForm;

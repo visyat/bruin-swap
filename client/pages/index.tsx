@@ -10,7 +10,7 @@ function Page() {
 
     return (
         <div className="App" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-            <h1>Bruin Swap</h1>
+            <h1>Course Swap</h1>
             <input
                 type="text"
                 placeholder="Search..."

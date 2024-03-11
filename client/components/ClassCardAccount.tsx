@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { tokens } from '@fluentui/react-theme';
 
+
 const useStyles = makeStyles({
 	card: {
 		// fill div
@@ -86,7 +87,7 @@ const ClassCardAccount: React.FC<CardProps> = ({ data }) => {
 							<Body1>{`${classDept} ${classNum}: ${classTitle}`}</Body1>
 						</div>
 					}
-					description={<Caption1>{`${instructor}`}</Caption1>}
+					description={<Caption1 style={{fontWeight: 'bold'}}>{`${instructor}`}</Caption1>}
 				/>
 				{/* Include CardPreview for wanted classes */}
 				<CardFooter
