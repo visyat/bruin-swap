@@ -1,6 +1,6 @@
 import { makeStyles, shorthands } from '@fluentui/react-components';
 import { OpenCardMode } from '@fluentui/react';
-import ClassCard from '../../components/ClassCard';
+import ClassCard from '../../components/classcard';
 import { LISTINGS } from '../../constants/temp_data';
 import { useRouter } from 'next/router';
 import { IListing } from '../../types/listing';
