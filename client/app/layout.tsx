@@ -12,8 +12,12 @@ const RootLayout = ({
 }>): JSX.Element => (
 	<div>
 		<div className='content'>
-			<Navbar />
-			{children}
+			<div className='top-content'>
+				<Navbar />
+				<div className='children'>
+					{children}
+				</div>
+			</div>
 			<Footer />
 		</div>
 	</div>

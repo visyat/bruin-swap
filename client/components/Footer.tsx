@@ -6,8 +6,8 @@ import styles from '../styles/Footer.module.css';
 const Footer = () => {
 	return (
 		<footer className={styles.footer}>
-			<p>Filler Text</p>
-			<p>Built by ...</p>
+			<p>BruinSwap</p>
+			<p>Built by Rathul, Aditya, Vishal, Matthew, Christian</p>
 		</footer>
 	);
 };

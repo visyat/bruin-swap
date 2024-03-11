@@ -1,4 +1,4 @@
-// components/navbar/classcard.tsx
+// components/navbar/ClassCard.tsx
 import {
 	makeStyles,
 	shorthands,
