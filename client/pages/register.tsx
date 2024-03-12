@@ -18,7 +18,7 @@ const Login = () => {
 
 	return (
 		<div className={styles.container}>
-			<LoginForm isRegister={false} />
+			<LoginForm isRegister={true} />
 		</div>
 	);
 };

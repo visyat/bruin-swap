@@ -44,7 +44,7 @@ body {
 .content {
   display: flex;
   flex-direction: column;
-  flex-direction: space-between;
+  justify-content: space-between;
   min-height: 100vh;
   align-items: 'center';
 }
@@ -53,6 +53,28 @@ body {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.nav {
+  flex-basis: 1
+}
+
+.children-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-grow: 1;
+  margin-right: 5vw;
+  margin-left: 5vw;
+  min-height: 100%;
+  /* min-width: 100%; */
+}
+
+.children {
+  /* flex: 1 */
 }
 
 @layer utilities {
@@ -60,9 +82,4 @@ body {
     text-wrap: balance;
   }
 
-}
-
-.children {
-  margin-right: 5vw;
-  margin-left: 5vw;
 }
