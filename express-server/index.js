@@ -1,15 +1,52 @@
 //npm i express pg
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
-import { getAllUsers, checkValidUser, checkUserAlreadyExists, getUserInfoByID, getUserInfoByJWT, authentication, getAllTransactions, getTransactionsByUser, getTransactionsByID, getTransactionsByDept, getTransactionsByCourseNum, getAllClasses, getClassesBySC, getWishlistByUser, getEnrollmentsByUser, addNewUser, addNewClass, addNewTransaction, addNewWishlistEntry, addNewEnrollmentEntry, updateUserInfoByJWT, updateCourseInfoByID, updateTransactionInfoByID, deleteUser, deleteCourse, deleteSection, deleteTransaction, deleteWishlistEntry, deleteEnrollmentEntry } from './queries.js';
+import { 
+    getAllUsers, 
+    checkValidUser, 
+    checkUserAlreadyExists, 
+    getUserInfoByID, 
+    getUserInfoByJWT, 
+    authentication, 
+    getAllTransactions,
+    getTransactionsByUser, 
+    getTransactionsByID, 
+    getTransactionsByDept, 
+    getTransactionsByCourseNum, 
+    getAllClasses, 
+    getClassesBySC, 
+    getWishlistByUser, 
+    getEnrollmentsByUser, 
+    addNewUser, 
+    addNewClass, 
+    addNewTransaction, 
+    addNewWishlistEntry, 
+    addNewEnrollmentEntry, 
+    updateUserInfoByJWT, 
+    updateCourseInfoByID, 
+    updateTransactionInfoByID, 
+    deleteUser, 
+    deleteCourse, 
+    deleteSection, 
+    deleteTransaction, 
+    deleteWishlistEntry, 
+    deleteEnrollmentEntry 
+} from './queries.js';
 import { notification } from './notification.js';
 
 const app = express()
 const port = 3000
-// var engines = require('consolidate');
+
+// Cross-Origin Resource Sharing
+// app.use(cors({
+//     // origin: 'http://localhost' // allow for cors only on same origin
+// }));
+app.use(cors());
 
 app.use(express.json());
+
 app.get('/', (request, response) => {
     response.json({ info: 'Course Swapper' })
 })

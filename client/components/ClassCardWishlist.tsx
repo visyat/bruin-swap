@@ -1,4 +1,4 @@
-// components/navbar/ClassCard.tsx
+// components/navbar/classcard.tsx
 import {
 	makeStyles,
 	shorthands,
@@ -11,10 +11,11 @@ import {
 	CardPreview,
 	Theme,
 } from '@fluentui/react-components';
-import { ArrowSwapFilled } from '@fluentui/react-icons';
-import { IListing } from '../types/listing';
+import { DeleteDismissFilled } from '@fluentui/react-icons';
+import { IClass } from '../types/listing';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { tokens } from '@fluentui/react-theme';
 
 const useStyles = makeStyles({
 	card: {
@@ -52,26 +53,34 @@ const useStyles = makeStyles({
 		// padding: '10px',
 		flexGrow: 0,
 	},
-	swap: {
+	remove: {
 		minWidth: '100px',
 		paddingLeft: '10px',
 		paddingRight: '10px',
 		paddingTop: '5px',
 		paddingBottom: '5px',
+		backgroundColor: '#d13438',
+		// color when selected should be
+		':hover': {
+			backgroundColor: '#bc2f32',
+		},
+		':active': {
+			backgroundColor: '#751d1f',
+		},
 	},
 });
 
 interface CardProps {
-	data: IListing;
+	data: IClass;
 }
 
-const ClassCard: React.FC<CardProps> = ({ data }) => {
-	const { transaction_id, classDept, classNum, classTitle, instructor, lecture } = data;
+const ClassCardWishlist: React.FC<CardProps> = ({ data }) => {
+	const { classDept, classNum, classTitle, instructor, lecture } = data;
 	// const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
 	const styles = useStyles();
 
-	const handleSwapClick = () => router.push(`${transaction_id}`);
+	const handleRemoveClick = () => console.log('Deleteting course!'); //router.push(`${transaction_id}`);
 
 	return (
 		<Card className={styles.card} appearance='filled' as='div' size='small'>
@@ -89,14 +98,14 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 				className={styles.footer}
 				action={
 					<Button
-						className={styles.swap}
-						icon={<ArrowSwapFilled />}
-						onClick={() => handleSwapClick()}
+						className={styles.remove}
+						icon={<DeleteDismissFilled />}
+						onClick={() => handleRemoveClick()}
 						as='button'
 						appearance='primary'
 						shape='rounded'
 					>
-						Swap!
+						Remove!
 					</Button>
 				}
 			>
@@ -106,4 +115,4 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 	);
 };
 
-export default ClassCard;
+export default ClassCardWishlist;

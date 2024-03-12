@@ -1,9 +1,11 @@
 // components/navbar/Navbar.tsx
 
 import Link from 'next/link';
+import { makeStyles, shorthands, Tab, TabList } from '@fluentui/react-components';
+import type { TabListProps } from '@fluentui/react-components';
 import styles from '../../styles/Navbar.module.css';
 
-const Navbar = () => {
+const Navbar = (props: Partial<TabListProps>) => {
 	return (
 		<nav className={styles.topnav}>
 			{/* Root */}
