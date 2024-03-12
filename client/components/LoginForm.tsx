@@ -1,3 +1,4 @@
+// TODO: make sure this is relatively responsive at least
 import {
 	Button,
 	makeStyles,
@@ -16,6 +17,7 @@ import { tokens } from '@fluentui/react-components';
 import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles({
 	loginContainer: {
@@ -54,24 +56,47 @@ interface LoginFormProps {
 	isRegister: boolean;
 }
 
+interface UserReturn {
+	user_id: string;
+	user_name: string;
+	email: string;
+}
+
 const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 	const styles = useStyles();
 	const usernameId = useId('username');
 	const passwordId = useId('password');
+	const fullNameId = useId('password');
 	const emailId = useId('email');
 	const yearId = useId('year');
 	const [userInput, setUserInput] = useState('');
 	const [passInput, setPassInput] = useState('');
+	const [fullNameInput, setFullNameInputInput] = useState('');
 	const [yearInput, setYearInput] = useState<string>('');
 	const [emailInput, setEmailInput] = useState('');
+	const router = useRouter();
 
 	const handleRegister = async () => {
 		console.log('Logging in');
 		let year = 0;
 		// console.log(`User: ${userInput}, ${passInput}`);
 		try {
-			// Valid username
-			// TODO: check if user already exists
+			// Validate username
+			console.log('Get request to')
+			console.log(`${process.env.NEXT_PUBLIC_API_URI}/users`)
+			// axios
+			// 	.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
+			// 	.then((res) => {
+			// 		const users = res.data;
+			// 		if (users.some((user: UserReturn) => user.user_id === userInput)) {
+			// 			swal('That username is already in use :(');
+			// 			return;
+			// 		}
+			// 	})
+			// 	.catch((error) => {
+			// 		swal('Something went wrong! Please try again');
+			// 	})
+
 			// Validate email
 			// Allow non-UCLA emails: const emailRegex = /^[a-zA-Z0-9. _-]+@[a-zA-Z0-9. -]+\. [a-zA-Z]{2,4}$/;
 			const emailRegex = /^[a-zA-Z0-9._-]+@(?:g\.)?ucla\.edu$/;
@@ -96,7 +121,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			}
 			return;
 		} catch (error) {
-			swal('An unexpected error occured in account creation. Please try again.');
+			// swal('An unexpected error occured in account creation. Please try again.');
+			swal(JSON.stringify(error));
 		}
 	};
 
@@ -104,10 +130,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 	};
 
+	const loginInstead = () => router.push(`/login`);
+	const registerInstead = () => router.push(`/register`);
+	// const loginInstead = () => console.log('logging in instead');
+	// const registerInstead = () => console.log('registering instead');
+
 	return (
 		<div className={styles.loginContainer}>
 			<div className={styles.title}>
-				<LargeTitle>Login</LargeTitle>
+				<LargeTitle>{isRegister ? 'Register' : 'Login'}</LargeTitle>
 			</div>
 
 			<div className={styles.loginItemContainer}>
@@ -135,29 +166,41 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				/>
 			</div>
 			{isRegister ? (<>
-					<div className={styles.loginItemContainer}>
-						{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-						<Label htmlFor={emailId}>UCLA Email</Label>
-						<Input
-							id='emailarea'
-							placeholder='joebruin@g.ucla.edu'
-							size='large'
-							contentBefore={<PersonRegular />}
-							onChange={(input) => setEmailInput(input.target.value)}
-						/>
-					</div>
+				<div className={styles.loginItemContainer}>
+					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+					<Label htmlFor={emailId}>Full Name</Label>
+					<Input
+						id='namearea'
+						placeholder='Joe Bruin'
+						size='large'
+						contentBefore={<PersonRegular />}
+						onChange={(input) => setEmailInput(input.target.value)}
+					/>
+				</div>
 
-					<div className={styles.loginItemContainer}>
-						{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-						<Label htmlFor={yearId}>Graduation Year</Label>
-						<Input
-							id='yeararea'
-							placeholder='2027'
-							size='large'
-							contentBefore={<PersonRegular />}
-							onChange={(input) => setYearInput(input.target.value)}
-						/>
-					</div>
+				<div className={styles.loginItemContainer}>
+					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+					<Label htmlFor={fullNameId}>UCLA Email</Label>
+					<Input
+						id='emailarea'
+						placeholder='joebruin@g.ucla.edu'
+						size='large'
+						contentBefore={<PersonRegular />}
+						onChange={(input) => setEmailInput(input.target.value)}
+					/>
+				</div>
+
+				<div className={styles.loginItemContainer}>
+					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+					<Label htmlFor={yearId}>Graduation Year</Label>
+					<Input
+						id='yeararea'
+						placeholder='2027'
+						size='large'
+						contentBefore={<PersonRegular />}
+						onChange={(input) => setYearInput(input.target.value)}
+					/>
+				</div>
 			</>) : <></>}
 			<Button
 				appearance='primary'
@@ -167,8 +210,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				Submit!
 			</Button>
 			{(isRegister
-				? <Caption1>Already have an account? <Link href='/login' appearance='default'>Login!</Link></Caption1>
-				: <Caption1>Don't have account? <Link href='/register' appearance='default'>Reigster!</Link></Caption1>
+				? <Caption1>Already have an account? <Link as="button" onClick={() => loginInstead()} appearance='default'>Login!</Link></Caption1>
+				: <Caption1>Don't have account? <Link as="button" onClick={() => registerInstead()} appearance='default'>Reigster!</Link></Caption1>
 			)}
 			
 		</div>
