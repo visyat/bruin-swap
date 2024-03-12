@@ -244,7 +244,7 @@ const getEnrollmentsByUser = (request, response) => {
 //POST Requests
 const addNewUser = (request, response) => {
     const { user_id, user_name, passwd, year, email } = request.body
-
+    console.log('Making user ', user_id, user_name, passwd, year, email);
     if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
         response.status(400).json({msg: `INVALID USER ID`});
     } 
