@@ -7,7 +7,7 @@ const customLightTheme: Theme = {
 	...webLightTheme,
 	colorPaletteRedBackground3: '#d13438',
 	// borderRadius
-}
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (

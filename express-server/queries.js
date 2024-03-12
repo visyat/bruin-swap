@@ -11,13 +11,14 @@ const pool = new Pool({
     port: '5432',
     ssl: {
         rejectUnauthorized: false
-        //cert: fs.readFileSync('cert/us-east-2-bundle.pem').toString(),
+
     }
 })
 
 //GET Requests
 const getAllUsers = (request, response) => {
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
+        console.log('Done withq query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }

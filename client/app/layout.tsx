@@ -13,9 +13,11 @@ const RootLayout = ({
 	<div>
 		<div className='content'>
 			<div className='top-content'>
-				<Navbar />
-				<div className='children'>
-					{children}
+				<div className='nav'>
+					<Navbar />
+				</div>
+				<div className='children-container'>
+					<div className='children'>{children}</div>
 				</div>
 			</div>
 			<Footer />
