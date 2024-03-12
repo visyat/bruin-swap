@@ -119,11 +119,33 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				!/[!@#$%^&*]/.test(passInput)
 			) {
 				swal('Please enter a more secure password. It should contain:\n- At least 8 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character');
+				return;
 			}
-			return;
+
+			// By now, all user inputs have been validated and we can create an account
+			console.log('Creating account!');
+
+			// TODO: pass back password hash instead of password in plaintext?
+			const newUser = {
+				user_id: userInput, 
+				user_name: fullNameInput, 
+				passwd: passInput, 
+				year: yearInput, 
+				email: emailInput,
+			}
+			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser);
+			console.log('Message:', res.data.msg);
+			if (res.status === 200) {
+				swal('Successfully created account!');
+				router.push('/');
+			} else {
+				swal('Something went wrong! Please try again.');
+			}
+
 		} catch (error) {
 			// swal('An unexpected error occured in account creation. Please try again.');
-			swal(JSON.stringify(error));
+			console.error(error)
+			swal('Something went wrong! Please try again.');
 		}
 	};
 
