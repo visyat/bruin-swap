@@ -84,18 +84,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			// Validate username
 			console.log('Get request to')
 			console.log(`${process.env.NEXT_PUBLIC_API_URI}/users`)
-			// axios
-			// 	.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
-			// 	.then((res) => {
-			// 		const users = res.data;
-			// 		if (users.some((user: UserReturn) => user.user_id === userInput)) {
-			// 			swal('That username is already in use :(');
-			// 			return;
-			// 		}
-			// 	})
-			// 	.catch((error) => {
-			// 		swal('Something went wrong! Please try again');
-			// 	})
+			axios
+				.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
+				.then((res) => {
+					const users = res.data;
+					if (users.some((user: UserReturn) => user.user_id === userInput)) {
+						swal('That username is already in use :(');
+						return;
+					}
+				})
+				.catch((error) => {
+					swal(`Something went wrong! Please try again ${error}`);
+					console.error(error);
+				})
 
 			// Validate email
 			// Allow non-UCLA emails: const emailRegex = /^[a-zA-Z0-9. _-]+@[a-zA-Z0-9. -]+\. [a-zA-Z]{2,4}$/;
