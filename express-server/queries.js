@@ -27,23 +27,26 @@ const getAllUsers = (request, response) => {
 const getUserInfoByID = (request, response) => {
     const user_id = request.params.user_id 
 
-    if (user_id === null || user_id === undefined || user_id === '') {
-        response.status(400).json({msg: `INVALID USER ID: ${user_id}`});
+    if (user_id == null || user_id == undefined || typeof(user_id) !== 'string' || user_id === '') {
+        response.status(400).json({msg: `INVALID USER ID`});
     } 
     else {
         pool.query('SELECT user_id,user_name,year_level,email FROM users WHERE user_id=$1;', [user_id], (error, results) => {
-            if (error) {
-                response.status(400).json({ msg: 'INVALID QUERY' });
+            if (results.rows.length === 0 || error) {
+                response.status(400).json({ msg: `INVALID QUERY` }); 
+                return;
             }
             response.status(200).json(results.rows); 
         })
+        
     }
 }
+//SELECT  FROM users WHERE user_id=$1;
 const getUserInfoByJWT = (request, response) => {
     const user_jwt = request.params.user_jwt
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
-        response.status(400).json({msg: `INVALID USER ID: ${user_jwt}`});
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT`});
     } 
     else {
         pool.query('SELECT * FROM users WHERE user_jwt=$1;', [user_jwt], (error, results) => {
@@ -58,7 +61,7 @@ const getUserInfoByJWT = (request, response) => {
 const checkValidUser = (request, response) => {
     const user_id = request.params.user_id 
 
-    if (user_id === null || user_id === undefined || user_id === '') {
+    if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
         response.status(400).json({msg: `INVALID QUERY`});
     } 
     else {
@@ -74,12 +77,12 @@ const checkValidUser = (request, response) => {
 const checkUserAlreadyExists = (request, response) => {
     const user_id = request.params.user_id 
 
-    if (user_id === null || user_id === undefined || user_id === '') {
+    if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
         response.status(400).json({msg: `INVALID USER ID`});
     }  
     else {
         pool.query('SELECT user_id FROM users WHERE user_id=$1;', [user_id], (error, results) => {
-            if (error || results.rows.length > 0) {
+            if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             } 
             else if (results.rows.length > 0) {
@@ -95,10 +98,10 @@ const authentication = (request, response) => {
     const user_id = request.params.user_id
     const passwd = request.params.passwd
 
-    if (user_id === null || user_id === undefined || user_id === '') {
+    if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
         response.status(400).json({msg: `INVALID USER ID`});
     }  
-    else if (passwd === null || passwd === undefined || passwd === '') {
+    else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
         response.status(400).json({msg: `INVALID PASSWORD`});
     }  
     else {
@@ -125,7 +128,7 @@ const getAllTransactions = (request, response) => {
 const getTransactionsByUser = (request, response) => {
     const user_jwt = request.params.user_jwt 
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     }  
     else {
@@ -140,7 +143,7 @@ const getTransactionsByUser = (request, response) => {
 const getTransactionsByID = (request, response) => {
     const transaction_id = request.params.transaction_id 
 
-    if (transaction_id === null || transaction_id === undefined || transaction_id === '') {
+    if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'string' || transaction_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     }  
     else {
@@ -155,7 +158,7 @@ const getTransactionsByID = (request, response) => {
 const getTransactionsByDept = (request, response) => {
     const dept = request.params.dept 
 
-    if (dept === null || dept === undefined || dept === '') {
+    if (dept === null || dept === undefined || typeof(dept) !== 'string' || dept === '') {
         response.status(400).json({msg: `INVALID DEPARTMENT`});
     }   
     else {
@@ -170,7 +173,7 @@ const getTransactionsByDept = (request, response) => {
 const getTransactionsByCourseNum = (request, response) => {
     const course_num = request.params.course_num 
 
-    if (dept === null || dept === undefined || dept === '') {
+    if (course_num === null || course_num === undefined || typeof(course_num) !== 'string' || course_num === '') {
         response.status(400).json({msg: `INVALID COURSE NUMBER`});
     }   
     else {
@@ -194,7 +197,7 @@ const getAllClasses = (request, response) => {
 const getClassesBySC = (request, response) => {
     const section_code = request.params.section_code 
 
-    if (section_code === null || section_code === undefined || section_code === '') {
+    if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
         response.status(400).json({msg: `INVALID SECTION CODE`});
     }   
     else {
@@ -209,7 +212,7 @@ const getClassesBySC = (request, response) => {
 const getWishlistByUser = (request, response) => {
     const user_jwt = request.params.user_jwt 
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     }  
     else {
@@ -224,7 +227,7 @@ const getWishlistByUser = (request, response) => {
 const getEnrollmentsByUser = (request, response) => {
     const user_jwt = request.params.user_jwt
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     }  
     else {
@@ -241,19 +244,19 @@ const getEnrollmentsByUser = (request, response) => {
 const addNewUser = (request, response) => {
     const { user_id, user_name, passwd, year, email } = request.body
 
-    if (user_id === null || user_id === undefined || user_id === '') {
+    if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
         response.status(400).json({msg: `INVALID USER ID`});
     } 
-    else if (user_name === null || user_name === undefined || user_name === '') {
+    else if (user_name === null || user_name === undefined || typeof(user_name) !== 'string' || user_name === '') {
         response.status(400).json({msg: `INVALID USER NAME`});
     }
-    else if (passwd === null || passwd === undefined || passwd === '') {
+    else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
         response.status(400).json({msg: `INVALID PASSWORD`});
     }
-    else if (year === null || year === undefined || year <= 0 || year > 6) {
+    else if (year === null || year === undefined || typeof(year) !== 'number' || year <= 0 || year > 6) {
         response.status(400).json({msg: `INVALID YEAR`});
     }
-    else if (email === null || email === undefined || email === '') {
+    else if (email === null || email === undefined || typeof(email) !== 'string' || email === '') {
         response.status(400).json({msg: `INVALID USER EMAIL`});
     }
     else {
@@ -270,22 +273,22 @@ const addNewUser = (request, response) => {
 const addNewClass = (request, response) => {
     const { section_code, department, course_num, course_name, professor, disc_section } = request.body
 
-    if (section_code === null || section_code === undefined || section_code === '') {
+    if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
         response.status(400).json({msg: `INVALID SECTION CODE`});
     } 
-    else if (department === null || department === undefined || department === '') {
-        response.status(400).json({msg: `INVALID DEPARTMENT NAME`});
+    else if (department === null || department === undefined || typeof(department) !== 'string' || department === '') {
+        response.status(400).json({msg: `INVALID DEPARTMENT`});
     }
-    else if (course_num === null || course_num === undefined || course_num === '') {
+    else if (course_num === null || course_num === undefined || typeof(course_num) !== 'string' || course_num === '') {
         response.status(400).json({msg: `INVALID COURSE NUMBER`});
     }
-    else if (course_name === null || course_name === undefined || course_name === '') {
+    else if (course_name === null || course_name === undefined || typeof(course_name) !== 'string' || course_name === '') {
         response.status(400).json({msg: `INVALID COURSE NAME`});
     }
-    else if (professor === null || professor === undefined || professor === '') {
+    else if (professor === null || professor === undefined || typeof(professor) !== 'string' || professor === '') {
         response.status(400).json({msg: `INVALID USER PROFESSOR NAME`});
     } 
-    else if (disc_section === null || disc_section === undefined || disc_section === '') {
+    else if (disc_section === null || disc_section === undefined || typeof(disc_section) !== 'string' || disc_section === '') {
         response.status(400).json({msg: `INVALID USER DISCUSSION SECTION`});
     } 
     else {
@@ -301,16 +304,16 @@ const addNewClass = (request, response) => {
 const addNewTransaction = (request, response) => {
     const {t_id, user_jwt, class_wanted, class_dropped} = request.body 
 
-    if (t_id === null || t_id === undefined || t_id === '') {
+    if (t_id === null || t_id === undefined || typeof(t_id) !== 'number' || t_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     } 
-    else if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    else if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     }
-    else if (class_wanted === null || class_wanted === undefined || class_wanted === '') {
+    else if (class_wanted === null || class_wanted === undefined || typeof(class_wanted) !== 'string' || class_wanted === '') {
         response.status(400).json({msg: `INVALID CLASS WANTED`});
     }
-    else if (class_dropped === null || class_dropped === undefined || class_dropped === '') {
+    else if (class_dropped === null || class_dropped === undefined || typeof(class_dropped) !== 'string' || class_dropped === '') {
         response.status(400).json({msg: `INVALID CLASS DROP`});
     }
     else {
@@ -326,10 +329,10 @@ const addNewTransaction = (request, response) => {
 const addNewWishlistEntry = (request, response) => {
     const {user_jwt, class_wished} = request.body
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     } 
-    else if (class_wished === null || class_wished === undefined || class_wished === '') {
+    else if (class_wished === null || class_wished === undefined || typeof(class_wished) !== 'string' || class_wished === '') {
         response.status(400).json({msg: `INVALID CLASS WISH`});
     }
     else {
@@ -344,10 +347,10 @@ const addNewWishlistEntry = (request, response) => {
 const addNewEnrollmentEntry = (request, response) => {
     const {user_jwt, class_enrolled} = request.body
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     } 
-    else if (class_enrolled === null || class_enrolled === undefined || class_enrolled === '') {
+    else if (class_enrolled === null || class_enrolled === undefined || typeof(class_enrolled) !== 'string' || class_enrolled === '') {
         response.status(400).json({msg: `INVALID CLASS ENROLLED`});
     } 
     else {
@@ -365,19 +368,19 @@ const updateUserInfoByJWT = (request, response) => {
     const user_jwt = request.params.user_jwt
     const { user_name, passwd, year_level, email } = request.body 
 
-    if (user_jwt === null || user_jwt === undefined || user_jwt === '') {
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
         response.status(400).json({msg: `INVALID USER JWT`});
     } 
-    else if (user_name === null || user_name === undefined || user_name === '') {
+    else if (user_name === null || user_name === undefined || typeof(user_name) !== 'string' || user_name === '') {
         response.status(400).json({msg: `INVALID USER NAME`});
     }
-    else if (passwd === null || passwd === undefined || passwd === '') {
+    else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
         response.status(400).json({msg: `INVALID PASSWORD`});
     }
-    else if (year_level === null || year_level === undefined || year_level <= 0 || year_level > 6) {
+    else if (year_level === null || year_level === undefined || typeof(year_level) !== 'number' || year_level <= 0 || year_level > 6) {
         response.status(400).json({msg: `INVALID YEAR LEVEL`});
     }
-    else if (email === null || email === undefined || email === '') {
+    else if (email === null || email === undefined || typeof(email) !== 'string' || email === '') {
         response.status(400).json({msg: `INVALID USER EMAIL`});
     } 
     else {
@@ -393,22 +396,22 @@ const updateCourseInfoByID = (request, response) => {
     const section_code = request.params.section_code
     const { department, course_num, course_name, professor, disc_section } = request.body 
 
-    if (section_code === null || section_code === undefined || section_code === '') {
+    if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
         response.status(400).json({msg: `INVALID SECTION CODE`});
     } 
-    else if (department === null || department === undefined || department === '') {
+    else if (department === null || department === undefined || typeof(department) !== 'string' || department === '') {
         response.status(400).json({msg: `INVALID DEPARTMENT`});
     }
-    else if (course_num === null || course_num === undefined || course_num === '') {
+    else if (course_num === null || course_num === undefined || typeof(course_num) !== 'string' || course_num === '') {
         response.status(400).json({msg: `INVALID COURSE NUMBER`});
     }
-    else if (course_name === null || course_name === undefined || course_name === '') {
+    else if (course_name === null || course_name === undefined || typeof(course_name) !== 'string' || course_name === '') {
         response.status(400).json({msg: `INVALID COURSE NAME`});
     }
-    else if (professor === null || professor === undefined || professor === '') {
+    else if (professor === null || professor === undefined || typeof(professor) !== 'string' || professor === '') {
         response.status(400).json({msg: `INVALID PROFESSOR NAME`});
     } 
-    else if (disc_section === null || disc_section === undefined || disc_section === '') {
+    else if (disc_section === null || disc_section === undefined || typeof(disc_section) !== 'string' || disc_section === '') {
         response.status(400).json({msg: `INVALID DISCUSSION SECTION`});
     } 
     else {
@@ -424,13 +427,13 @@ const updateTransactionInfoByID = (request, response) => {
     const transaction_id = request.params.transaction_id
     const { class_wanted, class_to_drop } = request.body
 
-    if (transaction_id === null || transaction_id === undefined || transaction_id === '') {
+    if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'number' || transaction_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     } 
-    else if (class_wanted === null || class_wanted === undefined || class_wanted === '') {
+    else if (class_wanted === null || class_wanted === undefined || typeof(class_wanted) !== 'string' || class_wanted === '') {
         response.status(400).json({msg: `INVALID CLASS WANTED`});
     } 
-    else if (class_to_drop === null || class_to_drop === undefined || class_to_drop === '') {
+    else if (class_to_drop === null || class_to_drop === undefined || typeof(class_to_drop) !== 'string' || class_to_drop === '') {
         response.status(400).json({msg: `INVALID CLASS TO DROP`});
     }
     else {
@@ -444,62 +447,107 @@ const updateTransactionInfoByID = (request, response) => {
 }
 
 //DELETE Requests
-const deleteUser = (request, response) => {
-    const user_jwt = request.params.user_jwt
-    pool.query('DELETE FROM users WHERE user_jwt=$1;', [user_jwt], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `USER DELETED`})
-    })
+const deleteUser = (request, response) => { 
+    const user_jwt = request.params.user_jwt 
+
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT`});
+    } 
+    else {
+        pool.query('DELETE FROM users WHERE user_jwt=$1;', [user_jwt], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `USER DELETED`})
+        })
+    } 
 }
 const deleteSection = (request, response) => {
-    const section_code = request.params.section_code
-    pool.query('DELETE FROM classes WHERE section_code=$1;', [section_code], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `SECTION ${section_code} DELETED`})
-    })
+    const section_code = request.params.section_code 
+
+    if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
+        response.status(400).json({msg: `INVALID SECTION CODE`});
+    }  
+    else {
+        pool.query('DELETE FROM classes WHERE section_code=$1;', [section_code], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `SECTION ${section_code} DELETED`})
+        })
+    }
 }
 const deleteCourse = (request, response) => {
     const dept = request.params.dept
-    const course_num = request.params.course_num
-    pool.query('DELETE FROM classes WHERE dept=$1 AND course_num=$2;', [dept, course_num], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `COURSE ${dept} ${course_num} DELETED`})
-    })
+    const course_num = request.params.course_num 
+
+    if (dept === null || dept === undefined || typeof(dept) !== 'string' || dept === '') {
+        response.status(400).json({msg: `INVALID DEPARTMENT`});
+    }  
+    else if (course_num === null || course_num === undefined || typeof(course_num) !== 'string' || course_num === '') {
+        response.status(400).json({msg: `INVALID COURSE NUMBER`});
+    }   
+    else {
+        pool.query('DELETE FROM classes WHERE dept=$1 AND course_num=$2;', [dept, course_num], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `COURSE ${dept} ${course_num} DELETED`})
+        })
+    }
 }
 const deleteTransaction = (request, response) => {
-    const transaction_id = request.params.transaction_id
-    pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})
-    })
+    const transaction_id = request.params.transaction_id 
+
+    if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'number' || transaction_id === '') {
+        response.status(400).json({msg: `INVALID TRANSACTION ID`});
+    }  
+    else {
+        pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})
+        })
+    }
 }
 const deleteWishlistEntry = (request, response) => {
     const user_jwt = request.params.user_jwt
-    const section_code = request.params.section_code
-    pool.query('DELETE FROM wishlist WHERE user_jwt=$1 AND section_code=$2;', [user_jwt, section_code], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `WISHLIST ENTRY DELETED`})
-    })
+    const section_code = request.params.section_code 
+
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT`});
+    }  
+    else if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
+        response.status(400).json({msg: `INVALID SECTION CODE`});
+    }  
+    else {
+        pool.query('DELETE FROM wishlist WHERE user_jwt=$1 AND section_code=$2;', [user_jwt, section_code], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `WISHLIST ENTRY DELETED`})
+        })
+    }
 }
 const deleteEnrollmentEntry = (request, response) => {
     const user_jwt = request.params.user_jwt
-    const section_code = request.params.section_code
-    pool.query('DELETE FROM enrollments WHERE user_jwt=$1 AND section_code=$2;', [user_jwt, section_code], (error, results) => {
-        if (error) {
-            response.status(400).json({ msg: 'INVALID QUERY' });
-        }
-        response.status(200).json({msg: `ENROLLMENT ENTRY DELETED`})
-    })
+    const section_code = request.params.section_code 
+
+    if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
+        response.status(400).json({msg: `INVALID USER JWT`});
+    }  
+    else if (section_code === null || section_code === undefined || typeof(section_code) !== 'string' || section_code === '') {
+        response.status(400).json({msg: `INVALID SECTION CODE`});
+    }  
+    else {
+        pool.query('DELETE FROM enrollments WHERE user_jwt=$1 AND section_code=$2;', [user_jwt, section_code], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            response.status(200).json({msg: `ENROLLMENT ENTRY DELETED`})
+        })
+    }
 }
 
 export {
