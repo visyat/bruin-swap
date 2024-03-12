@@ -1,34 +1,49 @@
 import hbs from 'nodemailer-express-handlebars';
 import nodeMailer from 'nodemailer';
+import path from 'path';
 
-const address = new TempMail("bruinSwap");
+import dotenv from 'dotenv'
+dotenv.config()
 
-
-/*var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth:{
-        user: 'your_email@gmail.com',
-        pass: 'password_for_your_email_address'
+var transporter = nodeMailer.createTransport({
+    service: process.env.MAIL_SERVICE,
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: true,
+    auth: {
+        user: process.env.MAIL_ADDRESS,
+        pass: process.env.MAIL_PASSWORD
     }
-});*/
-
-
-/*
-const mailgun = new mailGun(formData);
-
-const mg = mailgun.client
-({
-    username: "api",
-    key: process.env.MAILGUN_API_KEY,
 });
+const handlebarOptions = {
+    viewEngine: {
+        partialsDir: path.resolve('./views/'),
+        defaultLayout: false,
+    },
+    viewPath: path.resolve('./views/'),
+};
 
-exports.sendMail = (req, res) => {
-const { toEmail, fromEmail, subject, message } = req.body;
+const notification = (request) => {
+    const {user_name, user_email, user_class} = request;
+    transporter.use('compile', hbs(handlebarOptions));
+    const mailOptions = {
+        from: '"Bruin Swap" <vishalyathish01@gmail.com>',
+        template: "email",
+        to: user_email,
+        subject: `BruinSwap: Class on Your Wishlist Available!`,
+        context: {
+            name: user_name,
+            class: user_class
+        },
+    };
+    try {
+        transporter.sendMail(mailOptions);
+        //response.status(200).json({ msg: `MESSAGE SENT TO ${user_email}` })
+    } catch (error) {
+        const response = json({ msg: `NODEMAILER ERROR SENDING TO ${user_email}`});
+    }
+}
 
-mg.messages.create(process.env.MAILGUN_DOMAIN, {
-from: fromEmail,
-to: [toEmail],
-subject: subject,
-text: message,
-});
-};*/
+export {
+    notification
+}

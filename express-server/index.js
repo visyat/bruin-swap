@@ -1,7 +1,9 @@
+//npm i express pg
 import express from 'express';
 import bodyParser from 'body-parser';
 
 import { getAllUsers, checkValidUser, checkUserAlreadyExists, getUserInfoByID, getUserInfoByJWT, authentication, getAllTransactions, getTransactionsByUser, getTransactionsByID, getTransactionsByDept, getTransactionsByCourseNum, getAllClasses, getClassesBySC, getWishlistByUser, getEnrollmentsByUser, addNewUser, addNewClass, addNewTransaction, addNewWishlistEntry, addNewEnrollmentEntry, updateUserInfoByJWT, updateCourseInfoByID, updateTransactionInfoByID, deleteUser, deleteCourse, deleteSection, deleteTransaction, deleteWishlistEntry, deleteEnrollmentEntry } from './queries.js';
+import { notification } from './notification.js';
 
 const app = express()
 const port = 3000
@@ -33,6 +35,7 @@ app.post('/classes', addNewClass)
 app.post('/transactions', addNewTransaction)
 app.post('/wishlist', addNewWishlistEntry)
 app.post('/enrollments', addNewEnrollmentEntry)
+app.post('/notification', notification)
 
 app.put('/users/:user_jwt', updateUserInfoByJWT)
 app.put('/courses/:section_code', updateCourseInfoByID)
