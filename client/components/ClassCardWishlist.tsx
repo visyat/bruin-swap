@@ -86,7 +86,7 @@ const ClassCardWishlist: React.FC<CardProps> = ({ data }) => {
 							<Body1>{`${classDept} ${classNum}: ${classTitle}`}</Body1>
 						</div>
 					}
-					description={<Caption1 style={{ backgroundColor: 'yellow'}}>{`${instructor}`}</Caption1>}
+					description={<Caption1 style={{fontWeight: 'bold'}}>{`${instructor}`}</Caption1>}
 				/>
 				{/* Include CardPreview for wanted classes */}
 				<CardFooter

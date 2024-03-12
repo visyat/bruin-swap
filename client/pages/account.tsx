@@ -5,6 +5,9 @@ import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
 import ClassCardWishlist from '../components/ClassCardWishlist';
 
+
+
+
 const Account = () => {
 	const [output, setOutput] = useState('');
   
@@ -58,7 +61,7 @@ const Account = () => {
 	  content = (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
             <div>
-                <p>Current Classes</p>
+                <p>Wishlist Classes</p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <ClassCardWishlist
