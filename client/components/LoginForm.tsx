@@ -97,9 +97,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 	const [emailInput, setEmailInput] = useState('');
 	const router = useRouter();
 
-
-	const loginInstead = () => router.push(`/login`);
-	const registerInstead = () => router.push(`/register`);
+	const loginInstead = () => router.push('/login');
+	const registerInstead = () => router.push('/register');
 
 	const handleRegister = async () => {
 		console.log('Logging in');
@@ -107,8 +106,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 		let yearNum = 0;
 		try {
 			// Validate username
-			console.log('Get request to')
-			console.log(`${process.env.NEXT_PUBLIC_API_URI}/users`)
+			console.log('Get request to');
+			console.log(`${process.env.NEXT_PUBLIC_API_URI}/users`);
 
 			// axios
 			// 	.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
@@ -130,12 +129,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				swal('That username is already in use :(');
 				return;
 			}
-			
+
 			if (userInput.length > 15) {
 				swal('Ensure your username is less than 15 characters.');
 				return;
 			}
-			
+
 			// Validate full name
 			if (fullNameInput.length > 50) {
 				swal('Ensure your name is less than 50 characters.');
@@ -147,33 +146,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			const emailRegex = /^[a-zA-Z0-9._-]+@(?:g\.)?ucla\.edu$/;
 			if (!emailRegex.test(emailInput)) {
 				swal('Please enter a valid UCLA email.');
-				return;;
+				return;
 			}
 			if (emailInput.length > 50) {
 				swal('Ensure your email is less than 50 characters.');
 				return;
 			}
 			// Validate year
-            try {
-                yearNum = parseInt(yearInput);
-            } catch (error) {
-                swal('Please enter a valid year in school (1-7).');
+			try {
+				yearNum = parseInt(yearInput);
+			} catch (error) {
+				swal('Please enter a valid year in school (1-7).');
 				return;
-            }
+			}
 			if (yearNum < 1 || yearNum > 9) {
-                swal('Please enter a valid year in school (1-7).');
+				swal('Please enter a valid year in school (1-7).');
 				return;
 			}
 
 			// Validate password
-			if (passInput.length < 8 || 
+			if (
+				passInput.length < 8 ||
 				passInput.length > 40 ||
 				!/[a-z]/.test(passInput) ||
 				!/[A-Z]/.test(passInput) ||
 				!/\d/.test(passInput) ||
 				!/[!@#$%^&*]/.test(passInput)
 			) {
-				swal('Please enter a more secure password. It should contain:\n- At least 8 characters\n- No more than 40 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character');
+				swal(
+					'Please enter a more secure password. It should contain:\n- At least 8 characters\n- No more than 40 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character',
+				);
 				return;
 			}
 
@@ -182,30 +184,31 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 			// TODO: pass back password hash instead of password in plaintext?
 			const newUser = {
-				user_id: userInput, 
-				user_name: fullNameInput, 
-				passwd: passInput, 
-				year: yearNum, 
+				user_id: userInput,
+				user_name: fullNameInput,
+				passwd: passInput,
+				year: yearNum,
 				email: emailInput,
 			};
-			
+
 			// Now, the registration is valid
-			axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
+			axios
+				.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
 				.then((res) => {
 					swal('Success! Account created.');
 					loginInstead();
-				}).catch((err) => {
+				})
+				.catch((err) => {
 					swal('Something went wrong creating your account. Please try again');
 					console.error(err);
 				});
-
 		} catch (error) {
 			// swal('An unexpected error occured in account creation. Please try again.');
-			console.error(error)
+			console.error(error);
 			swal('Something went wrong! Please try again.');
 			return;
 		}
-	}
+	};
 
 	const handleLogin = async () => {
 		// userInput, passInput
@@ -219,7 +222,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			}
 
 			// Attempt to log in
-			axios.get(`${process.env.NEXT_PUBLIC_API_URI}/login/${userInput}/${passInput}`)
+			axios
+				.get(`${process.env.NEXT_PUBLIC_API_URI}/login/${userInput}/${passInput}`)
 				.then((res) => {
 					if (res?.data[0].user_jwt) {
 						console.log(`Success found: ${JSON.stringify(res.data[0].user_jwt)}`);
@@ -230,16 +234,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 							swal('Successfully logged in!');
 							router.push('/');
 						} else {
-							swal('Something went wrong! Please log in again.')
+							swal('Something went wrong! Please log in again.');
 						}
-					}
-					else
-						swal('Something went wrong! Please log in again.')
-				}).catch((err) => {
-					swal('Something went wrong! Please log in again.')
+					} else swal('Something went wrong! Please log in again.');
+				})
+				.catch((err) => {
+					swal('Something went wrong! Please log in again.');
 				});
 		} catch (error) {
-			swal('Something went wrong! Please log in again.')
+			swal('Something went wrong! Please log in again.');
 		}
 	};
 
@@ -276,43 +279,47 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 					onChange={(input) => setPassInput(input.target.value)}
 				/>
 			</div>
-			{isRegister ? (<>
-				<div className={styles.loginItemContainer}>
-					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-					<Label htmlFor={emailId}>Full Name</Label>
-					<Input
-						id='namearea'
-						placeholder='Joe Bruin'
-						size='large'
-						contentBefore={<PersonRegular />}
-						onChange={(input) => setFullNameInput(input.target.value)}
-					/>
-				</div>
+			{isRegister ? (
+				<>
+					<div className={styles.loginItemContainer}>
+						{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+						<Label htmlFor={emailId}>Full Name</Label>
+						<Input
+							id='namearea'
+							placeholder='Joe Bruin'
+							size='large'
+							contentBefore={<PersonRegular />}
+							onChange={(input) => setFullNameInput(input.target.value)}
+						/>
+					</div>
 
-				<div className={styles.loginItemContainer}>
-					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-					<Label htmlFor={fullNameId}>UCLA Email</Label>
-					<Input
-						id='emailarea'
-						placeholder='joebruin@g.ucla.edu'
-						size='large'
-						contentBefore={<PersonRegular />}
-						onChange={(input) => setEmailInput(input.target.value)}
-					/>
-				</div>
+					<div className={styles.loginItemContainer}>
+						{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+						<Label htmlFor={fullNameId}>UCLA Email</Label>
+						<Input
+							id='emailarea'
+							placeholder='joebruin@g.ucla.edu'
+							size='large'
+							contentBefore={<PersonRegular />}
+							onChange={(input) => setEmailInput(input.target.value)}
+						/>
+					</div>
 
-				<div className={styles.loginItemContainer}>
-					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-					<Label htmlFor={yearId}>Year (1-7)</Label>
-					<Input
-						id='yeararea'
-						placeholder='1'
-						size='large'
-						contentBefore={<PersonRegular />}
-						onChange={(input) => setYearInput(input.target.value)}
-					/>
-				</div>
-			</>) : <></>}
+					<div className={styles.loginItemContainer}>
+						{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
+						<Label htmlFor={yearId}>Year (1-7)</Label>
+						<Input
+							id='yeararea'
+							placeholder='1'
+							size='large'
+							contentBefore={<PersonRegular />}
+							onChange={(input) => setYearInput(input.target.value)}
+						/>
+					</div>
+				</>
+			) : (
+				<></>
+			)}
 			<Button
 				appearance='primary'
 				onClick={() => (isRegister ? handleRegister() : handleLogin())}
@@ -320,11 +327,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			>
 				Submit!
 			</Button>
-			{(isRegister
-				? <Caption1>Already have an account? <Link as="button" onClick={() => loginInstead()} appearance='default'>Login!</Link></Caption1>
-				: <Caption1>Don't have account? <Link as="button" onClick={() => registerInstead()} appearance='default'>Register!</Link></Caption1>
+			{isRegister ? (
+				<Caption1>
+					Already have an account?{' '}
+					<Link as='button' onClick={() => loginInstead()} appearance='default'>
+						Login!
+					</Link>
+				</Caption1>
+			) : (
+				<Caption1>
+					Don't have account?{' '}
+					<Link as='button' onClick={() => registerInstead()} appearance='default'>
+						Register!
+					</Link>
+				</Caption1>
 			)}
-			
 		</div>
 	);
 };

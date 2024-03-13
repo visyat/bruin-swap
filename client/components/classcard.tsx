@@ -76,9 +76,9 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 		if (false) {
 			router.push('/login');
 		}
-	
+
 		router.push(`${transaction_id}`);
-	}
+	};
 
 	return (
 		<Card className={styles.card} appearance='filled' as='div' size='small'>

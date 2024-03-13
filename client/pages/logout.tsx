@@ -16,17 +16,13 @@ const useStyles = makeStyles({
 
 const Login = () => {
 	const styles = useStyles();
-    const router = useRouter();
+	const router = useRouter();
 
-    // Log out and redirect
-    localStorage.removeItem('token');
-    router.push('/login');
-  
-	return (
-		<div className={styles.container}>
-			Logging out...
-		</div>
-	);
+	// Log out and redirect
+	localStorage.removeItem('token');
+	router.push('/login');
+
+	return <div className={styles.container}>Logging out...</div>;
 };
 
 export default Login;

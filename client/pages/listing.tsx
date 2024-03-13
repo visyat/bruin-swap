@@ -18,7 +18,7 @@ const Login = () => {
 
 	return (
 		<div className={styles.container}>
-			<AddListing/>
+			<AddListing />
 		</div>
 	);
 };

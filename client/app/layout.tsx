@@ -17,14 +17,12 @@ const RootLayout = ({
 					<Navbar />
 				</div>
 				<div className='children-container'>
-					<div className='children'>
-						{children}
-					</div>
+					<div className='children'>{children}</div>
 				</div>
 			</div>
 			<Footer />
 		</div>
-	)
+	);
 };
 
 export default RootLayout;
