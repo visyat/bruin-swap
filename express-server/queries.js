@@ -21,7 +21,6 @@ const pool = new Pool({
 //GET Requests
 const getAllUsers = (request, response) => { 
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
-        console.log('Done withq query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
