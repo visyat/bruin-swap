@@ -6,7 +6,7 @@ const useStyles = makeStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		...shorthands.padding('100px'),
+		...shorthands.padding('40px'),
 		// shadow
 		boxShadow: '0 6px 7px rgba(0, 0, 0, 0.3)',
 		...shorthands.borderRadius(tokens.borderRadiusXLarge),

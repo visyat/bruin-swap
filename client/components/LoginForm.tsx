@@ -1,4 +1,5 @@
 // TODO: make sure this is relatively responsive at least
+// TODO: put the login in cookies instead of local storage
 import {
 	Button,
 	makeStyles,
@@ -225,7 +226,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 						// Set cookie in client-side mode
 						if (typeof window !== 'undefined') {
-							Cookies.set('token', res.data[0].user_jwt, { expires: 7 }); 
+							localStorage.setItem('token', res.data[0].user_jwt);
 							swal('Successfully logged in!');
 							router.push('/');
 						} else {

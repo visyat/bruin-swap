@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-function Page() {
+const Page = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    
+    const [token, setToken] = useState<string | null>(null);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setToken(token);
+    }, []);
+
 
     const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearchTerm(event.target.value);
@@ -25,7 +32,7 @@ function Page() {
                 onChange={handleSearchChange}
                 value={searchTerm}
             />
-            {/* Additional content or components */}
+            {token}
         </div>
     );
 }

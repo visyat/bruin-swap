@@ -4,8 +4,17 @@ import Link from 'next/link';
 import { makeStyles, shorthands, Tab, TabList } from '@fluentui/react-components';
 import type { TabListProps } from '@fluentui/react-components';
 import styles from '../../styles/Navbar.module.css';
+import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react';
 
 const Navbar = (props: Partial<TabListProps>) => {
+
+	const [token, setToken] = useState<string | null>(null);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setToken(token);
+    }, []);
+
 	return (
 		<nav className={styles.topnav}>
 			{/* Root */}
@@ -27,21 +36,18 @@ const Navbar = (props: Partial<TabListProps>) => {
 				<span>👤</span>
 				<p>Account</p>
 			</Link>
-			{/* {(localStorage.getItem('token') 
-			? (<Link href='/logout' className={styles.navItem}>
-				<span>👋</span>
-				<p>Logout</p>
-			</Link>)
-			: (<Link href='/login' className={styles.navItem}>
-				<span>👋</span>
-				<p>Login</p>
-			</Link>))} */}
-			<Link href='/login' className={styles.navItem}>
-				<span>👋</span>
-				<p>Login</p>
-			</Link>
+			{(token
+				? (<Link href='/logout' className={styles.navItem}>
+					<span>👋</span>
+					<p>Logout</p>
+				</Link>)
+				: (<Link href='/login' className={styles.navItem}>
+					<span>👋</span>
+					<p>Login</p>
+				</Link>))}
 		</nav>
 	);
 };
+
 
 export default Navbar;
