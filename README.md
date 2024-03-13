@@ -21,15 +21,11 @@ npm install
 
 In the `express-server` directory, place the following keys in a file named `.env` to connect to our Amazon RDS instance and email server:
 ```
-#Environment Variables
-#Postgres API Keys
 POSTGRES_HOST=cs35l-course-swaps.czme8i86mreh.us-east-2.rds.amazonaws.com
 POSTGRES_ADMIN_USER=postgres
 POSTGRES_PASSWORD=comsci35lpassword
 POSTGRES_DB_NAME=courseswaps
 POSTGRES_PORT=5432
-
-#NodeMailer API Keys
 MAIL_SERVICE=gmail
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
@@ -61,10 +57,24 @@ To run the completed application, enter the following command:
 npm run dev
 ```
 The application will be available at `http://localhost:8080`
+
+## Main Features 
+1. Create posts, proposing class drops, and read & accept such posts from other students
+2. Search for course listings that you want, by department, course number, etc.
+3. Save courses on your wishlist; when a new post is created offering that course, you will get notified via email
+
+## Tech Stack 
+* JavaScript 
+* TypeScript
+* Node.js
+* Express.js
+* React.js (Fluent UI)
+* PostgreSQL
+
 ## References
 Below are some tutorials we used to help guide our implementation: 
 * https://blog.logrocket.com/crud-rest-api-node-js-express-postgresql/
 * https://blog.logrocket.com/sending-emails-node-js-nodemailer/ 
 
 ## Authors
-BruinSwap was made as project for COM SCI 35L (Winter 2024) taught by Professor Paul Eggert. Built by Vishal Yathish, Rathul Anand, Aditya Pai, Christian Giron-Michel, and Matthew Day.  
+BruinSwap was made as a project for COM SCI 35L (Winter 2024), taught by Professor Paul Eggert. It was built by Vishal Yathish, Rathul Anand, Aditya Pai, Christian Giron-Michel, and Matthew Day.  
