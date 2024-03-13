@@ -9,13 +9,17 @@ import { useRouter } from 'next/router';
 const Account = () => {
 	const router = useRouter();
 
-	// LOGINPROTECTTODO
-	if (false) {
-		router.push('/login');
-	}
+	// Login protect
+	const [token, setToken] = useState<string | null>(null);
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setToken(token);
+		if (!token) {
+			router.push('/login');
+		}
+	}, []);
 
 	const [output, setOutput] = useState('');
-
 
 	const handleButtonClick = (text: string) => {
 		setOutput(text);
