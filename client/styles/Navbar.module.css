@@ -29,8 +29,7 @@
     margin-right: auto;
 }
 .image{
-    width: 100; /* Adjust the width as needed */
-    height: 100; /* Maintain aspect ratio */
-    margin-right: 10px; /* Example margin */
-
+    width: 200px;
+    height: 60px;
+    margin-right: 10px; 
 }
