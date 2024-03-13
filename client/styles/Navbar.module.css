@@ -24,3 +24,13 @@
     background-color: #005a9e;
     cursor: pointer;
 }
+.bruinSwap {
+    display: block;
+    margin-right: auto;
+}
+.image{
+    width: 100; /* Adjust the width as needed */
+    height: 100; /* Maintain aspect ratio */
+    margin-right: 10px; /* Example margin */
+
+}

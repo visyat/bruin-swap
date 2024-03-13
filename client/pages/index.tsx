@@ -1,6 +1,31 @@
+import { Input, LargeTitle, makeStyles } from '@fluentui/react-components';
 import { useState, useEffect } from 'react';
 
+
+const useStyles = makeStyles({
+	centerTitle:{
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: '60vh',
+		color: '#2774AE',
+		fontFamily: 'sans serif',
+		marginTop: '10px'
+	},
+	search:{
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start',
+		width: '80vh',
+		height: '7vh'
+	}
+});
+
+
 const Page = () => {
+	const styles = useStyles();
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const [token, setToken] = useState<string | null>(null);
@@ -15,32 +40,23 @@ const Page = () => {
 	};
 
 	return (
-		<div
-			className='App'
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: '60vh',
-			}}
-		>
-			<h1>Course Swap</h1>
-			<input
+		<div className={styles.centerTitle}>
+			<LargeTitle>Bruin Swap</LargeTitle>
+		<div>
+			<div>
+		<Input
 				type='text'
 				placeholder='Search...'
-				style={{
-					padding: '8px 12px',
-					border: '2px solid #ccc',
-					borderRadius: '20px',
-					fontSize: '16px',
-					width: '300px',
-					outline: 'none',
-				}}
+				className={styles.search}
 				onChange={handleSearchChange}
 				value={searchTerm}
 			/>
 			{token}
+		</div>
+		</div>
+
+			
+			
 		</div>
 	);
 };
