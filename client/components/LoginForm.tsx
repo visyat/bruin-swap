@@ -14,7 +14,7 @@ import {
 } from '@fluentui/react-components';
 import { PersonRegular, KeyRegular } from '@fluentui/react-icons';
 import { tokens } from '@fluentui/react-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { useRouter } from 'next/router';
@@ -63,6 +63,25 @@ interface UserReturn {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
+	// const [response, setResponse] = useState({});
+	// useEffect(() => {
+	// 	const newUser = {
+	// 		"user_id": "abcdefghijkl",
+	// 		"user_name": "rathulatrahult",
+	// 		"passwd": "aBC323$#$ioj",
+	// 		"year": 1,
+	// 		"email": "ldksj123asdffdl@g.ucla.edu"
+	// 	}
+	// 	axios
+	// 		.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
+	// 		.then((res) => {
+	// 			console.log(`Response: ${res}`);
+	// 			setResponse(res);
+	// 		}).catch((err) => {
+	// 			console.error(`Error: ${err.msg}`);
+	// 		});
+	// }, []);
+
 	const styles = useStyles();
 	const usernameId = useId('username');
 	const passwordId = useId('password');
@@ -71,14 +90,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 	const yearId = useId('year');
 	const [userInput, setUserInput] = useState('');
 	const [passInput, setPassInput] = useState('');
-	const [fullNameInput, setFullNameInputInput] = useState('');
+	const [fullNameInput, setFullNameInput] = useState('');
 	const [yearInput, setYearInput] = useState<string>('');
 	const [emailInput, setEmailInput] = useState('');
 	const router = useRouter();
 
-	const handleRegister = async () => {
+	const validateRegistration = async (username: string, password: string, fullname: string, email: string, year: string) => {
 		console.log('Logging in');
-		let year = 0;
+		let yearNum = 0;
 		// console.log(`User: ${userInput}, ${passInput}`);
 		try {
 			// Validate username
@@ -88,38 +107,59 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
 				.then((res) => {
 					const users = res.data;
-					if (users.some((user: UserReturn) => user.user_id === userInput)) {
+					if (users.some((user: UserReturn) => user.user_id === username)) {
 						swal('That username is already in use :(');
-						return;
+						return {validation: 0};;
 					}
-				})
-				.catch((error) => {
+				}).catch((error) => {
 					swal(`Something went wrong! Please try again ${error}`);
 					console.error(error);
+					return {validation: 0};
 				})
+			if (username.length > 15) {
+				swal('Ensure your username is less than 15 characters.');
+				return {validation: 0};
+			}
+			
+			// Validate full name
+			if (fullname.length > 50) {
+				swal('Ensure your name is less than 50 characters.');
+				return {validation: 0};
+			}
 
 			// Validate email
 			// Allow non-UCLA emails: const emailRegex = /^[a-zA-Z0-9. _-]+@[a-zA-Z0-9. -]+\. [a-zA-Z]{2,4}$/;
 			const emailRegex = /^[a-zA-Z0-9._-]+@(?:g\.)?ucla\.edu$/;
-			if (!emailRegex.test(emailInput)) {
+			if (!emailRegex.test(email)) {
 				swal('Please enter a valid UCLA email.');
-				return;
+				return {validation: 0};;
+			}
+			if (email.length > 50) {
+				swal('Ensure your email is less than 50 characters.');
+				return {validation: 0};
 			}
 			// Validate year
             try {
-                year = parseInt(yearInput);
+                yearNum = parseInt(year);
             } catch (error) {
-                swal('Please enter a valid graduation year.');
+                swal('Please enter a valid year in school (1-7).');
+				return {validation: 0};
             }
+			if (yearNum < 1 || yearNum > 9) {
+                swal('Please enter a valid year in school (1-7).');
+				return {validation: 0};
+			}
+
 			// Validate password
-			if (passInput.length < 8 || 
-				!/[a-z]/.test(passInput) ||
-				!/[A-Z]/.test(passInput) ||
-				!/\d/.test(passInput) ||
-				!/[!@#$%^&*]/.test(passInput)
+			if (password.length < 8 || 
+				password.length > 40 ||
+				!/[a-z]/.test(password) ||
+				!/[A-Z]/.test(password) ||
+				!/\d/.test(password) ||
+				!/[!@#$%^&*]/.test(password)
 			) {
-				swal('Please enter a more secure password. It should contain:\n- At least 8 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character');
-				return;
+				swal('Please enter a more secure password. It should contain:\n- At least 8 characters\n- No more than 40 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character');
+				return {validation: 0};;
 			}
 
 			// By now, all user inputs have been validated and we can create an account
@@ -127,26 +167,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 			// TODO: pass back password hash instead of password in plaintext?
 			const newUser = {
-				user_id: userInput, 
-				user_name: fullNameInput, 
-				passwd: passInput, 
-				year: yearInput, 
-				email: emailInput,
+				user_id: username, 
+				user_name: fullname, 
+				passwd: password, 
+				year: yearNum, 
+				email: email,
 			}
-			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser);
-			console.log('Message:', res.data.msg);
-			if (res.status === 200) {
-				swal('Successfully created account!');
-				router.push('/');
-			} else {
-				swal('Something went wrong! Please try again.');
-			}
-
+			
+			return {validation: newUser};
 		} catch (error) {
 			// swal('An unexpected error occured in account creation. Please try again.');
 			console.error(error)
 			swal('Something went wrong! Please try again.');
+			return {validation: 0};
 		}
+	};
+
+	const handleRegister = async () => {
+		const val = await validateRegistration(userInput, passInput, fullNameInput, emailInput, yearInput);
+		if (val.validation === 0) {
+			// Note: once we get here, we should have already thrown a swal at some point
+			return;
+		}
+		const newUser = val.validation;
+		axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
+			.then((res) => {
+				swal('Success! Account created.');
+			}).catch((err) => {
+				swal('Something went wrong creating your account. Please try again');
+				console.error(err);
+			});
 	};
 
 	const handleLogin = async () => {
@@ -197,7 +247,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 						placeholder='Joe Bruin'
 						size='large'
 						contentBefore={<PersonRegular />}
-						onChange={(input) => setEmailInput(input.target.value)}
+						onChange={(input) => setFullNameInput(input.target.value)}
 					/>
 				</div>
 
@@ -215,10 +265,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 				<div className={styles.loginItemContainer}>
 					{/* <Subtitle1 className={styles.subTitle}>Username</Subtitle1> */}
-					<Label htmlFor={yearId}>Graduation Year</Label>
+					<Label htmlFor={yearId}>Year (1-7)</Label>
 					<Input
 						id='yeararea'
-						placeholder='2027'
+						placeholder='1'
 						size='large'
 						contentBefore={<PersonRegular />}
 						onChange={(input) => setYearInput(input.target.value)}

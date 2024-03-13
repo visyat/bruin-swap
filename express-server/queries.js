@@ -17,8 +17,9 @@ const pool = new Pool({
 
 //GET Requests
 const getAllUsers = (request, response) => { 
+    console.log('Querying users');
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
-        console.log('Done withq query');
+        console.log('Done with query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
@@ -244,30 +245,42 @@ const getEnrollmentsByUser = (request, response) => {
 //POST Requests
 const addNewUser = (request, response) => {
     const { user_id, user_name, passwd, year, email } = request.body
+    console.log(`Received: ${JSON.stringify(request.body)}`);
     console.log('Making user ', user_id, user_name, passwd, year, email);
     if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
+        console.log(`Invalid user ID`);
         response.status(400).json({msg: `INVALID USER ID`});
     } 
     else if (user_name === null || user_name === undefined || typeof(user_name) !== 'string' || user_name === '') {
+        console.log(`Invalid user name: ${user_name}`);
         response.status(400).json({msg: `INVALID USER NAME`});
     }
     else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
+        console.log('Invalid user pass');
         response.status(400).json({msg: `INVALID PASSWORD`});
     }
-    else if (year === null || year === undefined || typeof(year) !== 'number' || year <= 0 || year > 6) {
+    else if (year === null || year === undefined || typeof(year) !== 'number' || year <= 0) {
+        console.log('Invalid user year');
         response.status(400).json({msg: `INVALID YEAR`});
     }
     else if (email === null || email === undefined || typeof(email) !== 'string' || email === '') {
+        console.log('Invalid email');
         response.status(400).json({msg: `INVALID USER EMAIL`});
     }
     else {
+        console.log('Passed tests user');
         var secret_key = 'secret-key'
         const token = jwt.sign({ userID: user_id }, secret_key)
         pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);', [token, user_id, user_name, passwd, year, email], (error, results) => {
             if (error) {
+                console.log('Invalid query');
+                console.error(`Error is that: ${error}`)
+                console.log('"INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);"', [token, user_id, user_name, passwd, year, email]);
                 response.status(400).json({ msg: 'INVALID QUERY' });
+            } else {
+                response.status(200).json({msg: `USER INSERT SUCCESSFUL`});
+                console.log('Successfully amde user');
             }
-            response.status(200).json({msg: `USER INSERT SUCCESSFUL`});
         })
     }
 }
@@ -378,7 +391,7 @@ const updateUserInfoByJWT = (request, response) => {
     else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
         response.status(400).json({msg: `INVALID PASSWORD`});
     }
-    else if (year_level === null || year_level === undefined || typeof(year_level) !== 'number' || year_level <= 0 || year_level > 6) {
+    else if (year_level === null || year_level === undefined || typeof(year_level) !== 'number' || year_level <= 0) {
         response.status(400).json({msg: `INVALID YEAR LEVEL`});
     }
     else if (email === null || email === undefined || typeof(email) !== 'string' || email === '') {
