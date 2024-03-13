@@ -1,3 +1,5 @@
+'use client';
+
 import { AppProps } from 'next/app';
 import '../app/globals.css'; // Or wherever your global styles are located
 import RootLayout from '../app/layout';

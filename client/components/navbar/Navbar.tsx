@@ -1,11 +1,11 @@
 // components/navbar/Navbar.tsx
+'use client';
 
 import Link from 'next/link';
 import { makeStyles, shorthands, Tab, TabList } from '@fluentui/react-components';
 import type { TabListProps } from '@fluentui/react-components';
 import styles from '../../styles/Navbar.module.css';
-import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Navbar = (props: Partial<TabListProps>) => {
 	const [token, setToken] = useState<string | null>(null);
