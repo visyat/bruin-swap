@@ -79,23 +79,26 @@ const AddListingPage = () => {
 	const [professorList, setProfessorList] = useState<string[]>([]);
 	const [lectureSectionList, setLectureSectionList] = useState<string[]>([]);
 
-	const [classes, setClasses] = useState<ClassRemote[] | null>(null);
+	const [classes, setClasses] = useState<ClassRemote[]>([]);
 
 	const fetchClasses = async () => {
 		axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes`)
 			.then((res) => {
 				console.log(JSON.stringify(res.data));
 				setClasses(res.data);
-				const newDeptList = res.data.map((c: ClassRemote) => c.department);
-				const uniqueDeptList = newDeptList.filter((value: ClassRemote, index: number, self: ClassRemote[]) => self.indexOf(value) === index);
+				const newDeptList = classes.map((c: ClassRemote) => c.department);
+				const uniqueDeptList = newDeptList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 				setDepartmentList(uniqueDeptList);
 			}).catch((err) => {
 				swal('Something went wrong fetching classes.')
 			});
 	};
 
+	// Update once department selected
 	useEffect(() => {
-
+		const newCourseList = classes.map((c: ClassRemote) => c.course_num);
+		const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+		setCourseList(uniqueCourseList);
 	}, [department]);
 
 	useEffect(() => {
@@ -114,7 +117,7 @@ const AddListingPage = () => {
 
 	return (
 		<div className={styles.loginContainer}>
-			<LargeTitle>Add Listing</LargeTitle>
+			{department}
 			<form onSubmit={handleSubmit}>
 				<div className={styles.loginItemContainer}>
 					<Label>Course Department:</Label>
@@ -132,11 +135,31 @@ const AddListingPage = () => {
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label htmlFor='course'>Course:</Label>
-					<Dropdown placeholder='Select Course'></Dropdown>
+					<Dropdown 
+						placeholder='Select Course'
+						value={course ? course : ''}
+						onOptionSelect={(e, data) => setCourse(data.optionText)}
+					>
+						{courseList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label htmlFor='professor'>Professor:</Label>
-					<Dropdown placeholder='Select Professor'></Dropdown>
+					<Dropdown
+						placeholder='Select Professor'
+						value={professor ? professor : ''}
+						onOptionSelect={(e, data) => setProfessor(data.optionText)}
+					>
+						{professorList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label>Lecture Section:</Label>
