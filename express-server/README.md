@@ -5,7 +5,7 @@
 To download and test working queries, run the following commands: 
 
 ```
-git clone https://github.com/visyat/35L-project.git
+git clone https://github.com/visyat/bruin-swap.git
 cd express-server
 npm install
 npm start
