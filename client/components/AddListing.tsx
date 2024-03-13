@@ -8,8 +8,11 @@ import {
 	shorthands,
 	tokens,
 	useId,
+	Option,
 } from '@fluentui/react-components';
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, FormEventHandler, useState, useEffect } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const useStyles = makeStyles({
 	loginContainer: {
@@ -48,13 +51,57 @@ const useStyles = makeStyles({
 	},
 });
 
-function AddListingPage() {
+interface ClassRemote {
+	section_code: string;
+	department: string;
+	course_num: string;
+	course_name: string;
+	professor: string;
+	disc_section: string;
+};
+
+const AddListingPage = () => {
+	const [token, setToken] = useState<string | null>(null);
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setToken(token);
+	}, []);
+
 	// State variables to store selected values
 	const styles = useStyles();
-	const [department, setDepartment] = useState('');
-	const [course, setCourse] = useState('');
-	const [professor, setProfessor] = useState('');
-	const [lectureSection, setLectureSection] = useState('');
+	const [department, setDepartment] = useState<string | undefined>(undefined);
+	const [course, setCourse] = useState<string | undefined>(undefined);
+	const [professor, setProfessor] = useState<string | undefined>(undefined);
+	const [lectureSection, setLectureSection] = useState<string | undefined>(undefined);
+
+	const [departmentList, setDepartmentList] = useState<string[]>([]);
+	const [courseList, setCourseList] = useState<string[]>([]);
+	const [professorList, setProfessorList] = useState<string[]>([]);
+	const [lectureSectionList, setLectureSectionList] = useState<string[]>([]);
+
+	const [classes, setClasses] = useState<ClassRemote[] | null>(null);
+
+	const fetchClasses = async () => {
+		axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes`)
+			.then((res) => {
+				console.log(JSON.stringify(res.data));
+				setClasses(res.data);
+				const newDeptList = res.data.map((c: ClassRemote) => c.department);
+				const uniqueDeptList = newDeptList.filter((value: ClassRemote, index: number, self: ClassRemote[]) => self.indexOf(value) === index);
+				setDepartmentList(uniqueDeptList);
+			}).catch((err) => {
+				swal('Something went wrong fetching classes.')
+			});
+	};
+
+	useEffect(() => {
+
+	}, [department]);
+
+	useEffect(() => {
+		fetchClasses();
+	}, []);
+
 	const dropdownId = useId('dropdown-default');
 	const departmentName = useId('departmentName');
 
@@ -71,7 +118,17 @@ function AddListingPage() {
 			<form onSubmit={handleSubmit}>
 				<div className={styles.loginItemContainer}>
 					<Label>Course Department:</Label>
-					<Dropdown placeholder='Select Department'></Dropdown>
+					<Dropdown 
+						placeholder='Select Department'
+						value={department ? department : ''}
+						onOptionSelect={(e, data) => setDepartment(data.optionText)}
+					>
+						{departmentList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label htmlFor='course'>Course:</Label>
