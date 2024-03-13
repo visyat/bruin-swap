@@ -2,7 +2,7 @@
 
 ![Banner](./img/banner.png)
 
-BruinSwap is full-stack web application that allows students to post classes they intend to drop, and coordinate class swaps with other students. 
+BruinSwap is a full-stack web application that allows students to post classes they intend to drop and coordinate class swaps with other students. 
 
 ## Installation/Setup
 
