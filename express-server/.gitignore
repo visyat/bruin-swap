@@ -1,2 +1,3 @@
 test.js
 .env*.local
+/node_modules
