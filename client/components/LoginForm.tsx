@@ -95,71 +95,84 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 	const [emailInput, setEmailInput] = useState('');
 	const router = useRouter();
 
-	const validateRegistration = async (username: string, password: string, fullname: string, email: string, year: string) => {
+
+	const loginInstead = () => router.push(`/login`);
+	const registerInstead = () => router.push(`/register`);
+
+	const handleRegister = async () => {
 		console.log('Logging in');
+
 		let yearNum = 0;
-		// console.log(`User: ${userInput}, ${passInput}`);
 		try {
 			// Validate username
 			console.log('Get request to')
 			console.log(`${process.env.NEXT_PUBLIC_API_URI}/users`)
-			axios
-				.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
-				.then((res) => {
-					const users = res.data;
-					if (users.some((user: UserReturn) => user.user_id === username)) {
-						swal('That username is already in use :(');
-						return {validation: 0};;
-					}
-				}).catch((error) => {
-					swal(`Something went wrong! Please try again ${error}`);
-					console.error(error);
-					return {validation: 0};
-				})
-			if (username.length > 15) {
+
+			// axios
+			// 	.get(`${process.env.NEXT_PUBLIC_API_URI}/users`)
+			// 	.then((res) => {
+			// 		const users = res.data;
+			// 		if (users.some((user: UserReturn) => user.user_id === userInput)) {
+			// 			swal('That username is already in use :(');
+			// 			return;
+			// 		}
+			// 	}).catch((error) => {
+			// 		swal(`Something went wrong! Please try again ${error}`);
+			// 		return;
+			// 	})
+
+			// async await to stop race condition
+			const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/users`);
+			const users = res.data;
+			if (users.some((user: UserReturn) => user.user_id === userInput)) {
+				swal('That username is already in use :(');
+				return;
+			}
+			
+			if (userInput.length > 15) {
 				swal('Ensure your username is less than 15 characters.');
-				return {validation: 0};
+				return;
 			}
 			
 			// Validate full name
-			if (fullname.length > 50) {
+			if (fullNameInput.length > 50) {
 				swal('Ensure your name is less than 50 characters.');
-				return {validation: 0};
+				return;
 			}
 
 			// Validate email
 			// Allow non-UCLA emails: const emailRegex = /^[a-zA-Z0-9. _-]+@[a-zA-Z0-9. -]+\. [a-zA-Z]{2,4}$/;
 			const emailRegex = /^[a-zA-Z0-9._-]+@(?:g\.)?ucla\.edu$/;
-			if (!emailRegex.test(email)) {
+			if (!emailRegex.test(emailInput)) {
 				swal('Please enter a valid UCLA email.');
-				return {validation: 0};;
+				return;;
 			}
-			if (email.length > 50) {
+			if (emailInput.length > 50) {
 				swal('Ensure your email is less than 50 characters.');
-				return {validation: 0};
+				return;
 			}
 			// Validate year
             try {
-                yearNum = parseInt(year);
+                yearNum = parseInt(yearInput);
             } catch (error) {
                 swal('Please enter a valid year in school (1-7).');
-				return {validation: 0};
+				return;
             }
 			if (yearNum < 1 || yearNum > 9) {
                 swal('Please enter a valid year in school (1-7).');
-				return {validation: 0};
+				return;
 			}
 
 			// Validate password
-			if (password.length < 8 || 
-				password.length > 40 ||
-				!/[a-z]/.test(password) ||
-				!/[A-Z]/.test(password) ||
-				!/\d/.test(password) ||
-				!/[!@#$%^&*]/.test(password)
+			if (passInput.length < 8 || 
+				passInput.length > 40 ||
+				!/[a-z]/.test(passInput) ||
+				!/[A-Z]/.test(passInput) ||
+				!/\d/.test(passInput) ||
+				!/[!@#$%^&*]/.test(passInput)
 			) {
 				swal('Please enter a more secure password. It should contain:\n- At least 8 characters\n- No more than 40 characters\n- A lowercase letter\n- An uppercase letter\n- A digit\n- A special character');
-				return {validation: 0};;
+				return;
 			}
 
 			// By now, all user inputs have been validated and we can create an account
@@ -167,44 +180,35 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 
 			// TODO: pass back password hash instead of password in plaintext?
 			const newUser = {
-				user_id: username, 
-				user_name: fullname, 
-				passwd: password, 
+				user_id: userInput, 
+				user_name: fullNameInput, 
+				passwd: passInput, 
 				year: yearNum, 
-				email: email,
-			}
+				email: emailInput,
+			};
 			
-			return {validation: newUser};
+			// Now, the registration is valid
+			axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
+				.then((res) => {
+					swal('Success! Account created.');
+					loginInstead();
+				}).catch((err) => {
+					swal('Something went wrong creating your account. Please try again');
+					console.error(err);
+				});
+
 		} catch (error) {
 			// swal('An unexpected error occured in account creation. Please try again.');
 			console.error(error)
 			swal('Something went wrong! Please try again.');
-			return {validation: 0};
-		}
-	};
-
-	const handleRegister = async () => {
-		const val = await validateRegistration(userInput, passInput, fullNameInput, emailInput, yearInput);
-		if (val.validation === 0) {
-			// Note: once we get here, we should have already thrown a swal at some point
 			return;
 		}
-		const newUser = val.validation;
-		axios.post(`${process.env.NEXT_PUBLIC_API_URI}/users`, newUser)
-			.then((res) => {
-				swal('Success! Account created.');
-			}).catch((err) => {
-				swal('Something went wrong creating your account. Please try again');
-				console.error(err);
-			});
-	};
+	}
 
 	const handleLogin = async () => {
 
 	};
 
-	const loginInstead = () => router.push(`/login`);
-	const registerInstead = () => router.push(`/register`);
 	// const loginInstead = () => console.log('logging in instead');
 	// const registerInstead = () => console.log('registering instead');
 
