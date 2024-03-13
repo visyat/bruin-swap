@@ -4,8 +4,16 @@ import styles from '../styles/Account.module.css';
 import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
 import ClassCardWishlist from '../components/ClassCardWishlist';
+import { useRouter } from 'next/router';
 
 const Account = () => {
+	const router = useRouter();
+
+	// LOGINPROTECTTODO
+	if (false) {
+		router.push('/login');
+	}
+
 	const [output, setOutput] = useState('');
 
 	const handleButtonClick = (text: string) => {

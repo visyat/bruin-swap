@@ -93,6 +93,11 @@ const ListingPage = () => {
 	const { transaction_id } = router.query;
 	let transaction_id_num = -1;
 
+	// LOGINPROTECTTODO
+	if (false) {
+		router.push('/login');
+	}
+
 	useEffect(() => {
 		console.log(`Transaction param: ${transaction_id}`);
 		const fetchListing = async () => {

@@ -206,7 +206,29 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 	}
 
 	const handleLogin = async () => {
+		// userInput, passInput
+		try {
+			// async await to pause until username exists
+			const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/users`);
+			const users = res.data;
+			if (!users.some((user: UserReturn) => user.user_id === userInput)) {
+				swal('Username not found!');
+				return;
+			}
 
+			// Attempt to log in
+			axios.get(`${process.env.NEXT_PUBLIC_API_URI}/login/${userInput}/${passInput}`)
+				.then((res) => {
+					if (res?.data[0].user_jwt)
+						console.log(`Success found: ${JSON.stringify(res.data[0].user_jwt)}`);
+					else
+						swal('Something went wrong! Please log in again.')
+				}).catch((err) => {
+					swal('Something went wrong! Please log in again.')
+				});
+		} catch (error) {
+			swal('Something went wrong! Please log in again.')
+		}
 	};
 
 	// const loginInstead = () => console.log('logging in instead');

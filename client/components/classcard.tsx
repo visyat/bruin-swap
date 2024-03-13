@@ -71,7 +71,14 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 	const router = useRouter();
 	const styles = useStyles();
 
-	const handleSwapClick = () => router.push(`${transaction_id}`);
+	const handleSwapClick = () => {
+		// LOGINPROTECTTODO
+		if (false) {
+			router.push('/login');
+		}
+	
+		router.push(`${transaction_id}`);
+	}
 
 	return (
 		<Card className={styles.card} appearance='filled' as='div' size='small'>
