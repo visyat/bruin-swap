@@ -18,12 +18,12 @@ const Navbar = (props: Partial<TabListProps>) => {
 	return (
 		<nav className={styles.topnav}>
 			{/* Root */}
-			<Link href='/listings/search' className={`${styles.navItem} ${styles.bruinSwap}`}>
+			<Link href='/' className={`${styles.navItem} ${styles.bruinSwap}`}>
 			<img src='https://i.imgur.com/16fVOqH.png'className={styles.image} />
 			</Link>
 			{/* Course search */}
 			{/* <div className={styles.course_search}> */}
-			<Link href='/' className={styles.navItem}>
+			<Link href='/listings/search' className={styles.navItem}>
 				<span>🔍</span>
 				<p>Course Search</p>
 			</Link>

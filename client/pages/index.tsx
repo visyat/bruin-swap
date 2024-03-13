@@ -1,64 +1,58 @@
-import { Input, LargeTitle, makeStyles } from '@fluentui/react-components';
-import { useState, useEffect } from 'react';
-
+import { makeStyles, shorthands } from '@fluentui/react-components';
+import { OpenCardMode } from '@fluentui/react';
+import ClassCard from '../components/classcard';
+import { LISTINGS } from '../constants/temp_data';
+import { useRouter } from 'next/router';
+import { IListing } from '../types/listing';
 
 const useStyles = makeStyles({
-	centerTitle:{
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-		height: '60vh',
-		color: '#2774AE',
-		fontFamily: 'sans serif',
-		marginTop: '10px'
+	searchTitle: {
+		marginTop: '10px',
+		marginBottom: '10px',
+		textAlign: 'center',
+		fontSize: '30px',
 	},
-	search:{
+	classes: {
+		width: '100%',
+		height: '100%',
+		marginLeft: '0 auto',
+		marginRight: '0 auto',
+		display: 'grid',
+		gridTemplateColumns: '2fr 2fr 2fr',
+		// placeItems: 'center',
+		alignItems: 'center',
+		gridGap: '100px',
+	},
+	card: {
+		cursor: 'pointer',
+		width: '100%',
+		minHeight: '100px',
+		height: '100%',
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start',
-		width: '80vh',
-		height: '7vh'
-	}
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
 });
 
-
-const Page = () => {
+const Search = () => {
 	const styles = useStyles();
-	const [searchTerm, setSearchTerm] = useState('');
-
-	const [token, setToken] = useState<string | null>(null);
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		setToken(token);
-	}, []);
-
-	const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-		setSearchTerm(event.target.value);
-		// You can perform search-related actions here
-	};
 
 	return (
-		<div className={styles.centerTitle}>
-			<LargeTitle>Bruin Swap</LargeTitle>
 		<div>
-			<div>
-		<Input
-				type='text'
-				placeholder='Search...'
-				className={styles.search}
-				onChange={handleSearchChange}
-				value={searchTerm}
-			/>
-			{token}
-		</div>
-		</div>
-
-			
-			
+			<div className={styles.searchTitle}>
+				<h1>Listings</h1>
+			</div>
+			<div className={styles.classes}>
+				{LISTINGS.map((listing: IListing) => (
+					<div className={styles.card} key={listing.transaction_id}>
+						<ClassCard data={listing} />
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };
 
-export default Page;
+export default Search;
+
