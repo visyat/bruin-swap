@@ -8,8 +8,11 @@ import {
 	shorthands,
 	tokens,
 	useId,
+	Option,
 } from '@fluentui/react-components';
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, FormEventHandler, useState, useEffect } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const useStyles = makeStyles({
 	loginContainer: {
@@ -48,13 +51,69 @@ const useStyles = makeStyles({
 	},
 });
 
-function AddListingPage() {
+interface ClassRemote {
+	section_code: string;
+	department: string;
+	course_num: string;
+	course_name: string;
+	professor: string;
+	disc_section: string;
+};
+
+const AddListingPage = () => {
+	const [token, setToken] = useState<string | null>(null);
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setToken(token);
+	}, []);
+
 	// State variables to store selected values
 	const styles = useStyles();
-	const [department, setDepartment] = useState('');
-	const [course, setCourse] = useState('');
-	const [professor, setProfessor] = useState('');
-	const [lectureSection, setLectureSection] = useState('');
+	const [department, setDepartment] = useState<string | undefined>(undefined);
+	const [course, setCourse] = useState<string | undefined>(undefined);
+	const [professor, setProfessor] = useState<string | undefined>(undefined);
+	const [lectureSection, setLectureSection] = useState<string>('');
+
+	const [departmentList, setDepartmentList] = useState<string[]>([]);
+	const [courseList, setCourseList] = useState<string[]>([]);
+	const [professorList, setProfessorList] = useState<string[]>([]);
+	const [lectureSectionList, setLectureSectionList] = useState<string[]>([]);
+
+	const [classes, setClasses] = useState<ClassRemote[]>([]);
+
+	const fetchClasses = async () => {
+		axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes`)
+			.then((res) => {
+				console.log(JSON.stringify(res.data));
+				const newDeptList = res.data.map((c: ClassRemote) => c.department);
+				const uniqueDeptList = newDeptList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setDepartmentList(uniqueDeptList);
+
+				const newCourseList = res.data.map((c: ClassRemote) => c.course_num);
+				const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setCourseList(uniqueCourseList);
+
+				const newProfessorList = res.data.map((c: ClassRemote) => c.professor);
+				const uniqueProfessorList = newProfessorList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setProfessorList(uniqueProfessorList);
+				
+				setClasses(res.data);
+			}).catch((err) => {
+				swal('Something went wrong fetching classes.')
+			});
+	};
+
+	// // Update once department selected
+	// useEffect(() => {
+	// 	const newCourseList = classes.map((c: ClassRemote) => c.course_num);
+	// 	const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+	// 	setCourseList(uniqueCourseList);
+	// }, [department]);
+
+	useEffect(() => {
+		fetchClasses();
+	}, []);
+
 	const dropdownId = useId('dropdown-default');
 	const departmentName = useId('departmentName');
 
@@ -65,21 +124,63 @@ function AddListingPage() {
 		console.log('Form submitted:', { department, course, professor, lectureSection });
 	};
 
+	const submitPost = async () => {
+		// First, validate post
+		// Make sure such a class exists
+		const classToDrop = classes.find((c: ClassRemote) => {
+			c.department === department &&
+			c.course_num === course &&
+			c.professor === professor &&
+			c.disc_section === lectureSection
+		});
+
+	}
+
 	return (
 		<div className={styles.loginContainer}>
 			<LargeTitle>Add Listing</LargeTitle>
 			<form onSubmit={handleSubmit}>
 				<div className={styles.loginItemContainer}>
 					<Label>Course Department:</Label>
-					<Dropdown placeholder='Select Department'></Dropdown>
+					<Dropdown 
+						placeholder='Select Department'
+						value={department ? department : ''}
+						onOptionSelect={(e, data) => setDepartment(data.optionText)}
+					>
+						{departmentList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label htmlFor='course'>Course:</Label>
-					<Dropdown placeholder='Select Course'></Dropdown>
+					<Dropdown 
+						placeholder='Select Course'
+						value={course ? course : ''}
+						onOptionSelect={(e, data) => setCourse(data.optionText)}
+					>
+						{courseList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label htmlFor='professor'>Professor:</Label>
-					<Dropdown placeholder='Select Professor'></Dropdown>
+					<Dropdown
+						placeholder='Select Professor'
+						value={professor ? professor : ''}
+						onOptionSelect={(e, data) => setProfessor(data.optionText)}
+					>
+						{professorList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
 					<Label>Lecture Section:</Label>
@@ -87,10 +188,11 @@ function AddListingPage() {
 						type='text'
 						id='discussionSection'
 						value={lectureSection}
-						onChange={(e) => setLectureSection(e.target.value)}
+						placeholder='1A'
+						onChange={(input) => setLectureSection(input.target.value)}
 					/>
 				</div>
-				<Button type='submit' className={styles.submitButton}>
+				<Button type='submit' className={styles.submitButton} onClick={() => submitPost()}>
 					Submit
 				</Button>
 			</form>

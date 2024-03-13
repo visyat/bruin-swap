@@ -16,9 +16,12 @@ const Account = () => {
 
 	const [output, setOutput] = useState('');
 
+
 	const handleButtonClick = (text: string) => {
 		setOutput(text);
+		setOutput(text);
 	};
+
 
 	let content;
 	if (output === 'Profile Information') {

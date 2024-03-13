@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/Edit.module.css';
+// import styles from '../styles/Edit.module.css';
 import {
 	Button,
 	makeStyles,
@@ -162,3 +162,4 @@ function ProfileForm(props: { email: any; fullName: any; major: any; gradYear: a
 }
 
 export default ProfileForm;
+
