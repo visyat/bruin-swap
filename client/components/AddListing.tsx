@@ -72,7 +72,7 @@ const AddListingPage = () => {
 	const [department, setDepartment] = useState<string | undefined>(undefined);
 	const [course, setCourse] = useState<string | undefined>(undefined);
 	const [professor, setProfessor] = useState<string | undefined>(undefined);
-	const [lectureSection, setLectureSection] = useState<string | undefined>(undefined);
+	const [lectureSection, setLectureSection] = useState<string>('');
 
 	const [departmentList, setDepartmentList] = useState<string[]>([]);
 	const [courseList, setCourseList] = useState<string[]>([]);
@@ -85,21 +85,30 @@ const AddListingPage = () => {
 		axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes`)
 			.then((res) => {
 				console.log(JSON.stringify(res.data));
-				setClasses(res.data);
-				const newDeptList = classes.map((c: ClassRemote) => c.department);
+				const newDeptList = res.data.map((c: ClassRemote) => c.department);
 				const uniqueDeptList = newDeptList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 				setDepartmentList(uniqueDeptList);
+
+				const newCourseList = res.data.map((c: ClassRemote) => c.course_num);
+				const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setCourseList(uniqueCourseList);
+
+				const newProfessorList = res.data.map((c: ClassRemote) => c.professor);
+				const uniqueProfessorList = newProfessorList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setProfessorList(uniqueProfessorList);
+				
+				setClasses(res.data);
 			}).catch((err) => {
 				swal('Something went wrong fetching classes.')
 			});
 	};
 
-	// Update once department selected
-	useEffect(() => {
-		const newCourseList = classes.map((c: ClassRemote) => c.course_num);
-		const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
-		setCourseList(uniqueCourseList);
-	}, [department]);
+	// // Update once department selected
+	// useEffect(() => {
+	// 	const newCourseList = classes.map((c: ClassRemote) => c.course_num);
+	// 	const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+	// 	setCourseList(uniqueCourseList);
+	// }, [department]);
 
 	useEffect(() => {
 		fetchClasses();
@@ -115,9 +124,21 @@ const AddListingPage = () => {
 		console.log('Form submitted:', { department, course, professor, lectureSection });
 	};
 
+	const submitPost = async () => {
+		// First, validate post
+		// Make sure such a class exists
+		const classToDrop = classes.find((c: ClassRemote) => {
+			c.department === department &&
+			c.course_num === course &&
+			c.professor === professor &&
+			c.disc_section === lectureSection
+		});
+
+	}
+
 	return (
 		<div className={styles.loginContainer}>
-			{department}
+			<LargeTitle>Add Listing</LargeTitle>
 			<form onSubmit={handleSubmit}>
 				<div className={styles.loginItemContainer}>
 					<Label>Course Department:</Label>
@@ -167,10 +188,11 @@ const AddListingPage = () => {
 						type='text'
 						id='discussionSection'
 						value={lectureSection}
-						onChange={(e) => setLectureSection(e.target.value)}
+						placeholder='1A'
+						onChange={(input) => setLectureSection(input.target.value)}
 					/>
 				</div>
-				<Button type='submit' className={styles.submitButton}>
+				<Button type='submit' className={styles.submitButton} onClick={() => submitPost()}>
 					Submit
 				</Button>
 			</form>
