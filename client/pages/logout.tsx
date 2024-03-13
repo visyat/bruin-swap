@@ -1,5 +1,6 @@
 import { Button, makeStyles, Title1 } from '@fluentui/react-components';
-import AddListing from '@/components/AddListing';
+import LoginForm from '@/components/LoginForm';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles({
 	container: {
@@ -15,12 +16,13 @@ const useStyles = makeStyles({
 
 const Login = () => {
 	const styles = useStyles();
+	const router = useRouter();
 
-	return (
-		<div className={styles.container}>
-			<AddListing />
-		</div>
-	);
+	// Log out and redirect
+	localStorage.removeItem('token');
+	router.push('/login');
+
+	return <div className={styles.container}>Logging out...</div>;
 };
 
 export default Login;

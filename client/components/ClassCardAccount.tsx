@@ -17,7 +17,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { tokens } from '@fluentui/react-theme';
 
-
 const useStyles = makeStyles({
 	card: {
 		// fill div
@@ -83,34 +82,34 @@ const ClassCardAccount: React.FC<CardProps> = ({ data }) => {
 	const handleRemoveClick = () => console.log('Deleteting course!'); //router.push(`${transaction_id}`);
 
 	return (
-			<Card className={styles.card} appearance='filled' as='div' size='small'>
-				<CardHeader
-					className={styles.header}
-					header={
-						<div className={styles.details}>
-							<Body1>{`${classDept} ${classNum}: ${classTitle}`}</Body1>
-						</div>
-					}
-					description={<Caption1 style={{fontWeight: 'bold'}}>{`${instructor}`}</Caption1>}
-				/>
-				<CardFooter
-					className={styles.footer}
-					action={
-						<Button
-							className={styles.remove}
-							icon={<DeleteDismissFilled />}
-							onClick={() => handleRemoveClick()}
-							as='button'
-							appearance='primary'
-							shape='rounded'
-						>
-							Remove!
-						</Button>
-					}
-				>
-					<Caption1>Lecture: {lecture}</Caption1>
-				</CardFooter>
-			</Card>
+		<Card className={styles.card} appearance='filled' as='div' size='small'>
+			<CardHeader
+				className={styles.header}
+				header={
+					<div className={styles.details}>
+						<Body1>{`${classDept} ${classNum}: ${classTitle}`}</Body1>
+					</div>
+				}
+				description={<Caption1 style={{ fontWeight: 'bold' }}>{`${instructor}`}</Caption1>}
+			/>
+			<CardFooter
+				className={styles.footer}
+				action={
+					<Button
+						className={styles.remove}
+						icon={<DeleteDismissFilled />}
+						onClick={() => handleRemoveClick()}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+					>
+						Remove!
+					</Button>
+				}
+			>
+				<Caption1>Lecture: {lecture}</Caption1>
+			</CardFooter>
+		</Card>
 	);
 };
 
