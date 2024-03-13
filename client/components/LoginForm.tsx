@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles({
 	loginContainer: {
@@ -221,7 +222,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 				.then((res) => {
 					if (res?.data[0].user_jwt) {
 						console.log(`Success found: ${JSON.stringify(res.data[0].user_jwt)}`);
-						localStorage.setItem('token', res.data[0].user_jwt);
+
+						// Set cookie in client-side mode
+						if (typeof window !== 'undefined') {
+							Cookies.set('token', res.data[0].user_jwt, { expires: 7 }); 
+							swal('Successfully logged in!');
+							router.push('/');
+						} else {
+							swal('Something went wrong! Please log in again.')
+						}
 					}
 					else
 						swal('Something went wrong! Please log in again.')
