@@ -23,6 +23,15 @@ const Navbar = (props: Partial<TabListProps>) => {
 				<span>👤</span>
 				<p>Account</p>
 			</Link>
+			{(localStorage.getItem('token') 
+			? (<Link href='/logout' className={styles.navItem}>
+				<span>👋</span>
+				<p>Logout</p>
+			</Link>)
+			: (<Link href='/login' className={styles.navItem}>
+				<span>👋</span>
+				<p>Login</p>
+			</Link>))}
 		</nav>
 	);
 };

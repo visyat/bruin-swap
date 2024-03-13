@@ -219,8 +219,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			// Attempt to log in
 			axios.get(`${process.env.NEXT_PUBLIC_API_URI}/login/${userInput}/${passInput}`)
 				.then((res) => {
-					if (res?.data[0].user_jwt)
+					if (res?.data[0].user_jwt) {
 						console.log(`Success found: ${JSON.stringify(res.data[0].user_jwt)}`);
+						localStorage.setItem('token', res.data[0].user_jwt);
+					}
 					else
 						swal('Something went wrong! Please log in again.')
 				}).catch((err) => {
