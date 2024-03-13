@@ -1,17 +1,20 @@
 import pkg from 'pg';
 //NOTE: Have to manually run "npm install jsonwebtoken" when cloning server
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv'
+dotenv.config()
+
+import { notification } from './notification.js';
 const { Pool } = pkg;
 
 const pool = new Pool({
-    host: 'cs35l-course-swaps.czme8i86mreh.us-east-2.rds.amazonaws.com',
-    user: 'postgres',
-    password: 'comsci35lpassword', 
-    database: 'courseswaps', 
-    port: '5432',
+    host: process.env.POSTGRES_HOST,
+    user: process.env.POSTGRES_ADMIN_USER,
+    password: process.env.POSTGRES_PASSWORD, 
+    database: process.env.POSTGRES_DB_NAME, 
+    port: process.env.POSTGRES_PORT,
     ssl: {
         rejectUnauthorized: false
-
     }
 })
 
@@ -19,7 +22,6 @@ const pool = new Pool({
 const getAllUsers = (request, response) => { 
     console.log('Querying users');
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
-        console.log('Done with query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
@@ -119,6 +121,7 @@ const authentication = (request, response) => {
     }
 }
 //Filtered out JWT tokens from results
+
 const getAllTransactions = (request, response) => {
     pool.query('SELECT transaction_id,user_id,class_wanted,class_to_drop FROM active_transactions JOIN users ON active_transactions.user_jwt=users.user_jwt;', (error, results) => {
         if (error) {
@@ -335,10 +338,31 @@ const addNewTransaction = (request, response) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
+            
+            pool.query('SELECT user_name,email,department,course_num,course_name FROM wishlist JOIN users ON wishlist.user_jwt=users.user_jwt JOIN classes ON wishlist.section_code=classes.section_code WHERE wishlist.section_code=$1;', [class_dropped], (e_not, r_not) => {
+              if (e_not) {
+                response.status(400).json({ msg: 'ERROR' });  
+              }
+              if (r_not.rows.length > 0)
+              {
+                for (let i = 0; i < r_not.rows.length; i++) //for (user in r_not.rows) 
+                {
+                  var user = r_not.rows[i]
+                  const { user_name, email, department, course_num, course_name } = user
+                  const user_class = department.concat(" ", course_num, " ", course_name)
+                  
+                  const req = {
+                    "user_name": user_name,
+                    "user_email": email,
+                    "user_class": user_class
+                  }
+                  notification(request=req)
+                }
+              }
+            })
             response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
         })
     }
-    
 }
 const addNewWishlistEntry = (request, response) => {
     const {user_jwt, class_wished} = request.body

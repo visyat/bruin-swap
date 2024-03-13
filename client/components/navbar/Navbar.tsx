@@ -19,6 +19,10 @@ const Navbar = (props: Partial<TabListProps>) => {
 				<p>Course Search</p>
 			</Link>
 			{/* Profile */}
+			<Link href='/listing' className={styles.navItem}>
+				<span>➕</span>
+				<p>Add Listing</p>
+			</Link>
 			<Link href='/account' className={styles.navItem}>
 				<span>👤</span>
 				<p>Account</p>

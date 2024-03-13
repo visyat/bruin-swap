@@ -321,7 +321,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ isRegister }) => {
 			</Button>
 			{(isRegister
 				? <Caption1>Already have an account? <Link as="button" onClick={() => loginInstead()} appearance='default'>Login!</Link></Caption1>
-				: <Caption1>Don't have account? <Link as="button" onClick={() => registerInstead()} appearance='default'>Reigster!</Link></Caption1>
+				: <Caption1>Don't have account? <Link as="button" onClick={() => registerInstead()} appearance='default'>Register!</Link></Caption1>
 			)}
 			
 		</div>
