@@ -21,11 +21,15 @@ npm install
 
 In the `express-server` directory, place the following keys in a file named `.env` to connect to our Amazon RDS instance and email server:
 ```
+#Environment Variables
+#Postgres API Keys
 POSTGRES_HOST=cs35l-course-swaps.czme8i86mreh.us-east-2.rds.amazonaws.com
 POSTGRES_ADMIN_USER=postgres
 POSTGRES_PASSWORD=comsci35lpassword
 POSTGRES_DB_NAME=courseswaps
 POSTGRES_PORT=5432
+
+#NodeMailer API Keys
 MAIL_SERVICE=gmail
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
