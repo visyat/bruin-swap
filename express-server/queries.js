@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { notification } from './notification.js';
+import { notifyWishlistTransaction,
+    notifyRequestTransaction, 
+    notifyRejectRequest, 
+    notifyAcceptRequest 
+} from './notification.js';
 const { Pool } = pkg;
 
 const pool = new Pool({
@@ -123,7 +127,7 @@ const authentication = (request, response) => {
 //Filtered out JWT tokens from results
 
 const getAllTransactions = (request, response) => {
-    pool.query('SELECT transaction_id,user_id,class_wanted,class_to_drop FROM active_transactions JOIN users ON active_transactions.user_jwt=users.user_jwt;', (error, results) => {
+    pool.query('SELECT transaction_id,user_id,class_wanted,class_to_drop FROM active_transactions JOIN users ON active_transactions.user_jwt=users.user_jwt WHERE active_transactions.requested=FALSE;', (error, results) => {
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
@@ -334,7 +338,7 @@ const addNewTransaction = (request, response) => {
         response.status(400).json({msg: `INVALID CLASS DROP`});
     }
     else {
-        pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
+        pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4, FALSE, NULL);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
@@ -356,7 +360,7 @@ const addNewTransaction = (request, response) => {
                     "user_email": email,
                     "user_class": user_class
                   }
-                  notification(request=req)
+                  notifyWishlistTransaction(request=req)
                 }
               }
             })
@@ -483,6 +487,71 @@ const updateTransactionInfoByID = (request, response) => {
         })
     }
 }
+const requestTransaction = (request, response) => {
+    const transaction_id = request.params.transaction_id
+    const { requester_id, requester_name, requester_email } = request.body
+    pool.query ('UPDATE active_transactions SET requested=true, requesting_user=$1 WHERE transaction_id=$2;', [requester_id, transaction_id], (error, results) => {
+        if (error) {
+            response.status(400).json({msg: 'INVALID QUERY' }); 
+        }
+        pool.query(
+            `SELECT poster.user_name, poster.email, class_drop.department, class_drop.course_num, class_want.department, class_want.course_num
+            FROM active_transactions 
+            JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
+            JOIN classes AS class_drop ON active_transactions.class_to_drop=class_drop.section_code 
+            JOIN classes AS class_want ON active_transactions.class_wanted=class_want.section_code 
+            WHERE active_transactions.transaction_id=$1;`, [transaction_id], (e_not, res) => {
+                if (e_not) {
+                    response.status(400).json({ msg: 'ERROR' });  
+                }
+                const { poster_name, poster_email, cd_dept, cd_cn, cw_dept, cw_cn } = res.rows[0]
+                const class_drop = cd_dept.concat(" ", cd_cn)
+                const class_want = cw_dept.concat(" ", cw_cn)
+
+                const req = {
+                    "poster_name": poster_name,
+                    "poster_email": poster_email, 
+                    "class_want": class_want,
+                    "class_drop": class_drop, 
+                    "requester_name": requester_name, 
+                    "requester_email": requester_email
+                }
+                notifyRequestTransaction(request=req)
+            })
+
+        response.status(200).json({msg:'TRANSACTION REQUESTED'})
+    })
+}
+const rejectRequest = (request, response) => {
+    const transaction_id = request.params.transaction_id
+
+    pool.query ('UPDATE active_transactions SET requested=FALSE, requesting_user=NULL WHERE transaction_id=$1;', [transaction_id], (error, results) => {
+        if (error) {
+            response.status(400).json({msg: 'INVALID QUERY' }); 
+        }
+        pool.query (
+            `SELECT users.name, users.email, classes.department, classes.course_num
+            FROM active_transactions 
+            JOIN users ON active_transactions.requesting_user=users.user_id
+            JOIN classes ON active_transactions.class_to_drop=classes.section_code
+            WHERE transaction_id=$1`, [transaction_id], (e_not, res) => {
+                if (e_not)
+                {
+                    response.status(400).json({ msg: 'ERROR' });  
+                }
+
+                const {requester_name, requester_email, cd_dept, cd_cn} = res.rows[0]
+                const class_drop = cd_dept.concat(" ", cd_cn)
+                const req = {
+                    "t_class": class_drop, 
+                    "requester_name": requester_name, 
+                    "requester_email":requester_email
+                }
+                notifyRejectRequest (request=req)
+            })
+        response.status(200).json({msg:'REQUEST REJECTED'})
+    })
+}
 
 //DELETE Requests
 const deleteUser = (request, response) => { 
@@ -545,6 +614,44 @@ const deleteTransaction = (request, response) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
+            response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})
+        })
+    }
+}
+const acceptRequest = (request, response) => {
+    const transaction_id = request.params.transaction_id 
+
+    if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'number' || transaction_id === '') {
+        response.status(400).json({msg: `INVALID TRANSACTION ID`});
+    }  
+    else {
+        pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
+            pool.query(
+            `SELECT poster.user_name, poster.email, requester.user_name, requester.email, class_drop.department, class_drop.course_num,
+            FROM active_transactions 
+            JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
+            JOIN users AS requester ON active_transactions.requesting_user=requester.user_id
+            JOIN classes AS class_drop ON active_transactions.class_to_drop=class_drop.section_code 
+            WHERE active_transactions.transaction_id=$1;`, [transaction_id], (e_not, res) => {
+                if (e_not) {
+                    response.status(400).json({ msg: 'ERROR' });  
+                }
+                const { poster_name, poster_email, requester_name, requester_email, cd_dept, cd_cn } = res.rows[0]
+                const class_drop = cd_dept.concat(" ", cd_cn)
+
+                const req = {
+                    "poster_name": poster_name, 
+                    "poster_email":poster_email, 
+                    "t_class": class_drop, 
+                    "requester_name": requester_name, 
+                    "requester_email": requester_email
+                }
+                notifyAcceptRequest(request=req)
+            })
+
             response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})
         })
     }
@@ -613,17 +720,19 @@ export {
     addNewWishlistEntry,
     addNewEnrollmentEntry,
 
-
     //PUT Requests
     updateUserInfoByJWT,
     updateCourseInfoByID,
     updateTransactionInfoByID,
+    requestTransaction,
+    rejectRequest,
 
     //DELETE Requests
     deleteUser,
     deleteSection,
     deleteCourse, 
     deleteTransaction,
+    acceptRequest,
     deleteWishlistEntry,
     deleteEnrollmentEntry
 }

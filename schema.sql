@@ -18,9 +18,11 @@ CREATE TABLE users (
 
 CREATE TABLE active_transactions (
     transaction_id  smallint PRIMARY KEY, 
-    user_jwt         varchar(256) REFERENCES users(user_jwt) ON DELETE CASCADE, 
+    user_jwt        varchar(256) REFERENCES users(user_jwt) ON DELETE CASCADE, 
     class_wanted    varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE,
-    class_to_drop   varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE
+    class_to_drop   varchar (9) REFERENCES classes(section_code) ON DELETE CASCADE, 
+    requested       boolean DEFAULT FALSE,
+    requesting_user varchar (15) REFERENCES users(user_id) DEFAULT NULL
 );
 
 CREATE TABLE wishlist (

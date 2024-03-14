@@ -23,12 +23,12 @@ const handlebarOptions = {
     viewPath: path.resolve('./views/'),
 };
 
-const notification = (request) => {
+const notifyWishlistTransaction = (request) => {
     const {user_name, user_email, user_class} = request;
     transporter.use('compile', hbs(handlebarOptions));
     const mailOptions = {
-        from: '"Bruin Swap" <vishalyathish01@gmail.com>',
-        template: "email",
+        from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
+        template: "wishlist",
         to: user_email,
         subject: `BruinSwap: Class on Your Wishlist Available!`,
         context: {
@@ -38,12 +38,76 @@ const notification = (request) => {
     };
     try {
         transporter.sendMail(mailOptions);
-        //response.status(200).json({ msg: `MESSAGE SENT TO ${user_email}` })
+    } catch (error) {
+        const response = json({ msg: `NODEMAILER ERROR SENDING TO ${user_email}`});
+    }
+}
+const notifyRequestTransaction = (request) => {
+    const {poster_name, poster_email, class_want, class_drop, requester_name, requester_email} = request; 
+    transporter.use('compile', hbs(handlebarOptions));
+    const mailOptions = {
+        from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
+        template: "request",
+        to: poster_email,
+        subject: `BruinSwap: Someone Requested Your Transaction!`,
+        context: {
+            poster_name: poster_name,
+            class_want: class_want,
+            class_drop: class_drop,
+            requester_name: requester_name, 
+            requester_email: requester_email
+        },
+    };
+    try {
+        transporter.sendMail(mailOptions);
+    } catch (error) {
+        const response = json({ msg: `NODEMAILER ERROR SENDING TO ${user_email}`});
+    }
+}
+const notifyRejectRequest = (request) => {
+    const {t_class, requester_name, requester_email} = request; 
+    transporter.use('compile', hbs(handlebarOptions));
+    const mailOptions = {
+        from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
+        template: "request",
+        to: requester_email,
+        subject: `BruinSwap: Your Request Was Rejected`,
+        context: {
+            requester_name: requester_name, 
+            class: t_class, 
+        },
+    };
+    try {
+        transporter.sendMail(mailOptions);
+    } catch (error) {
+        const response = json({ msg: `NODEMAILER ERROR SENDING TO ${user_email}`});
+    }
+}
+const notifyAcceptRequest = (request) => {
+    const {poster_name, poster_email, t_class, requester_name, requester_email} = request; 
+    transporter.use('compile', hbs(handlebarOptions));
+    const mailOptions = {
+        from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
+        template: "request",
+        to: requester_email,
+        subject: `BruinSwap: Your Request Was Approved!`,
+        context: {
+            requester_name: requester_name,
+            class: t_class, 
+            poster_name: poster_name,
+            poster_email: poster_email
+        },
+    };
+    try {
+        transporter.sendMail(mailOptions);
     } catch (error) {
         const response = json({ msg: `NODEMAILER ERROR SENDING TO ${user_email}`});
     }
 }
 
 export {
-    notification
+    notifyWishlistTransaction,
+    notifyRequestTransaction, 
+    notifyRejectRequest, 
+    notifyAcceptRequest
 }
