@@ -1,11 +1,12 @@
+
 // components/navbar/Navbar.tsx
 
+'use client'
 import Link from 'next/link';
 import { makeStyles, shorthands, Tab, TabList } from '@fluentui/react-components';
 import type { TabListProps } from '@fluentui/react-components';
 import styles from '../../styles/Navbar.module.css';
-import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Navbar = (props: Partial<TabListProps>) => {
 	const [token, setToken] = useState<string | null>(null);
@@ -17,8 +18,8 @@ const Navbar = (props: Partial<TabListProps>) => {
 	return (
 		<nav className={styles.topnav}>
 			{/* Root */}
-			<Link href='/' className={styles.navItem}>
-				<p>BruinSwap</p>
+			<Link href='/' className={`${styles.navItem} ${styles.bruinSwap}`}>
+			<img src='https://i.imgur.com/16fVOqH.png'className={styles.image} />
 			</Link>
 			{/* Course search */}
 			{/* <div className={styles.course_search}> */}

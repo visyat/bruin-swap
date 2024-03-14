@@ -26,6 +26,7 @@ const pool = new Pool({
 const getAllUsers = (request, response) => { 
     console.log('Querying users');
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
+        console.log('Done withq query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
@@ -324,7 +325,7 @@ const addNewClass = (request, response) => {
 }
 const addNewTransaction = (request, response) => {
     const {t_id, user_jwt, class_wanted, class_dropped} = request.body 
-
+    console.log('Adding new transaction');
     if (t_id === null || t_id === undefined || typeof(t_id) !== 'number' || t_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     } 
@@ -340,11 +341,14 @@ const addNewTransaction = (request, response) => {
     else {
         pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4, FALSE, NULL);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
             if (error) {
+                console.log('Transaction could not go through');
+                console.error('The error is:', error);
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
-            
+            console.log('Transaction going thorugh');
             pool.query('SELECT user_name,email,department,course_num,course_name FROM wishlist JOIN users ON wishlist.user_jwt=users.user_jwt JOIN classes ON wishlist.section_code=classes.section_code WHERE wishlist.section_code=$1;', [class_dropped], (e_not, r_not) => {
               if (e_not) {
+                console.log('Error!')
                 response.status(400).json({ msg: 'ERROR' });  
               }
               if (r_not.rows.length > 0)
@@ -364,6 +368,7 @@ const addNewTransaction = (request, response) => {
                 }
               }
             })
+            console.log('Transaction went thorugh');
             response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
         })
     }

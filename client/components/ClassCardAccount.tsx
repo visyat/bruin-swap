@@ -53,6 +53,13 @@ const useStyles = makeStyles({
 		// padding: '10px',
 		flexGrow: 0,
 	},
+	profileFormContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		marginTop: '10px',
+		marginBottom: '10px',
+	},
 	remove: {
 		minWidth: '100px',
 		paddingLeft: '10px',
@@ -82,6 +89,7 @@ const ClassCardAccount: React.FC<CardProps> = ({ data }) => {
 	const handleRemoveClick = () => console.log('Deleteting course!'); //router.push(`${transaction_id}`);
 
 	return (
+		<div className={styles.profileFormContainer}>
 		<Card className={styles.card} appearance='filled' as='div' size='small'>
 			<CardHeader
 				className={styles.header}
@@ -110,6 +118,7 @@ const ClassCardAccount: React.FC<CardProps> = ({ data }) => {
 				<Caption1>Lecture: {lecture}</Caption1>
 			</CardFooter>
 		</Card>
+	</div>
 	);
 };
 
