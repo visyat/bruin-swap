@@ -59,9 +59,9 @@ npm run dev
 ```
 
 ## Main Features 
-1. Create posts, proposing class drops, and read & request such listings from other students
-2. Filter for course listings that you want, by department, course number, etc.
-3. Save courses on your wishlist; when a new post is created offering that course, you will get notified via email
+1. **Creating Posts**: In the "Add Listing" Tab, users can create their own course swap proposal, stating a class they want to offer and a class they would like to get in exchange. 
+2. **Reading and Accepting Posts**: In the "Listings" Tab, users can see posts created by other users, and choose to make those swaps if they have the class being requested. 
+3. **Notification on Transaction**: In the "Account" Tab, users can save courses to their wishlist. When a new post is created offering that course, they will get a notification via email that this was the case, giving them the opportunity to make the trade. 
 
 ## Tech Stack 
 * JavaScript 
