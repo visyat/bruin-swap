@@ -314,7 +314,7 @@ const addNewClass = (request, response) => {
 }
 const addNewTransaction = (request, response) => {
     const {t_id, user_jwt, class_wanted, class_dropped} = request.body 
-    if (t_id === null || t_id === undefined || typeof(t_id) !== 'number' || t_id === '') {
+    if (t_id === null || t_id === undefined || typeof(t_id) !== 'number' || t_id === '' || t_id > 32767) {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     } 
     else if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
@@ -481,42 +481,6 @@ const updateTransactionInfoByID = (request, response) => {
         })
     }
 }
-// const requestTransaction = (request, response) => {
-//     const transaction_id = request.params.transaction_id
-//     const { requester_id, requester_name, requester_email } = request.body
-//     pool.query ('UPDATE active_transactions SET requested=true, requesting_user=$1 WHERE transaction_id=$2;', [requester_id, transaction_id], (error, results) => {
-//         if (error) {
-//             response.status(400).json({msg: 'INVALID QUERY' }); 
-//         }
-//         pool.query(
-//             `SELECT poster.user_name, poster.email, class_drop.department, class_drop.course_num, class_want.department, class_want.course_num
-//             FROM active_transactions 
-//             JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
-//             JOIN classes AS class_drop ON active_transactions.class_to_drop=class_drop.section_code 
-//             JOIN classes AS class_want ON active_transactions.class_wanted=class_want.section_code 
-//             WHERE active_transactions.transaction_id=$1;`, [transaction_id], (e_not, res) => {
-//                 if (e_not) {
-//                     response.status(400).json({ msg: 'ERROR' });  
-//                 }
-//                 const { poster_name, poster_email, cd_dept, cd_cn, cw_dept, cw_cn } = res.rows[0]
-//                 const class_drop = cd_dept.concat(" ", cd_cn)
-//                 const class_want = cw_dept.concat(" ", cw_cn)
-
-//                 const req = {
-//                     "poster_name": poster_name,
-//                     "poster_email": poster_email, 
-//                     "class_want": class_want,
-//                     "class_drop": class_drop, 
-//                     "requester_name": requester_name, 
-//                     "requester_email": requester_email
-//                 }
-//                 notifyRequestTransaction(request=req)
-//             })
-
-//         response.status(200).json({msg:'TRANSACTION REQUESTED'})
-//     })
-// }
-
 const requestTransaction = (request, response) => {
     const transaction_id = request.params.transaction_id;
     const { requester_id, requester_name, requester_email } = request.body;
@@ -565,7 +529,7 @@ const rejectRequest = (request, response) => {
             response.status(400).json({msg: 'INVALID QUERY' }); 
         }
         pool.query (
-            `SELECT users.name, users.email, classes.department, classes.course_num
+            `SELECT users.name AS requester_name, users.email AS requester_email, classes.department AS cd_dept, classes.course_num AS cd_cn
             FROM active_transactions 
             JOIN users ON active_transactions.requesting_user=users.user_id
             JOIN classes ON active_transactions.class_to_drop=classes.section_code
@@ -667,7 +631,7 @@ const acceptRequest = (request, response) => {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
             pool.query(
-            `SELECT poster.user_name, poster.email, requester.user_name, requester.email, class_drop.department, class_drop.course_num,
+            `SELECT poster.user_name AS poster_name, poster.email AS poster_email, requester.user_name AS requester_name, requester.email AS requester_email, class_drop.department AS cd_dept, class_drop.course_num AS cd_cn
             FROM active_transactions 
             JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
             JOIN users AS requester ON active_transactions.requesting_user=requester.user_id
