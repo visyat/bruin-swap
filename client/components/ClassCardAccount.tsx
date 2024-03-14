@@ -103,18 +103,18 @@ const ClassCardAccount: React.FC<CardProps> = ({ data }, token) => {
 			/>
 			<CardFooter
 				className={styles.footer}
-				action={
-					<Button
-						className={styles.remove}
-						icon={<DeleteDismissFilled />}
-						onClick={() => handleRemoveClick()}
-						as='button'
-						appearance='primary'
-						shape='rounded'
-					>
-						Remove!
-					</Button>
-				}
+				// action={
+				// 	<Button
+				// 		className={styles.remove}
+				// 		icon={<DeleteDismissFilled />}
+				// 		onClick={() => handleRemoveClick()}
+				// 		as='button'
+				// 		appearance='primary'
+				// 		shape='rounded'
+				// 	>
+				// 		Remove!
+				// 	</Button>
+				// }
 			>
 				<Caption1>Lecture: {lecture}</Caption1>
 			</CardFooter>
