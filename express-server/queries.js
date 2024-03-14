@@ -24,9 +24,7 @@ const pool = new Pool({
 
 //GET Requests
 const getAllUsers = (request, response) => { 
-    console.log('Querying users');
     pool.query('SELECT user_id, user_name, email FROM users;', (error, results) => {
-        console.log('Done withq query');
         if (error) {
             response.status(400).json({ msg: 'INVALID QUERY' });
         }
@@ -253,41 +251,29 @@ const getEnrollmentsByUser = (request, response) => {
 //POST Requests
 const addNewUser = (request, response) => {
     const { user_id, user_name, passwd, year, email } = request.body
-    console.log(`Received: ${JSON.stringify(request.body)}`);
-    console.log('Making user ', user_id, user_name, passwd, year, email);
     if (user_id === null || user_id === undefined || typeof(user_id) !== 'string' || user_id === '') {
-        console.log(`Invalid user ID`);
         response.status(400).json({msg: `INVALID USER ID`});
     } 
     else if (user_name === null || user_name === undefined || typeof(user_name) !== 'string' || user_name === '') {
-        console.log(`Invalid user name: ${user_name}`);
         response.status(400).json({msg: `INVALID USER NAME`});
     }
     else if (passwd === null || passwd === undefined || typeof(passwd) !== 'string' || passwd === '') {
-        console.log('Invalid user pass');
         response.status(400).json({msg: `INVALID PASSWORD`});
     }
     else if (year === null || year === undefined || typeof(year) !== 'number' || year <= 0) {
-        console.log('Invalid user year');
         response.status(400).json({msg: `INVALID YEAR`});
     }
     else if (email === null || email === undefined || typeof(email) !== 'string' || email === '') {
-        console.log('Invalid email');
         response.status(400).json({msg: `INVALID USER EMAIL`});
     }
     else {
-        console.log('Passed tests user');
         var secret_key = 'secret-key'
         const token = jwt.sign({ userID: user_id }, secret_key)
         pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);', [token, user_id, user_name, passwd, year, email], (error, results) => {
             if (error) {
-                console.log('Invalid query');
-                console.error(`Error is that: ${error}`)
-                console.log('"INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6);"', [token, user_id, user_name, passwd, year, email]);
                 response.status(400).json({ msg: 'INVALID QUERY' });
             } else {
                 response.status(200).json({msg: `USER INSERT SUCCESSFUL`});
-                console.log('Successfully amde user');
             }
         })
     }
@@ -325,7 +311,6 @@ const addNewClass = (request, response) => {
 }
 const addNewTransaction = (request, response) => {
     const {t_id, user_jwt, class_wanted, class_dropped} = request.body 
-    console.log('Adding new transaction');
     if (t_id === null || t_id === undefined || typeof(t_id) !== 'number' || t_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     } 
@@ -341,14 +326,11 @@ const addNewTransaction = (request, response) => {
     else {
         pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4, FALSE, NULL);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
             if (error) {
-                console.log('Transaction could not go through');
                 console.error('The error is:', error);
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
-            console.log('Transaction going thorugh');
             pool.query('SELECT user_name,email,department,course_num,course_name FROM wishlist JOIN users ON wishlist.user_jwt=users.user_jwt JOIN classes ON wishlist.section_code=classes.section_code WHERE wishlist.section_code=$1;', [class_dropped], (e_not, r_not) => {
               if (e_not) {
-                console.log('Error!')
                 response.status(400).json({ msg: 'ERROR' });  
               }
               if (r_not.rows.length > 0)
@@ -368,7 +350,6 @@ const addNewTransaction = (request, response) => {
                 }
               }
             })
-            console.log('Transaction went thorugh');
             response.status(200).json({msg: `TRANSACTION INSERT SUCCESSFUL: ${t_id}`})
         })
     }
