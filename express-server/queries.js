@@ -481,26 +481,65 @@ const updateTransactionInfoByID = (request, response) => {
         })
     }
 }
+// const requestTransaction = (request, response) => {
+//     const transaction_id = request.params.transaction_id
+//     const { requester_id, requester_name, requester_email } = request.body
+//     pool.query ('UPDATE active_transactions SET requested=true, requesting_user=$1 WHERE transaction_id=$2;', [requester_id, transaction_id], (error, results) => {
+//         if (error) {
+//             response.status(400).json({msg: 'INVALID QUERY' }); 
+//         }
+//         pool.query(
+//             `SELECT poster.user_name, poster.email, class_drop.department, class_drop.course_num, class_want.department, class_want.course_num
+//             FROM active_transactions 
+//             JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
+//             JOIN classes AS class_drop ON active_transactions.class_to_drop=class_drop.section_code 
+//             JOIN classes AS class_want ON active_transactions.class_wanted=class_want.section_code 
+//             WHERE active_transactions.transaction_id=$1;`, [transaction_id], (e_not, res) => {
+//                 if (e_not) {
+//                     response.status(400).json({ msg: 'ERROR' });  
+//                 }
+//                 const { poster_name, poster_email, cd_dept, cd_cn, cw_dept, cw_cn } = res.rows[0]
+//                 const class_drop = cd_dept.concat(" ", cd_cn)
+//                 const class_want = cw_dept.concat(" ", cw_cn)
+
+//                 const req = {
+//                     "poster_name": poster_name,
+//                     "poster_email": poster_email, 
+//                     "class_want": class_want,
+//                     "class_drop": class_drop, 
+//                     "requester_name": requester_name, 
+//                     "requester_email": requester_email
+//                 }
+//                 notifyRequestTransaction(request=req)
+//             })
+
+//         response.status(200).json({msg:'TRANSACTION REQUESTED'})
+//     })
+// }
+
 const requestTransaction = (request, response) => {
-    const transaction_id = request.params.transaction_id
-    const { requester_id, requester_name, requester_email } = request.body
-    pool.query ('UPDATE active_transactions SET requested=true, requesting_user=$1 WHERE transaction_id=$2;', [requester_id, transaction_id], (error, results) => {
+    const transaction_id = request.params.transaction_id;
+    const { requester_id, requester_name, requester_email } = request.body;
+
+    pool.query('UPDATE active_transactions SET requested=true, requesting_user=$1 WHERE transaction_id=$2;', [requester_id, transaction_id], (error, results) => {
         if (error) {
-            response.status(400).json({msg: 'INVALID QUERY' }); 
+            return response.status(400).json({msg: 'INVALID QUERY' }); 
         }
+
         pool.query(
-            `SELECT poster.user_name, poster.email, class_drop.department, class_drop.course_num, class_want.department, class_want.course_num
+            `SELECT poster.user_name as poster_name, poster.email as poster_email, class_drop.department as cd_dept, class_drop.course_num as cd_cn, class_want.department as cw_dept, class_want.course_num as cw_cn
             FROM active_transactions 
             JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
             JOIN classes AS class_drop ON active_transactions.class_to_drop=class_drop.section_code 
             JOIN classes AS class_want ON active_transactions.class_wanted=class_want.section_code 
-            WHERE active_transactions.transaction_id=$1;`, [transaction_id], (e_not, res) => {
-                if (e_not) {
-                    response.status(400).json({ msg: 'ERROR' });  
+            WHERE active_transactions.transaction_id=$1;`, [transaction_id], (err, queryRes) => {
+                if (err) {
+                    return response.status(400).json({ msg: 'ERROR' });  
                 }
-                const { poster_name, poster_email, cd_dept, cd_cn, cw_dept, cw_cn } = res.rows[0]
-                const class_drop = cd_dept.concat(" ", cd_cn)
-                const class_want = cw_dept.concat(" ", cw_cn)
+
+                const { poster_name, poster_email, cd_dept, cd_cn, cw_dept, cw_cn } = queryRes.rows[0];
+                const class_drop = cd_dept.concat(" ", cd_cn);
+                const class_want = cw_dept.concat(" ", cw_cn);
 
                 const req = {
                     "poster_name": poster_name,
@@ -509,13 +548,15 @@ const requestTransaction = (request, response) => {
                     "class_drop": class_drop, 
                     "requester_name": requester_name, 
                     "requester_email": requester_email
-                }
-                notifyRequestTransaction(request=req)
-            })
+                };
+                notifyRequestTransaction(req);
 
-        response.status(200).json({msg:'TRANSACTION REQUESTED'})
-    })
-}
+                response.status(200).json({msg: 'TRANSACTION REQUESTED'});
+            });
+    });
+};
+
+
 const rejectRequest = (request, response) => {
     const transaction_id = request.params.transaction_id
 
@@ -598,14 +639,16 @@ const deleteCourse = (request, response) => {
     }
 }
 const deleteTransaction = (request, response) => {
-    const transaction_id = request.params.transaction_id 
-
+    const transaction_id = parseInt(request.params.transaction_id);
     if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'number' || transaction_id === '') {
+        console.log('invalid transaction');
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     }  
     else {
+        console.log('delete now');
         pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
             if (error) {
+                console.log('bad query');
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
             response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})

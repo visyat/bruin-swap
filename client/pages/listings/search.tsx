@@ -82,13 +82,9 @@ const Search = () => {
 		<div className={styles.centerTitle}>
 			<LargeTitle>Course Search</LargeTitle>
 			<div>
-				<div className={styles.searchTitle}>
-					<h1>Listings</h1>
-				</div>
 				<div className={styles.classes}>
 					{listings.map((listing: IListing) => (
 						<ClassCard data={listing} />
-						// JSON.stringify(listing)
 					))}
 				</div>
 			</div>
