@@ -32,9 +32,12 @@ import {
     deleteSection, 
     deleteTransaction, 
     deleteWishlistEntry, 
-    deleteEnrollmentEntry 
+    deleteEnrollmentEntry,
+    acceptRequest,
+    rejectRequest,
+    requestTransaction,
+
 } from './queries.js';
-import { notification } from './notification.js';
 
 const app = express()
 const port = 3000
@@ -72,16 +75,18 @@ app.post('/classes', addNewClass)
 app.post('/transactions', addNewTransaction)
 app.post('/wishlist', addNewWishlistEntry)
 app.post('/enrollments', addNewEnrollmentEntry)
-app.post('/notification', notification)
 
 app.put('/users/:user_jwt', updateUserInfoByJWT)
 app.put('/courses/:section_code', updateCourseInfoByID)
 app.put('/transactions/:transaction_id', updateTransactionInfoByID)
+app.put('/request/:transaction_id', requestTransaction)
+app.put('/reject-request/:transaction_id', rejectRequest)
 
 app.delete('/users/:user_jwt', deleteUser)
 app.delete('/courses/:section_code', deleteSection)
 app.delete('/courses/:dept/:course_num', deleteCourse)
 app.delete('/transactions/:transaction_id', deleteTransaction)
+app.delete('/accept-request/:transaction_id', acceptRequest)
 app.delete('/wishlist/:user_jwt/:section_id', deleteWishlistEntry)
 app.delete('/enrollments/:user_jwt/:section_id', deleteEnrollmentEntry)
 
