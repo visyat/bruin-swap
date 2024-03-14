@@ -98,10 +98,10 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 					<Button
 						className={styles.swap}
 						icon={<ArrowSwapFilled />}
-						onClick={() => handleSwapClick()}
 						as='button'
 						appearance='primary'
 						shape='rounded'
+						onClick={() => handleSwapClick()}
 					>
 						Swap!
 					</Button>

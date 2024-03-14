@@ -78,9 +78,10 @@ const useStyles = makeStyles({
 
 interface CardProps {
 	data: IClass;
+	token: string;
 }
 
-const ClassCardAccount: React.FC<CardProps> = ({ data }) => {
+const ClassCardAccount: React.FC<CardProps> = ({ data }, token) => {
 	const { classDept, classNum, classTitle, instructor, lecture } = data;
 	// const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
