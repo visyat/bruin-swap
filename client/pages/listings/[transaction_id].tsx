@@ -94,9 +94,11 @@ const ListingPage = () => {
 	const [selectedClassNotFound, setSelectedClassNotFound] = useState(false);
 	const { transaction_id } = router.query;
 	let transaction_id_num = -1;
-
-	// Login protected
 	const [token, setToken] = useState<string | null>(null);
+	const [fullName, setFullName] = useState('');
+	const [userId, setUserId] = useState('');
+	const [email, setEmail] = useState('');
+
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		setToken(token);
@@ -104,6 +106,18 @@ const ListingPage = () => {
 			router.push('/login');
 		}
 	}, []);
+
+	const fetchProfileInfo = async () => {
+		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/users/${token}`);
+		setUserId(res.data[0].user_id);
+		setFullName(res.data[0].user_name);
+		setEmail(res.data[0].email);
+	}
+
+	useEffect(() => {
+		if (token)
+			fetchProfileInfo();
+	}, [token]);	
 
 	useEffect(() => {
 		console.log(`Transaction param: ${transaction_id}`);
@@ -160,14 +174,24 @@ const ListingPage = () => {
 		fetchListing();
 	}, [transaction_id]); // Should not change
 
-	const handleSwapRequestClick = () => {
-		if (!selectedClassIndex) {
+	const handleSwapRequestClick = async () => {
+		console.log(`Selected: ${selectedClassIndex}`);
+		if (selectedClassIndex === null) {
 			console.log('No class was selected');
 			setSelectedClassNotFound(true);
 			return;
 		}
-		console.log('Swapping!');
-		// Add to
+		const requester = {
+			requester_id: userId,
+			requester_name: fullName,
+			requester_email: email,
+		}
+		axios.put(`${process.env.NEXT_PUBLIC_API_URI}/request/${transaction_id}`, requester)
+			.then((res) => {
+				swal('Successfully requested! Sent a notification to the poster.');
+			}).catch((err) => {
+				swal('Something went wrong. Please try again.');
+			});
 	};
 
 	if (isLoading) return <div>Loading...</div>; // TOOD: improve loading page

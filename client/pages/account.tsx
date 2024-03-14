@@ -4,11 +4,13 @@ import styles from '../styles/Account.module.css';
 import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
 import ClassCardWishlist from '../components/ClassCardWishlist';
+import ClassCardOpen from '../components/ClassCardOpen';
 import { useRouter } from 'next/router';
 import { makeStyles, Button, LargeTitle } from '@fluentui/react-components';
-import { PersonAccountsFilled, BriefcaseFilled, ClipboardTaskListLtrFilled } from '@fluentui/react-icons';
+import { PersonAccountsFilled, BriefcaseFilled, ClipboardTaskListLtrFilled, ArrowSyncCircleFilled } from '@fluentui/react-icons';
 import { tokens } from '@fluentui/react-components';
 import { AddCircleFilled } from '@fluentui/react-icons';
+import { IOpenTransaction } from '@/types/listing';
 
 const useStyles = makeStyles({
 	container: {
@@ -88,11 +90,20 @@ interface UserClassRemote {
 	user_jwt: string
 };
 
+interface TransactionRemote {
+	class_to_drop: string;
+	class_wanted: string;
+	requested: boolean;
+	requesting_user: string;
+	transaction_id: number;
+};
+
 const Account = () => {
 	const router = useRouter();
 	const localStyles = useStyles();
 	const [wishlist, setWishlist] = useState<UserClassRemote[]>([]);
 	const [enrollments, setEnrollments] = useState<UserClassRemote[]>([]);
+	const [transactions, setTransactions] = useState<IOpenTransaction[]>([]);
 
 	// Login protecto
 	const [token, setToken] = useState<string | null>(null);
@@ -108,27 +119,47 @@ const Account = () => {
 		if (token) {
 			fetchWishlist();
 			fetchEnrollments();
+			fetchTransactions();
 		}
 	}, [token]);	
 
 	const [output, setOutput] = useState('');
 
 	const fetchWishlist = async () => {
-		console.log(token);
+		// console.log(token);
 		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
-		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
-		console.log('Wishlist');
-		console.log(res.data);
+		// console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		// console.log('Wishlist');
+		// console.log(res.data);
 		setWishlist(res.data);
 	};
 
 	const fetchEnrollments = async () => {
-		console.log(token);
+		// console.log(token);
 		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/enrollments/${token}`);
-		console.log(`${process.env.NEXT_PUBLIC_API_URI}/enrollments/${token}`);
-		console.log('Enrollments');
-		console.log(res.data);
+		// console.log(`${process.env.NEXT_PUBLIC_API_URI}/enrollments/${token}`);
+		// console.log('Enrollments');
+		// console.log(res.data);
 		setEnrollments(res.data);
+	};
+
+	const fetchTransactions = async () => {
+		console.log(token);
+		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/transactions-by-user/${token}`);
+		const transactionsFull = await Promise.all(res.data.map(async (c: TransactionRemote) => {
+			const class_drop_code = c.class_to_drop;
+			const class_drop_res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes/${class_drop_code}`);
+			return {
+				transaction_id: c.transaction_id,
+				classDept: class_drop_res.data[0].department,
+				classNum: class_drop_res.data[0].course_num,
+				classTitle: class_drop_res.data[0].course_name,
+				instructor: class_drop_res.data[0].professor,
+				lecture: class_drop_res.data[0].disc_section,
+				requested: c.requested,
+			};
+		}));
+		setTransactions(transactionsFull);
 	};
 	
 
@@ -209,6 +240,32 @@ const Account = () => {
 				</div>
 			</div>
 		);
+	} else if (output === 'Open Transactions') {
+
+		content = (
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
+				<div>
+					<LargeTitle style={{textAlign: 'center'}}>Open Transactions For</LargeTitle>
+				</div>
+				<div style={{ display: 'flex', flexDirection: 'column' }}>
+					{transactions.map((t: IOpenTransaction) => 
+						<ClassCardOpen
+							data={t}
+						/>
+					)}
+					<Button
+						className={styles.swap}
+						icon={<AddCircleFilled />}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+						onClick={() => router.push('/add')}
+					>
+						Add to Wishlist
+					</Button>
+				</div>
+			</div>
+		);
 	} else {
 		content = <></>;
 	}
@@ -250,6 +307,18 @@ const Account = () => {
 						size="large"
 					>
 						Wishlist Classes
+					</Button>
+				</div>
+				<div className={localStyles.buttonContainer}>
+					<Button
+						icon={<ArrowSyncCircleFilled />}
+						onClick={() => handleButtonClick('Open Transactions')}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+						size="large"
+					>
+						Open Transactions
 					</Button>
 				</div>
 				

@@ -1,9 +1,9 @@
 import { makeStyles, shorthands } from '@fluentui/react-components';
 import { OpenCardMode } from '@fluentui/react';
-import ClassCard from '../components/ClassCard';
 import { LISTINGS } from '../constants/temp_data';
 import { useRouter } from 'next/router';
 import { IListing } from '../types/listing';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles({
 	searchTitle: {
@@ -37,16 +37,14 @@ const useStyles = makeStyles({
 
 const Page = () => {
 	const styles = useStyles();
+	
+	const router = useRouter();
 
+	useEffect(() => {
+		router.push('/listings/search');
+	}, []);
 	return (
-		<div>
-			<div className={styles.searchTitle}>
-				<h1>Listings</h1>
-			</div>
-			<div className={styles.classes}>
-				Homepage
-			</div>
-		</div>
+		<></>
 	);
 };
 

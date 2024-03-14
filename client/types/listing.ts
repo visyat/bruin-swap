@@ -9,6 +9,16 @@ export interface IListing {
 	lecture: string;
 }
 
+export interface IOpenTransaction {
+	transaction_id: number;
+	classDept: string;
+	classNum: string;
+	classTitle: string;
+	instructor: string;
+	lecture: string;
+	requested: boolean;
+}
+
 export interface IClass {
 	classDept: string;
 	classNum: string;

@@ -12,9 +12,9 @@ import {
 	Theme,
 } from '@fluentui/react-components';
 import { ArrowSwapFilled } from '@fluentui/react-icons';
-import { IListing } from '../types/listing';
+import { IListing, IOpenTransaction } from '../types/listing';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -64,22 +64,29 @@ const useStyles = makeStyles({
 });
 
 interface CardProps {
-	data: IListing;
+	data: IOpenTransaction;
 }
 
-const ClassCard: React.FC<CardProps> = ({ data }) => {
-	const { transaction_id, classDept, classNum, classTitle, instructor, lecture } = data;
+const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
+	const { transaction_id, classDept, classNum, classTitle, instructor, lecture, requested } = data;
 	// const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
 	const styles = useStyles();
-	const [token, setToken] = useState<string | null>(null);
-	const [fullName, setFullName] = useState('');
-	const [userId, setUserId] = useState('');
-	const [email, setEmail] = useState('');
+	const [deleted, setDeleted] = useState(false);
 
 	const handleSwapClick = () => {
-		router.push(`${transaction_id}`);
+		console.log('Data:', data);
+		// It is guaranteed that transaction_id will be a number
+		axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/transactions/${transaction_id}`)
+			.then((res) => {
+				swal('Successfully removed!')
+				setDeleted(true);
+			}).catch((err) => {
+				swal('Something went wrong. Please try removing again.');
+			});
 	};
+
+	if (deleted) return <></>;
 
 	return (
 		<Card className={styles.card} appearance='filled' as='div' size='small'>
@@ -96,7 +103,7 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 			<CardFooter
 				className={styles.footer}
 				action={
-					<Button
+					(<Button
 						className={styles.swap}
 						icon={<ArrowSwapFilled />}
 						as='button'
@@ -104,8 +111,8 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 						shape='rounded'
 						onClick={() => handleSwapClick()}
 					>
-						Swap!
-					</Button>
+						{requested ? 'Accepted!' : 'Delete'}
+					</Button>)
 				}
 			>
 				<Caption1>Lecture: {lecture}</Caption1>
@@ -114,4 +121,4 @@ const ClassCard: React.FC<CardProps> = ({ data }) => {
 	);
 };
 
-export default ClassCard;
+export default ClassCardOpen;
