@@ -13,7 +13,11 @@ import {
 	Body1,
 	Link,
 	Title1,
+	Body1Strong,
 } from '@fluentui/react-components';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const useStyles = makeStyles({
 	title: {
@@ -45,123 +49,66 @@ const useStyles = makeStyles({
 	},
 });
 
-function ProfileForm(props: { email: any; fullName: any; major: any; gradYear: any }) {
+function ProfileForm() {
 	const styles = useStyles();
-	const [editing, setEditing] = useState(false);
-	const [email, setEmail] = useState(props.email);
-	const [fullName, setFullName] = useState(props.fullName);
-	const [major, setMajor] = useState(props.major);
-	const [gradYear, setGradYear] = useState(props.gradYear);
+	const [userId, setUserId] = useState('Loading...');
+	const [email, setEmail] = useState('Loading...');
+	const [fullName, setFullName] = useState('Loading...');
+	const [year, setYear] = useState('Loading...');
+	const router = useRouter();
 
-	const handleEditClick = () => {
-		setEditing(true);
-	};
-
-	const handleSaveClick = () => {
-		setEditing(false);
-		// Call a function to handle saving changes
-		// For simplicity, let's just log the changes
-		console.log('Saved changes:', { email, fullName, major, gradYear });
-	};
-
-	const handleKeyPress = (e: { key: string }) => {
-		if (e.key === 'Enter') {
-			handleSaveClick();
+	// Login protecto
+	const [token, setToken] = useState<string | null>(null);
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setToken(token);
+		if (!token) {
+			router.push('/login');
 		}
-	};
+	}, []);
+
+	const fetchProfileInfo = async () => {
+		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/users/${token}`);
+		setUserId(res.data[0].user_id);
+		setFullName(res.data[0].user_name);
+		setYear(res.data[0].year_level);
+		setEmail(res.data[0].email);
+	}
+
+	useEffect(() => {
+		if (token)
+			fetchProfileInfo();
+	}, [token]);	
+
+	if (!token) return <div>Loading...</div>
 
 	return (
 		<div className={styles.profileFormContainer}>
 			<Title1>Profile Information</Title1>
 			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
 				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
+					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Username: </label>
+					<Body1>{userId}</Body1>
+				</div>
+			</div>
+			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
+				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
 					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Email: </label>
-					{editing ? (
-						<input
-							type='text'
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							onKeyPress={handleKeyPress}
-						/>
-					) : (
-						<p style={{ margin: '0' }}>{email}</p>
-					)}
-					<button
-						onClick={handleEditClick}
-						className={styles.button}
-						style={{ marginLeft: '10px' }}
-					>
-						Edit
-					</button>
+					<Body1>{email}</Body1>
 				</div>
 			</div>
 			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
 				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
 					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Full Name: </label>
-					{editing ? (
-						<input
-							type='text'
-							value={fullName}
-							onChange={(e) => setFullName(e.target.value)}
-							onKeyPress={handleKeyPress}
-						/>
-					) : (
-						<p style={{ margin: '0' }}>{fullName}</p>
-					)}
-					<button
-						onClick={handleEditClick}
-						className={styles.button}
-						style={{ marginLeft: '10px' }}
-					>
-						Edit
-					</button>
+					<Body1>{fullName}</Body1>
 				</div>
 			</div>
 			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
 				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
-					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Major: </label>
-					{editing ? (
-						<input
-							type='text'
-							value={major}
-							onChange={(e) => setMajor(e.target.value)}
-							onKeyPress={handleKeyPress}
-						/>
-					) : (
-						<p style={{ margin: '0' }}>{major}</p>
-					)}
-					<button
-						onClick={handleEditClick}
-						className={styles.button}
-						style={{ marginLeft: '10px' }}
-					>
-						Edit
-					</button>
+					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Year in School: </label>
+					<Body1>{year}</Body1>
 				</div>
 			</div>
-			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
-				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
-					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Graduation Year: </label>
-					{editing ? (
-						<input
-							type='text'
-							value={gradYear}
-							onChange={(e) => setGradYear(e.target.value)}
-							onKeyPress={handleKeyPress}
-						/>
-					) : (
-						<p style={{ margin: '0' }}>{gradYear}</p>
-					)}
-					<button
-						onClick={handleEditClick}
-						className={styles.button}
-						style={{ marginLeft: '10px' }}
-					>
-						Edit
-					</button>
-				</div>
-			</div>
-			{editing && <button onClick={handleSaveClick}>Save</button>}
 		</div>
 	);
 }

@@ -94,11 +94,12 @@ const ClassCardWishlist: React.FC<CardProps> = ({ data }, token) => {
 
 	const handleRemoveClick = async () => {
 		// Get class code
-		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
-		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
-		console.log(JSON.stringify(token));
-		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
-		console.log(res.data)
+		// swal(token);
+		// const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		// console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		
+		// console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		// console.log(res.data)
 		// const res = await axios.get('https://google.com');
 		// const res = {'data': '0'};/
 		// if (res?.data[0]) {
@@ -128,18 +129,18 @@ const ClassCardWishlist: React.FC<CardProps> = ({ data }, token) => {
 			{/* Include CardPreview for wanted classes */}
 			<CardFooter
 				className={styles.footer}
-				action={
-					<Button
-						className={styles.remove}
-						icon={<DeleteDismissFilled />}
-						onClick={() => handleRemoveClick()}
-						as='button'
-						appearance='primary'
-						shape='rounded'
-					>
-						Remove!
-					</Button>
-				}
+				// action={
+				// 	<Button
+				// 		className={styles.remove}
+				// 		icon={<DeleteDismissFilled />}
+				// 		onClick={() => handleRemoveClick()}
+				// 		as='button'
+				// 		appearance='primary'
+				// 		shape='rounded'
+				// 	>
+				// 		Remove!
+				// 	</Button>
+				// }
 			>
 				<Caption1>Lecture: {lecture}</Caption1>
 			</CardFooter>

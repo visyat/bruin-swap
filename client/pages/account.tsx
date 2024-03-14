@@ -140,13 +140,9 @@ const Account = () => {
 
 	let content = <div>Loading...</div>;
 	if (output === 'Profile Information') {
+
 		content = (
-			<ProfileForm
-				email='someone@example.com'
-				fullName='Someone Something'
-				major='Electrical Engineering'
-				gradYear='2023'
-			/>
+			<ProfileForm />
 		);
 	} else if (output === 'Current Classes') {
 		content = (
