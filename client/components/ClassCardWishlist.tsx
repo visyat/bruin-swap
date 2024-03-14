@@ -1,4 +1,6 @@
 // components/navbar/classcard.tsx
+'use client';
+
 import {
 	makeStyles,
 	shorthands,
@@ -16,6 +18,8 @@ import { IClass } from '../types/listing';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { tokens } from '@fluentui/react-theme';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const useStyles = makeStyles({
 	card: {
@@ -79,15 +83,31 @@ const useStyles = makeStyles({
 
 interface CardProps {
 	data: IClass;
+	token: string;
 }
 
-const ClassCardWishlist: React.FC<CardProps> = ({ data }) => {
+const ClassCardWishlist: React.FC<CardProps> = ({ data }, token) => {
 	const { classDept, classNum, classTitle, instructor, lecture } = data;
 	// const [transaction, setTransaction] = useState(null);
 	const router = useRouter();
 	const styles = useStyles();
 
-	const handleRemoveClick = () => console.log('Deleteting course!'); //router.push(`${transaction_id}`);
+	const handleRemoveClick = async () => {
+		// Get class code
+		// const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${'asdf'}`);
+		const res = await axios.get('https://google.com');
+		// const res = {'data': '0'};
+		// if (res?.data[0]) {
+		// 	// const idToDelete = res.data[0].find(())
+		// 	console.log(JSON.stringify(res.data[0]))
+
+
+		// 	// axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}/${}`)
+		// 	console.log('Removed from wishlist');
+		// } else {
+		// 	swal('Nothing found in wishlist.');
+		// }
+	}
 
 	return (
 		<div className={styles.profileFormContainer}>
