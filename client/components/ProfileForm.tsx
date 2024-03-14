@@ -12,6 +12,7 @@ import {
 	Caption1,
 	Body1,
 	Link,
+	Title1,
 } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
@@ -24,6 +25,10 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		marginTop: '10px',
 		marginBottom: '10px',
+	},
+	inputField: {
+		marginBottom: '10px',
+		fontWeight: 'bold',
 	},
 	button: {
 		color: 'gray',
@@ -66,8 +71,8 @@ function ProfileForm(props: { email: any; fullName: any; major: any; gradYear: a
 	};
 
 	return (
-		<div id='wrapper' className={styles.profileFormContainer}>
-			<h2 style={{ marginBottom: '20px' }}>Profile Information</h2>
+		<div className={styles.profileFormContainer}>
+			<Title1>Profile Information</Title1>
 			<div className='profile-field-container' style={{ marginBottom: '20px' }}>
 				<div className='profile-field' style={{ display: 'flex', alignItems: 'center' }}>
 					<label style={{ marginRight: '10px', fontWeight: 'bold' }}>Email: </label>
