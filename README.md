@@ -6,11 +6,24 @@ BruinSwap is a full-stack web application that allows students to post classes t
 
 ## Installation/Setup
 
-To download and run our application, first clone our git repository; then you can install dependencies for and run both the client and server. 
-
+To download and run our application, first clone our git repository.
 ```
 git clone https://github.com/visyat/bruin-swap.git
 ```
+
+From here, place the required keys into the files `bruin-swap/express-server/.env` and `bruin-swap/client/.env.local`, to properly access our server, PostgreSQL database, and mail framework. 
+
+Once you've done this, you can install dependencies for and run the server and frontend using the shell script we've provided (from within the main `bruin-swap` directory)
+
+```
+./setup.sh
+```
+
+The backend server will be available at `http://localhost:3000`. If you want to test individual routes, full instructions regarding available routes, request parameters/bodies, and outputs are available in the server README file: `express-server/README.md`. 
+
+The frontend application will be available at `http://localhost:8080`
+
+In case you want to manually install dependencies for the client and server, we've outlined the steps as follows - our shell script simply automates this process for convenience. 
 
 ### Server
 To install dependencies for our Express.js server, run the following commands: 
@@ -18,27 +31,11 @@ To install dependencies for our Express.js server, run the following commands:
 cd express-server
 npm install
 ```
-
-In the `express-server` directory, place the following keys in a file named `.env` to connect to our Amazon RDS instance and email server:
-```
-POSTGRES_HOST=cs35l-course-swaps.czme8i86mreh.us-east-2.rds.amazonaws.com
-POSTGRES_ADMIN_USER=postgres
-POSTGRES_PASSWORD=comsci35lpassword
-POSTGRES_DB_NAME=courseswaps
-POSTGRES_PORT=5432
-MAIL_SERVICE=gmail
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=465
-MAIL_ADDRESS=vishalyathish01@gmail.com
-MAIL_PASSWORD="gdbe ksxx lrho ruhi"
-```
 To run the server, enter the following command:
 
 ```
 npm start
  ```
-
-The backend server will be available at `http://localhost:3000`. If you want to test individual routes, full instructions regarding available routes, request parameters/bodies, and outputs are available in the server README file: `express-server/README.md`. 
 
 ### Client
 To install dependencies for our frontend application, run the following commands: 
@@ -56,11 +53,10 @@ To run the completed application, enter the following command:
 ```
 npm run dev
 ```
-The application will be available at `http://localhost:8080`
 
 ## Main Features 
-1. Create posts, proposing class drops, and read & accept such posts from other students
-2. Search for course listings that you want, by department, course number, etc.
+1. Create posts, proposing class drops, and read & request such listings from other students
+2. Filter for course listings that you want, by department, course number, etc.
 3. Save courses on your wishlist; when a new post is created offering that course, you will get notified via email
 
 ## Tech Stack 
