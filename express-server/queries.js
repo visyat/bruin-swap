@@ -336,9 +336,10 @@ const addNewTransaction = (request, response) => {
     }
     else {
         console.log('Transaction good format');
-        pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
+        pool.query('INSERT INTO active_transactions VALUES ($1, $2, $3, $4, FALSE);', [t_id, user_jwt, class_wanted, class_dropped], (error, results) => {
             if (error) {
                 console.log('Transaction could not go through');
+                console.error('The error is:', error);
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
             console.log('Transaction going thorugh');
