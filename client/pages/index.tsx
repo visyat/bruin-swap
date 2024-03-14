@@ -1,6 +1,6 @@
 import { makeStyles, shorthands } from '@fluentui/react-components';
 import { OpenCardMode } from '@fluentui/react';
-import ClassCard from '../components/classcard';
+import ClassCard from '../components/ClassCard';
 import { LISTINGS } from '../constants/temp_data';
 import { useRouter } from 'next/router';
 import { IListing } from '../types/listing';
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Search = () => {
+const Page = () => {
 	const styles = useStyles();
 
 	return (
@@ -44,15 +44,11 @@ const Search = () => {
 				<h1>Listings</h1>
 			</div>
 			<div className={styles.classes}>
-				{LISTINGS.map((listing: IListing) => (
-					<div className={styles.card} key={listing.transaction_id}>
-						<ClassCard data={listing} />
-					</div>
-				))}
+				Homepage
 			</div>
 		</div>
 	);
 };
 
-export default Search;
+export default Page;
 

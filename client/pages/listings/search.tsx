@@ -1,4 +1,4 @@
-import { makeStyles, shorthands } from '@fluentui/react-components';
+import { makeStyles, shorthands, LargeTitle } from '@fluentui/react-components';
 import { OpenCardMode } from '@fluentui/react';
 import ClassCard from '../../components/ClassCard';
 // import { LISTINGS } from '../../constants/temp_data';
@@ -81,18 +81,19 @@ const Search = () => {
 	return (
 		<div className={styles.centerTitle}>
 			<LargeTitle>Course Search</LargeTitle>
-		<div>
-			<div className={styles.searchTitle}>
-				<h1>Listings</h1>
-			</div>
-			<div className={styles.classes}>
-				{listings.map((listing: IListing) => (
-					<ClassCard data={listing} />
-					// JSON.stringify(listing)
-				))}
+			<div>
+				<div className={styles.searchTitle}>
+					<h1>Listings</h1>
+				</div>
+				<div className={styles.classes}>
+					{listings.map((listing: IListing) => (
+						<ClassCard data={listing} />
+						// JSON.stringify(listing)
+					))}
+				</div>
 			</div>
 		</div>
 	);
 };
 
-export default Page;
+export default Search;
