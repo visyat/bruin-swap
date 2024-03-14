@@ -23,7 +23,11 @@ The backend server will be available at `http://localhost:3000`. If you want to 
 
 The frontend application will be available at `http://localhost:8080`
 
-In case you want to manually install dependencies for the client and server, we've outlined the steps as follows - our shell script simply automates this process for convenience. 
+If you want to manually install the client and server dependencies, we've outlined the steps below — our shell script simply automates this process for convenience.
+
+**NOTE: If you've already run the shell script above, you do not need to run the following commands.**
+
+***
 
 ### Server
 To install dependencies for our Express.js server, run the following commands: 
