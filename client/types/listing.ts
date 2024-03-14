@@ -1,6 +1,6 @@
 export interface IListing {
 	transaction_id: number;
-	user_id: number;
+	user_id: string;
 	classDept: string;
 	classNum: string;
 	classTitle: string;
