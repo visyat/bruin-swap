@@ -4,6 +4,9 @@
 
 BruinSwap is a full-stack web application that allows students to post classes they intend to drop and coordinate class swaps with other students. 
 
+## Link to Public Repository
+This is the link to our public GitHub repository: [https://github.com/visyat/bruin-swap](https://github.com/visyat/bruin-swap)
+
 ## Installation/Setup
 
 To download and run our application, first clone our git repository.
