@@ -5,28 +5,33 @@ import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
 import ClassCardWishlist from '../components/ClassCardWishlist';
 import { useRouter } from 'next/router';
-import { makeStyles } from '@fluentui/react-components';
+import { makeStyles, Button, LargeTitle } from '@fluentui/react-components';
+import { PersonAccountsFilled, BriefcaseFilled, ClipboardTaskListLtrFilled } from '@fluentui/react-icons';
+import { tokens } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
 	container: {
+		paddingTop: '5vh',
 		width: '100%',
 		minHeight: '10vh',
 		// flexGrow: 1,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'flex-start',
+		justifyContent: 'space-around',
 	},
 	optionContainer: {
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'flex-start',
+		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 	contentContainer: {
+		flexGrow: 10,
+		backgroundColor: 'green',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'flex-start',
+		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	searchTitle: {
@@ -55,7 +60,16 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-	},
+	}, 
+	buttonContainer: {
+		flexGrow: 1,
+		display: 'flex',
+		justifyContent: 'flex-start',
+		marginTop: tokens.spacingVerticalXXL,
+		marginBottom: tokens.spacingVerticalXXL,
+		marginLeft: tokens.spacingHorizontalM, // Add left margin
+		marginRight: tokens.spacingHorizontalM, // Add right margin
+	}
 });
 
 const Account = () => {
@@ -94,7 +108,7 @@ const Account = () => {
 		content = (
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<p>Current Classes</p>
+					<LargeTitle>Current Classes</LargeTitle>
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<ClassCardAccount
@@ -122,7 +136,7 @@ const Account = () => {
 		content = (
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<p>Wishlist Classes</p>
+					<LargeTitle style={{textAlign: 'center'}}>Wishlist Classes</LargeTitle>
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<ClassCardWishlist
@@ -133,6 +147,7 @@ const Account = () => {
 							instructor: 'Eggert, P.',
 							lecture: '3A',
 						}}
+						token={token as string}
 					/>
 					<ClassCardWishlist
 						data={{
@@ -142,42 +157,58 @@ const Account = () => {
 							instructor: 'Eggert, P.',
 							lecture: '3A',
 						}}
+						token={token as string}
 					/>
 				</div>
 			</div>
 		);
 	} else {
-		content = <div>No content selected</div>;
+		content = <></>;
 	}
 
 	return (
 		<div className={localStyles.container} style={{backgroundColor: 'yellow'}}>
 			<div className={localStyles.optionContainer}>
-				<div>
-					<button className={styles.profileButton} onClick={() => handleButtonClick('Profile Information')}>
+				<div className={localStyles.buttonContainer}>
+					<Button
+						icon={<PersonAccountsFilled />}
+						onClick={() => handleButtonClick('Profile Information')}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+						size="large"
+					>
 						Profile Information
-					</button>
+					</Button>
 				</div>
-				<div>
-					<button className={styles.currentButton} onClick={() => handleButtonClick('Current Classes')}>
+				<div className={localStyles.buttonContainer}>
+					<Button
+						icon={<BriefcaseFilled />}
+						onClick={() => handleButtonClick('Current Classes')}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+						size="large"
+					>
 						Current Classes
-					</button>
+					</Button>
 				</div>
-				<div>
-					<button className={styles.wishlistButton} onClick={() => handleButtonClick('Wishlist Classes')}>
+				<div className={localStyles.buttonContainer}>
+					<Button
+						icon={<ClipboardTaskListLtrFilled />}
+						onClick={() => handleButtonClick('Wishlist Classes')}
+						as='button'
+						appearance='primary'
+						shape='rounded'
+						size="large"
+					>
 						Wishlist Classes
-					</button>
+					</Button>
 				</div>
+				
 			</div>
 			<div className={localStyles.contentContainer}>
 				{content}
-				{/* <div>
-					<span className={`${styles.divider} ${styles.flexContainer}`}></span>
-				</div>
-
-				<div>
-					<span className={styles.outputContainer}>{content}</span>
-				</div> */}
 			</div>
 		</div>
 	);
