@@ -94,9 +94,13 @@ const ClassCardWishlist: React.FC<CardProps> = ({ data }, token) => {
 
 	const handleRemoveClick = async () => {
 		// Get class code
-		// const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${'asdf'}`);
-		const res = await axios.get('https://google.com');
-		// const res = {'data': '0'};
+		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		console.log(JSON.stringify(token));
+		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
+		console.log(res.data)
+		// const res = await axios.get('https://google.com');
+		// const res = {'data': '0'};/
 		// if (res?.data[0]) {
 		// 	// const idToDelete = res.data[0].find(())
 		// 	console.log(JSON.stringify(res.data[0]))

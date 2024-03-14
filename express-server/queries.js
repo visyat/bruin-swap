@@ -228,6 +228,7 @@ const getWishlistByUser = (request, response) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
+            console.log(`Found: ${results.rows}`)
             response.status(200).json(results.rows); 
         })
     }
@@ -239,10 +240,12 @@ const getEnrollmentsByUser = (request, response) => {
         response.status(400).json({msg: `INVALID USER JWT`});
     }  
     else {
-        pool.query('SELECT * FROM enrollments JOIN classes ON wishlist.section_code=classes.section_code WHERE user_jwt=$1;', [user_jwt], (error,results) => {
+        pool.query('SELECT * FROM enrollments JOIN classes ON enrollments.section_code=classes.section_code WHERE user_jwt=$1;', [user_jwt], (error,results) => {
             if (error) {
+                // console.log(`Error: ${'SELECT * FROM enrollments JOIN classes ON wishlist.section_code=classes.section_code WHERE user_jwt=$1;', [user_jwt]}`)
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
+            console.log(`Found: ${results.rows}`)
             response.status(200).json(results.rows); 
         })
     }
@@ -358,14 +361,19 @@ const addNewWishlistEntry = (request, response) => {
     const {user_jwt, class_wished} = request.body
 
     if (user_jwt === null || user_jwt === undefined || typeof(user_jwt) !== 'string' || user_jwt === '') {
+        
         response.status(400).json({msg: `INVALID USER JWT`});
     } 
     else if (class_wished === null || class_wished === undefined || typeof(class_wished) !== 'string' || class_wished === '') {
         response.status(400).json({msg: `INVALID CLASS WISH`});
     }
     else {
-        pool.query('INSERT INTO wishlist VALUES ($1, $2);' [user_jwt, class_wished], (error, results) => {
+        console.log('Good query');
+        pool.query('INSERT INTO wishlist VALUES ($1, $2);', [user_jwt, class_wished], (error, results) => {
             if (error) {
+                console.log('BAD QUERY');
+                console.log('INSERT INTO wishlist VALUES ($1, $2);');
+                console.log([user_jwt, class_wished]);
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
             response.status(200).json({msg: `WISHLIST INSERT SUCCESSFUL`})
@@ -382,7 +390,7 @@ const addNewEnrollmentEntry = (request, response) => {
         response.status(400).json({msg: `INVALID CLASS ENROLLED`});
     } 
     else {
-        pool.query('INSERT INTO enrollments VALUES ($1, $2);' [user_jwt, class_enrolled], (error, results) => {
+        pool.query('INSERT INTO enrollments VALUES ($1, $2);', [user_jwt, class_enrolled], (error, results) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }

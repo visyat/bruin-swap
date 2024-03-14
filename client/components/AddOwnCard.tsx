@@ -16,7 +16,7 @@ import swal from 'sweetalert';
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles({
-	loginContainer: {
+	cardContainer: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 	infoEntry: {
 		width: '33.333',
 	},
-	loginItemContainer: {
+	cardItemContainer: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'flex-start',
@@ -125,21 +125,11 @@ const AddListingPage = () => {
 		fetchClasses();
 	}, []);
 
-	const dropdownId = useId('dropdown-default');
-	const departmentName = useId('departmentName');
-
-	// Function to handle form submission
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		// Handle form submission logic here
-		// console.log('Form submitted:', { department, course, professor, lectureSection });
-	};
-
 	// TODO: properly filter finding posts
-	const submitPost = async () => {
+	const submitWishlist = async () => {
 		// First, validate post
 		// Make sure such a class exists
-		const classToDrop = classes.find((c: ClassRemote) => {
+		const classToAdd = classes.find((c: ClassRemote) => {
 			// console.log(JSON.stringify(c));
 			return (
 				c.department === department &&
@@ -149,36 +139,49 @@ const AddListingPage = () => {
 			);
 		});
 
-		// console.log(department, course, professor, lectureSection);
-
-		const classWanted = classes.find((c: ClassRemote) => {
-			// console.log(JSON.stringify(c));
-			return (
-				c.department === departmentWanted &&
-				c.course_num === courseWanted &&
-				c.professor === professorWanted &&
-				c.disc_section === lectureSectionWanted
-			);
-		});
-
-		// console.log(JSON.stringify(classToDrop));
-		// console.log(JSON.stringify(classWanted));
-
-		// CS000331A
-
-		if (!classToDrop || !classWanted) {
+		if (!classToAdd) {
 			swal('Those classes were not found.');
 			return;
 		}
 
-		const newTransaction = {
-			t_id: Math.floor(Math.random() * 32767),
+		const newWishlistItem = {
 			user_jwt: token,
-			class_wanted: classWanted.section_code,
-			class_dropped: classToDrop.section_code,
+			class_wished: classToAdd.section_code,
 		}
 
-		axios.post(`${process.env.NEXT_PUBLIC_API_URI}/transactions`, newTransaction)
+		axios.post(`${process.env.NEXT_PUBLIC_API_URI}/wishlist`, newWishlistItem)
+			.then((res) => {
+				swal('Success!');
+				router.push('/');
+			}).catch((err) => {
+				swal('Something went wrong. Please try again');
+			})
+	}
+
+	const submitHeld = async () => {
+		// First, validate post
+		// Make sure such a class exists
+		const classToAdd = classes.find((c: ClassRemote) => {
+			// console.log(JSON.stringify(c));
+			return (
+				c.department === department &&
+				c.course_num === course &&
+				c.professor === professor &&
+				c.disc_section === lectureSection
+			);
+		});
+
+		if (!classToAdd) {
+			swal('Those classes were not found.');
+			return;
+		}
+
+		const newHeldItem = {
+			user_jwt: token,
+			class_enrolled: classToAdd.section_code,
+		}
+
+		axios.post(`${process.env.NEXT_PUBLIC_API_URI}/enrollments`, newHeldItem)
 			.then((res) => {
 				swal('Success!');
 				router.push('/');
@@ -188,10 +191,10 @@ const AddListingPage = () => {
 	}
 
 	return (
-		<div className={styles.loginContainer}>
-			<LargeTitle>Add Listing</LargeTitle>
+		<div className={styles.cardContainer}>
+			<LargeTitle>Add Class</LargeTitle>
 			{/* <form onSubmit={handleSubmit}> */}
-				<div className={styles.loginItemContainer}>
+				<div className={styles.cardItemContainer}>
 					<Label>Course Department:</Label>
 					<Dropdown 
 						placeholder='Select Department'
@@ -205,7 +208,7 @@ const AddListingPage = () => {
 						)}
 					</Dropdown>
 				</div>
-				<div className={styles.loginItemContainer}>
+				<div className={styles.cardItemContainer}>
 					<Label htmlFor='course'>Course:</Label>
 					<Dropdown 
 						placeholder='Select Course'
@@ -219,7 +222,7 @@ const AddListingPage = () => {
 						)}
 					</Dropdown>
 				</div>
-				<div className={styles.loginItemContainer}>
+				<div className={styles.cardItemContainer}>
 					<Label htmlFor='professor'>Professor:</Label>
 					<Dropdown
 						placeholder='Select Professor'
@@ -233,7 +236,7 @@ const AddListingPage = () => {
 						)}
 					</Dropdown>
 				</div>
-				<div className={styles.loginItemContainer}>
+				<div className={styles.cardItemContainer}>
 					<Label>Lecture Section:</Label>
 					<Input
 						type='text'
@@ -244,61 +247,11 @@ const AddListingPage = () => {
 					/>
 				</div>
 
-				<div className={styles.loginItemContainer}>
-					<Label>Course Department Wanted:</Label>
-					<Dropdown 
-						placeholder='Select Department'
-						value={departmentWanted ? departmentWanted : ''}
-						onOptionSelect={(e, data) => setDepartmentWanted(data.optionText)}
-					>
-						{departmentList.map((option: string) =>
-							<Option key={option} value={option}>
-								{option}
-							</Option>
-						)}
-					</Dropdown>
-				</div>
-				<div className={styles.loginItemContainer}>
-					<Label htmlFor='course'>Course Wanted:</Label>
-					<Dropdown 
-						placeholder='Select Course'
-						value={courseWanted ? courseWanted : ''}
-						onOptionSelect={(e, data) => setCourseWanted(data.optionText)}
-					>
-						{courseList.map((option: string) =>
-							<Option key={option} value={option}>
-								{option}
-							</Option>
-						)}
-					</Dropdown>
-				</div>
-				<div className={styles.loginItemContainer}>
-					<Label htmlFor='professor'>Professor Wanted:</Label>
-					<Dropdown
-						placeholder='Select Professor'
-						value={professorWanted ? professorWanted : ''}
-						onOptionSelect={(e, data) => setProfessorWanted(data.optionText)}
-					>
-						{professorList.map((option: string) =>
-							<Option key={option} value={option}>
-								{option}
-							</Option>
-						)}
-					</Dropdown>
-				</div>
-				<div className={styles.loginItemContainer}>
-					<Label>Lecture Section Wanted:</Label>
-					<Input
-						type='text'
-						id='discussionSection'
-						value={lectureSectionWanted}
-						placeholder='1A'
-						onChange={(input) => setLectureSectionWanted(input.target.value)}
-					/>
-				</div>
-
-				<Button type='submit' className={styles.submitButton} onClick={() => submitPost()}>
-					Submit
+				<Button type='submit' className={styles.submitButton} onClick={() => submitWishlist()}>
+					Add to Wishlist
+				</Button>
+				<Button type='submit' className={styles.submitButton} onClick={() => submitHeld()}>
+					Add held Class
 				</Button>
 			{/* </form> */}
 		</div>
