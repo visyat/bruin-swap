@@ -76,6 +76,9 @@ Below are some tutorials we used to help guide our implementation:
 * https://blog.logrocket.com/crud-rest-api-node-js-express-postgresql/
 * https://blog.logrocket.com/sending-emails-node-js-nodemailer/
 * https://nathansmith.io/posts/scraping-enrollment-data-from-the-ucla-registrar-part-one/#fnref:4
+* https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_getting_started
+* https://plainenglish.io/blog/how-to-implement-a-search-bar-in-react-js
+* https://react.dev/learn
 
 ## Authors
 BruinSwap was made as a project for COM SCI 35L (Winter 2024), taught by Professor Paul Eggert. It was built by Vishal Yathish, Rathul Anand, Aditya Pai, Christian Giron-Michel, and Matthew Day.  
