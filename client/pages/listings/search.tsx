@@ -9,31 +9,9 @@ import axios from 'axios';
 import swal from 'sweetalert';
 
 const useStyles = makeStyles({
-	searchTitle: {
-		marginTop: '10px',
-		marginBottom: '10px',
-		textAlign: 'center',
-		fontSize: '30px',
-	},
-	classes: {
-		width: '100%',
-		height: '100%',
-		marginLeft: '0 auto',
-		marginRight: '0 auto',
-		display: 'grid',
-		gridTemplateColumns: '2fr 2fr 2fr',
-		// placeItems: 'center',
-		alignItems: 'center',
-		gridGap: '100px',
-	},
-	card: {
-		cursor: 'pointer',
-		width: '100%',
-		minHeight: '100px',
-		height: '100%',
+	centerTitle:{
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 });
@@ -101,6 +79,8 @@ const Search = () => {
 	}, []);
 
 	return (
+		<div className={styles.centerTitle}>
+			<LargeTitle>Course Search</LargeTitle>
 		<div>
 			<div className={styles.searchTitle}>
 				<h1>Listings</h1>
@@ -115,4 +95,4 @@ const Search = () => {
 	);
 };
 
-export default Search;
+export default Page;

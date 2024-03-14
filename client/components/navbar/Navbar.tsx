@@ -1,6 +1,7 @@
-// components/navbar/Navbar.tsx
-'use client';
 
+// components/navbar/Navbar.tsx
+
+'use client'
 import Link from 'next/link';
 import { makeStyles, shorthands, Tab, TabList } from '@fluentui/react-components';
 import type { TabListProps } from '@fluentui/react-components';
@@ -17,8 +18,8 @@ const Navbar = (props: Partial<TabListProps>) => {
 	return (
 		<nav className={styles.topnav}>
 			{/* Root */}
-			<Link href='/' className={styles.navItem}>
-				<p>BruinSwap</p>
+			<Link href='/' className={`${styles.navItem} ${styles.bruinSwap}`}>
+			<img src='https://i.imgur.com/16fVOqH.png'className={styles.image} />
 			</Link>
 			{/* Course search */}
 			{/* <div className={styles.course_search}> */}

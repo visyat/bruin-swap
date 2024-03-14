@@ -1,48 +1,58 @@
-import { useState, useEffect } from 'react';
+import { makeStyles, shorthands } from '@fluentui/react-components';
+import { OpenCardMode } from '@fluentui/react';
+import ClassCard from '../components/classcard';
+import { LISTINGS } from '../constants/temp_data';
+import { useRouter } from 'next/router';
+import { IListing } from '../types/listing';
 
-const Page = () => {
-	const [searchTerm, setSearchTerm] = useState('');
+const useStyles = makeStyles({
+	searchTitle: {
+		marginTop: '10px',
+		marginBottom: '10px',
+		textAlign: 'center',
+		fontSize: '30px',
+	},
+	classes: {
+		width: '100%',
+		height: '100%',
+		marginLeft: '0 auto',
+		marginRight: '0 auto',
+		display: 'grid',
+		gridTemplateColumns: '2fr 2fr 2fr',
+		// placeItems: 'center',
+		alignItems: 'center',
+		gridGap: '100px',
+	},
+	card: {
+		cursor: 'pointer',
+		width: '100%',
+		minHeight: '100px',
+		height: '100%',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+});
 
-	const [token, setToken] = useState<string | null>(null);
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		setToken(token);
-	}, []);
-
-	const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-		setSearchTerm(event.target.value);
-		// You can perform search-related actions here
-	};
+const Search = () => {
+	const styles = useStyles();
 
 	return (
-		<div
-			className='App'
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: '60vh',
-			}}
-		>
-			<h1>Course Swap</h1>
-			<input
-				type='text'
-				placeholder='Search...'
-				style={{
-					padding: '8px 12px',
-					border: '2px solid #ccc',
-					borderRadius: '20px',
-					fontSize: '16px',
-					width: '300px',
-					outline: 'none',
-				}}
-				onChange={handleSearchChange}
-				value={searchTerm}
-			/>
-			{token}
+		<div>
+			<div className={styles.searchTitle}>
+				<h1>Listings</h1>
+			</div>
+			<div className={styles.classes}>
+				{LISTINGS.map((listing: IListing) => (
+					<div className={styles.card} key={listing.transaction_id}>
+						<ClassCard data={listing} />
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };
 
-export default Page;
+export default Search;
+
