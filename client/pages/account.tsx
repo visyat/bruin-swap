@@ -1,48 +1,68 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import constStyles from '../styles/Account.module.css';
+import styles from '../styles/Account.module.css';
 import ClassCardAccount from '../components/ClassCardAccount';
 import ProfileForm from '../components/ProfileForm';
 import ClassCardWishlist from '../components/ClassCardWishlist';
 import { useRouter } from 'next/router';
-import { Title1, makeStyles } from '@fluentui/react-components';
+import { makeStyles } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
-	title: {
-		textAlign: 'center',
+	container: {
+		width: '100%',
+		minHeight: '10vh',
+		// flexGrow: 1,
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
 	},
-	informationContainer: {
+	optionContainer: {
 		display: 'flex',
 		flexDirection: 'column',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
-		marginTop: '20px',
-		marginBottom: '10px',
-		marginLeft: '100px',
 	},
-	inputField: {
-		marginBottom: '10px',
-		fontWeight: 'bold',
+	contentContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
 	},
-	button: {
-		color: 'gray',
-	},
-
-	subTitle: {
-		textAlign: 'left',
+	searchTitle: {
 		marginTop: '10px',
 		marginBottom: '10px',
+		textAlign: 'center',
+		fontSize: '30px',
 	},
-	submitButton: {
-		marginTop: '10px',
-		marginBottom: '16px',
+	classes: {
+		width: '100%',
+		height: '100%',
+		marginLeft: '0 auto',
+		marginRight: '0 auto',
+		display: 'grid',
+		gridTemplateColumns: '2fr 2fr 2fr',
+		// placeItems: 'center',
+		alignItems: 'center',
+		gridGap: '100px',
+	},
+	card: {
+		cursor: 'pointer',
+		width: '100%',
+		minHeight: '100px',
+		height: '100%',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 });
 
 const Account = () => {
-	const styles = useStyles();
 	const router = useRouter();
+	const localStyles = useStyles();
 
-	// Login protect
+	// Login protecto
 	const [token, setToken] = useState<string | null>(null);
 	useEffect(() => {
 		const token = localStorage.getItem('token');
@@ -63,21 +83,18 @@ const Account = () => {
 	let content;
 	if (output === 'Profile Information') {
 		content = (
-		<div className={styles.informationContainer}>
 			<ProfileForm
 				email='someone@example.com'
 				fullName='Someone Something'
 				major='Electrical Engineering'
 				gradYear='2023'
 			/>
-		</div>
-
 		);
 	} else if (output === 'Current Classes') {
 		content = (
-			<div className={styles.informationContainer}>
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<Title1>Current Classes</Title1>
+					<p>Current Classes</p>
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<ClassCardAccount
@@ -103,9 +120,9 @@ const Account = () => {
 		);
 	} else if (output === 'Wishlist Classes') {
 		content = (
-			<div className={styles.informationContainer}>
+			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div>
-					<Title1>Wishlist Classes</Title1>
+					<p>Wishlist Classes</p>
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<ClassCardWishlist
@@ -130,39 +147,37 @@ const Account = () => {
 			</div>
 		);
 	} else {
-		content = <Title1 className={styles.informationContainer}>No content selected</Title1>;
+		content = <div>No content selected</div>;
 	}
 
 	return (
-		<div>
-			<div>
-				<button
-					className={constStyles.profileButton}
-					onClick={() => handleButtonClick('Profile Information')}
-				>
-					Profile Information
-				</button>
+		<div className={localStyles.container} style={{backgroundColor: 'yellow'}}>
+			<div className={localStyles.optionContainer}>
+				<div>
+					<button className={styles.profileButton} onClick={() => handleButtonClick('Profile Information')}>
+						Profile Information
+					</button>
+				</div>
+				<div>
+					<button className={styles.currentButton} onClick={() => handleButtonClick('Current Classes')}>
+						Current Classes
+					</button>
+				</div>
+				<div>
+					<button className={styles.wishlistButton} onClick={() => handleButtonClick('Wishlist Classes')}>
+						Wishlist Classes
+					</button>
+				</div>
 			</div>
+			<div className={localStyles.contentContainer}>
+				{content}
+				{/* <div>
+					<span className={`${styles.divider} ${styles.flexContainer}`}></span>
+				</div>
 
-			<div>
-				<button
-					className={constStyles.currentButton}
-					onClick={() => handleButtonClick('Current Classes')}
-				>
-					Current Classes
-				</button>
-			</div>
-
-			<div>
-				<button
-					className={constStyles.wishlistButton}
-					onClick={() => handleButtonClick('Wishlist Classes')}
-				>
-					Wishlist Classes
-				</button>
-			</div>
-			<div>
-				<span className={constStyles.outputContainer}>{content}</span>
+				<div>
+					<span className={styles.outputContainer}>{content}</span>
+				</div> */}
 			</div>
 		</div>
 	);
