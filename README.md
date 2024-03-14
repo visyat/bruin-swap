@@ -74,7 +74,8 @@ npm run dev
 ## References
 Below are some tutorials we used to help guide our implementation: 
 * https://blog.logrocket.com/crud-rest-api-node-js-express-postgresql/
-* https://blog.logrocket.com/sending-emails-node-js-nodemailer/ 
+* https://blog.logrocket.com/sending-emails-node-js-nodemailer/
+* https://nathansmith.io/posts/scraping-enrollment-data-from-the-ucla-registrar-part-one/#fnref:4
 
 ## Authors
 BruinSwap was made as a project for COM SCI 35L (Winter 2024), taught by Professor Paul Eggert. It was built by Vishal Yathish, Rathul Anand, Aditya Pai, Christian Giron-Michel, and Matthew Day.  
