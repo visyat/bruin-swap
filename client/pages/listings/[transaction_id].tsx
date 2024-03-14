@@ -15,6 +15,8 @@ import {
 } from '@fluentui/react-components';
 import { ArrowSwapFilled } from '@fluentui/react-icons';
 import { tokens } from '@fluentui/react-theme';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const useStyles = makeStyles({
 	container: {
@@ -93,10 +95,15 @@ const ListingPage = () => {
 	const { transaction_id } = router.query;
 	let transaction_id_num = -1;
 
-	// LOGINPROTECTTODO
-	if (false) {
-		router.push('/login');
-	}
+	// Login protected
+	const [token, setToken] = useState<string | null>(null);
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setToken(token);
+		if (!token) {
+			router.push('/login');
+		}
+	}, []);
 
 	useEffect(() => {
 		console.log(`Transaction param: ${transaction_id}`);
@@ -118,13 +125,34 @@ const ListingPage = () => {
 			}
 			// Try to fetch listing data
 			try {
-				// fetch here
-				const res = LISTINGS.filter(
-					(listing: IListing) => listing.transaction_id == transaction_id_num,
-				)[0];
-				setListing(res);
-			} catch (error) {
-				console.log(`Could not get transaction ${transaction_id}: ${error}`);
+				const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/transactions-by-tid/${transaction_id}`);
+				console.log(JSON.stringify(res.data));
+
+				const class_drop_res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes/${res.data[0].class_to_drop}`);
+				const class_wanted_res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes/${res.data[0].class_wanted}`);
+				const user_id_res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/users/${res.data[0].user_jwt}`);
+				console.log(JSON.stringify(class_drop_res.data[0]))
+				console.log(JSON.stringify(class_wanted_res.data[0]))
+				console.log(JSON.stringify(user_id_res.data[0].user_id))
+
+				const fetchedListing = {
+					transaction_id: parseInt(transaction_id as string),
+					user_id: user_id_res.data[0].user_id,
+					classDept: class_drop_res.data[0].department,
+					classNum: class_drop_res.data[0].course_num,
+					classTitle: class_drop_res.data[0].course_name,
+					classWanted: [class_wanted_res.data[0].department+' '+class_wanted_res.data[0].course_num],
+					instructor: class_drop_res.data[0].professor,
+					lecture: class_drop_res.data[0].disc_section,
+				};	
+				
+				setListing(fetchedListing);
+
+				// console.log(JSON.stringify(listing));
+				// console.log(JSON.stringify(fetchedListing));
+			} catch (err) {
+				swal('Something went wrong fetching that transaction.');
+				router.push('/listings/search');
 			}
 			setIsLoading(false);
 		};
