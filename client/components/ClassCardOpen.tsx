@@ -98,14 +98,14 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 					</div>
 				}
 				description={<Caption1>{`${instructor}`}</Caption1>}
-			/>
+			/> 
 			{/* Include CardPreview for wanted classes */}
 			<CardFooter
 				className={styles.footer}
 				action={
 					(<Button
 						className={styles.swap}
-						icon={<ArrowSwapFilled />}
+							icon={<ArrowSwapFilled />}
 						as='button'
 						appearance='primary'
 						shape='rounded'

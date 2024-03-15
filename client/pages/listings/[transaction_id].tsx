@@ -175,6 +175,7 @@ const ListingPage = () => {
 	}, [transaction_id]); // Should not change
 
 	const handleSwapRequestClick = async () => {
+		// TODO: block spamming requests.
 		console.log(`Selected: ${selectedClassIndex}`);
 		if (selectedClassIndex === null) {
 			console.log('No class was selected');
