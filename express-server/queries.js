@@ -519,35 +519,32 @@ const requestTransaction = (request, response) => {
             });
     });
 };
-
-
 const rejectRequest = (request, response) => {
-    const transaction_id = request.params.transaction_id
+    const transaction_id = parseInt(request.params.transaction_id)
 
+    pool.query (
+        `SELECT users.user_name AS requester_name, users.email AS requester_email, classes.department AS cd_dept, classes.course_num AS cd_cn
+        FROM active_transactions 
+        JOIN users ON active_transactions.requesting_user=users.user_id
+        JOIN classes ON active_transactions.class_to_drop=classes.section_code
+        WHERE transaction_id=$1`, [transaction_id], (e_not, res) => {
+            if (e_not)
+            {
+                response.status(400).json({ msg: 'ERROR' });  
+            }
+            const {requester_name, requester_email, cd_dept, cd_cn} = res.rows[0]
+            const class_drop = cd_dept.concat(" ", cd_cn)
+            const req = {
+                "t_class": class_drop, 
+                "requester_name": requester_name, 
+                "requester_email":requester_email
+            }
+            notifyRejectRequest (request=req)
+        })
     pool.query ('UPDATE active_transactions SET requested=FALSE, requesting_user=NULL WHERE transaction_id=$1;', [transaction_id], (error, results) => {
         if (error) {
             response.status(400).json({msg: 'INVALID QUERY' }); 
         }
-        pool.query (
-            `SELECT users.name AS requester_name, users.email AS requester_email, classes.department AS cd_dept, classes.course_num AS cd_cn
-            FROM active_transactions 
-            JOIN users ON active_transactions.requesting_user=users.user_id
-            JOIN classes ON active_transactions.class_to_drop=classes.section_code
-            WHERE transaction_id=$1`, [transaction_id], (e_not, res) => {
-                if (e_not)
-                {
-                    response.status(400).json({ msg: 'ERROR' });  
-                }
-
-                const {requester_name, requester_email, cd_dept, cd_cn} = res.rows[0]
-                const class_drop = cd_dept.concat(" ", cd_cn)
-                const req = {
-                    "t_class": class_drop, 
-                    "requester_name": requester_name, 
-                    "requester_email":requester_email
-                }
-                notifyRejectRequest (request=req)
-            })
         response.status(200).json({msg:'REQUEST REJECTED'})
     })
 }
@@ -620,17 +617,13 @@ const deleteTransaction = (request, response) => {
     }
 }
 const acceptRequest = (request, response) => {
-    const transaction_id = request.params.transaction_id 
+    const transaction_id = parseInt(request.params.transaction_id)
 
     if (transaction_id === null || transaction_id === undefined || typeof(transaction_id) !== 'number' || transaction_id === '') {
         response.status(400).json({msg: `INVALID TRANSACTION ID`});
     }  
     else {
-        pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
-            if (error) {
-                response.status(400).json({ msg: 'INVALID QUERY' });
-            }
-            pool.query(
+        pool.query(
             `SELECT poster.user_name AS poster_name, poster.email AS poster_email, requester.user_name AS requester_name, requester.email AS requester_email, class_drop.department AS cd_dept, class_drop.course_num AS cd_cn
             FROM active_transactions 
             JOIN users AS poster ON active_transactions.user_jwt=poster.user_jwt
@@ -652,6 +645,10 @@ const acceptRequest = (request, response) => {
                 }
                 notifyAcceptRequest(request=req)
             })
+        pool.query('DELETE FROM active_transactions WHERE transaction_id=$1;', [transaction_id], (error, results) => {
+            if (error) {
+                response.status(400).json({ msg: 'INVALID QUERY' });
+            }
 
             response.status(200).json({msg: `TRANSACTION ${transaction_id} DELETED`})
         })

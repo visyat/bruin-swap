@@ -69,7 +69,7 @@ const notifyRejectRequest = (request) => {
     transporter.use('compile', hbs(handlebarOptions));
     const mailOptions = {
         from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
-        template: "request",
+        template: "reject",
         to: requester_email,
         subject: `BruinSwap: Your Request Was Rejected`,
         context: {
@@ -88,7 +88,7 @@ const notifyAcceptRequest = (request) => {
     transporter.use('compile', hbs(handlebarOptions));
     const mailOptions = {
         from: `"Bruin Swap" <${process.env.MAIL_ADDRESS}>`,
-        template: "request",
+        template: "accept",
         to: requester_email,
         subject: `BruinSwap: Your Request Was Approved!`,
         context: {
