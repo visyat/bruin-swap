@@ -16,7 +16,7 @@ git clone https://github.com/visyat/bruin-swap.git
 
 From here, place the required keys into the files `bruin-swap/express-server/.env` and `bruin-swap/client/.env.local`, to properly access our server, PostgreSQL database, and mail framework. 
 
-Once you've done this, you can install dependencies for and run the server and frontend using the shell script we've provided (from within the main `bruin-swap` directory)
+Once you've done this, you can install dependencies for and run the server and frontend using the shell script we've provided (from within the main `bruin-swap` directory). An important note here, **this shell script will only work for UNIX users**; Windows users will have to run the configuration steps manually (as shown below), due to WSL's different support for background processes. In that case, the client and server should be run on different shell windows.
 
 ```
 ./setup.sh
