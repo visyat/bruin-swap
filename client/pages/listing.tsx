@@ -4,8 +4,8 @@ import AddListing from '@/components/AddListing';
 const useStyles = makeStyles({
 	container: {
 		width: '100%',
-		height: '80vh',
-		flexGrow: 1,
+		height: '120vh',
+		flexGrow: 0.4,
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',

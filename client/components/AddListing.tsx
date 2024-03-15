@@ -9,6 +9,8 @@ import {
 	tokens,
 	useId,
 	Option,
+	Divider,
+	Title1,
 } from '@fluentui/react-components';
 import { FormEvent, FormEventHandler, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -25,6 +27,7 @@ const useStyles = makeStyles({
 		boxShadow: '0 6px 7px rgba(0, 0, 0, 0.3)',
 		...shorthands.borderRadius(tokens.borderRadiusXLarge),
 		backgroundColor: 'rgba(0, 0, 0, 0.02)',
+		fontWeight:'bold',
 		// borderR
 	},
 	title: {
@@ -49,6 +52,13 @@ const useStyles = makeStyles({
 	submitButton: {
 		alignItems: 'center',
 		marginBottom: '10px',
+	},
+	divider: {
+		backgroundColor: '#0078d4',
+		fontWeight:'bold',
+		height: '12px',
+		width: '300px',
+		alignItems: 'center',
 	},
 });
 
@@ -191,6 +201,9 @@ const AddListingPage = () => {
 		<div className={styles.loginContainer}>
 			<LargeTitle>Add Listing</LargeTitle>
 			{/* <form onSubmit={handleSubmit}> */}
+			<div>
+				<Title1>Course You Want to Drop: </Title1>
+			</div>
 				<div className={styles.loginItemContainer}>
 					<Label>Course Department:</Label>
 					<Dropdown 
@@ -243,9 +256,11 @@ const AddListingPage = () => {
 						onChange={(input) => setLectureSection(input.target.value)}
 					/>
 				</div>
-
+				<div>
+				<Title1>Course You Want in Exchange: </Title1>
+				</div>
 				<div className={styles.loginItemContainer}>
-					<Label>Course Department Wanted:</Label>
+					<Label>Course Department:</Label>
 					<Dropdown 
 						placeholder='Select Department'
 						value={departmentWanted ? departmentWanted : ''}
@@ -259,7 +274,7 @@ const AddListingPage = () => {
 					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
-					<Label htmlFor='course'>Course Wanted:</Label>
+					<Label htmlFor='course'>Course:</Label>
 					<Dropdown 
 						placeholder='Select Course'
 						value={courseWanted ? courseWanted : ''}
@@ -273,7 +288,7 @@ const AddListingPage = () => {
 					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
-					<Label htmlFor='professor'>Professor Wanted:</Label>
+					<Label htmlFor='professor'>Professor:</Label>
 					<Dropdown
 						placeholder='Select Professor'
 						value={professorWanted ? professorWanted : ''}
@@ -287,7 +302,7 @@ const AddListingPage = () => {
 					</Dropdown>
 				</div>
 				<div className={styles.loginItemContainer}>
-					<Label>Lecture Section Wanted:</Label>
+					<Label>Lecture Section:</Label>
 					<Input
 						type='text'
 						id='discussionSection'

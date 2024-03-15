@@ -1,6 +1,6 @@
 import { makeStyles, shorthands, LargeTitle } from '@fluentui/react-components';
-import { OpenCardMode } from '@fluentui/react';
-import ClassCard from '../../components/ClassCard';
+//import { OpenCardMode } from '@fluentui/react';
+import ClassCard from '../../components/classcard';
 // import { LISTINGS } from '../../constants/temp_data';
 import { useRouter } from 'next/router';
 import { IListing } from '../../types/listing';
@@ -14,6 +14,9 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		alignItems: 'center',
 	},
+	courseSearchTitle:{
+		color:'#2774AE'
+	}
 });
 
 interface TransactionRemote {
@@ -80,12 +83,14 @@ const Search = () => {
 
 	return (
 		<div className={styles.centerTitle}>
-			<LargeTitle>Course Search</LargeTitle>
+			<LargeTitle className={styles.courseSearchTitle}>Search Posts</LargeTitle>
 			<div>
 				<div className={styles.classes}>
 					{listings.map((listing: IListing) => (
 						<ClassCard data={listing} />
 					))}
+				</div>
+				<div>
 				</div>
 			</div>
 		</div>
