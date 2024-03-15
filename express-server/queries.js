@@ -144,7 +144,12 @@ const getTransactionsByUser = (request, response) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
-            response.status(200).json(results.rows); 
+            // console.log(`Rows: ${results}`)
+            if (!results) {
+                response.status(200).json([]);
+            } else {
+                response.status(200).json(results.rows); 
+            }
         }) 
     }
 }
@@ -228,8 +233,11 @@ const getWishlistByUser = (request, response) => {
             if (error) {
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
-            console.log(`Found: ${results.rows}`)
-            response.status(200).json(results.rows); 
+            if (!results) {
+                response.status(200).json([]);
+            } else {
+                response.status(200).json(results.rows); 
+            }
         })
     }
 }
@@ -245,8 +253,11 @@ const getEnrollmentsByUser = (request, response) => {
                 // console.log(`Error: ${'SELECT * FROM enrollments JOIN classes ON wishlist.section_code=classes.section_code WHERE user_jwt=$1;', [user_jwt]}`)
                 response.status(400).json({ msg: 'INVALID QUERY' });
             }
-            console.log(`Found: ${results.rows}`)
-            response.status(200).json(results.rows); 
+            if (!results) {
+                response.status(200).json([]);
+            } else {
+                response.status(200).json(results.rows); 
+            }
         })
     }
 }
