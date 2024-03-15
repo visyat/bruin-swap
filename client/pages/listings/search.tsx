@@ -1,4 +1,10 @@
-import { makeStyles, shorthands, LargeTitle } from '@fluentui/react-components';
+import { 
+	makeStyles,
+	shorthands, 
+	LargeTitle,
+	Dropdown,
+	Option,
+} from '@fluentui/react-components';
 //import { OpenCardMode } from '@fluentui/react';
 import ClassCard from '../../components/classcard';
 // import { LISTINGS } from '../../constants/temp_data';
@@ -10,6 +16,11 @@ import swal from 'sweetalert';
 import SearchPosts from '@/components/SearchPosts';
 
 const useStyles = makeStyles({
+	container: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+	},
 	centerTitle:{
 		display: 'flex',
 		flexDirection: 'column',
@@ -27,6 +38,9 @@ const useStyles = makeStyles({
 		justifyContent: 'flex-start',
 		width: '80vh',
 		height: '7vh'
+	},
+	classes: {
+		
 	}
 });
 
@@ -104,23 +118,19 @@ const Search = () => {
 	}, []);
 
 	return (
-	 
-		<div className={styles.centerTitle}>
-			<LargeTitle>Bruin Swap</LargeTitle>
-		<div/>
-			<div>
-				<div className={styles.classes}>
-					{listings.map((listing: IListing) => (
-						<ClassCard data={listing} />
-					))}
-				</div>
+		<div className={styles.container}>
+			<div className={styles.centerTitle}>
+				<LargeTitle>Bruin Swap</LargeTitle>
+			<div/>
 				<div>
-					<SearchPosts/>
-				</div>
-				<div>
+					<div className={styles.classes}>
+						{listings.map((listing: IListing) => (
+							<ClassCard data={listing} />
+						))}
+					</div>
 				</div>
 			</div>
-	</div>
+		</div>
 	);
 };
 

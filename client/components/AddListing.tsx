@@ -89,7 +89,6 @@ const AddListingPage = () => {
 	const [professor, setProfessor] = useState<string | undefined>(undefined);
 	const [lectureSection, setLectureSection] = useState<string>('');
 
-
 	const [departmentWanted, setDepartmentWanted] = useState<string | undefined>(undefined);
 	const [courseWanted, setCourseWanted] = useState<string | undefined>(undefined);
 	const [professorWanted, setProfessorWanted] = useState<string | undefined>(undefined);
@@ -98,7 +97,11 @@ const AddListingPage = () => {
 	const [departmentList, setDepartmentList] = useState<string[]>([]);
 	const [courseList, setCourseList] = useState<string[]>([]);
 	const [professorList, setProfessorList] = useState<string[]>([]);
-	const [lectureSectionList, setLectureSectionList] = useState<string[]>([]);
+
+	const [departmentListWanted, setDepartmentListWanted] = useState<string[]>([]);
+	const [courseListWanted, setCourseListWanted] = useState<string[]>([]);
+	const [professorListWanted, setProfessorListWanted] = useState<string[]>([]);
+
 
 	const [classes, setClasses] = useState<ClassRemote[]>([]);
 
@@ -109,14 +112,17 @@ const AddListingPage = () => {
 				const newDeptList = res.data.map((c: ClassRemote) => c.department);
 				const uniqueDeptList = newDeptList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 				setDepartmentList(uniqueDeptList);
+				setDepartmentListWanted(uniqueDeptList);
 
 				const newCourseList = res.data.map((c: ClassRemote) => c.course_num);
 				const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 				setCourseList(uniqueCourseList);
+				setCourseListWanted(uniqueCourseList);
 
 				const newProfessorList = res.data.map((c: ClassRemote) => c.professor);
 				const uniqueProfessorList = newProfessorList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 				setProfessorList(uniqueProfessorList);
+				setProfessorListWanted(uniqueProfessorList);
 				
 				setClasses(res.data);
 			}).catch((err) => {
@@ -124,12 +130,66 @@ const AddListingPage = () => {
 			});
 	};
 
-	// // Update once department selected
-	// useEffect(() => {
-	// 	const newCourseList = classes.map((c: ClassRemote) => c.course_num);
-	// 	const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
-	// 	setCourseList(uniqueCourseList);
-	// }, [department]);
+	// Update once department selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (department) {
+			console.log(department);
+			const newCourseList = classes.filter((c: ClassRemote) => {
+				// console.log(c.department+ '   ' + department);
+				return c.department === department;
+			}).map((c: ClassRemote) => c.course_num);
+			console.log(`New: ${JSON.stringify(newCourseList)}`)
+			const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			console.log(`New: ${JSON.stringify(uniqueCourseList)}`)
+			setCourseList(uniqueCourseList);
+		}
+	}, [department]);
+
+	// Update once department & coursenum selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (department && course) {
+			console.log(department+' '+course);
+			const newProfList = classes.filter((c: ClassRemote) => {
+				return c.department === department && c.course_num === course;
+			}).map((c: ClassRemote) => c.professor);
+			console.log(`New: ${JSON.stringify(newProfList)}`)
+			const uniqueProfList = newProfList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			setProfessorList(uniqueProfList);
+		}
+	}, [course]);
+
+
+	// Update once departmentwanted selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (departmentWanted) {
+			console.log(departmentWanted);
+			const newCourseList = classes.filter((c: ClassRemote) => {
+				// console.log(c.departmentWanted+ '   ' + departmentWanted);
+				return c.department === departmentWanted;
+			}).map((c: ClassRemote) => c.course_num);
+			console.log(`New: ${JSON.stringify(newCourseList)}`)
+			const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			console.log(`New: ${JSON.stringify(uniqueCourseList)}`)
+			setCourseListWanted(uniqueCourseList);
+		}
+	}, [departmentWanted]);
+
+	// Update once departmentwanted & coursenumwanted selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (departmentWanted && courseWanted) {
+			console.log(departmentWanted+' '+courseWanted);
+			const newProfList = classes.filter((c: ClassRemote) => {
+				return c.department === departmentWanted && c.course_num === courseWanted;
+			}).map((c: ClassRemote) => c.professor);
+			console.log(`New: ${JSON.stringify(newProfList)}`)
+			const uniqueProfList = newProfList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			setProfessorListWanted(uniqueProfList);
+		}
+	}, [courseWanted]);
 
 	useEffect(() => {
 		fetchClasses();
@@ -266,7 +326,7 @@ const AddListingPage = () => {
 						value={departmentWanted ? departmentWanted : ''}
 						onOptionSelect={(e, data) => setDepartmentWanted(data.optionText)}
 					>
-						{departmentList.map((option: string) =>
+						{departmentListWanted.map((option: string) =>
 							<Option key={option} value={option}>
 								{option}
 							</Option>
@@ -280,7 +340,7 @@ const AddListingPage = () => {
 						value={courseWanted ? courseWanted : ''}
 						onOptionSelect={(e, data) => setCourseWanted(data.optionText)}
 					>
-						{courseList.map((option: string) =>
+						{courseListWanted.map((option: string) =>
 							<Option key={option} value={option}>
 								{option}
 							</Option>
@@ -294,7 +354,7 @@ const AddListingPage = () => {
 						value={professorWanted ? professorWanted : ''}
 						onOptionSelect={(e, data) => setProfessorWanted(data.optionText)}
 					>
-						{professorList.map((option: string) =>
+						{professorListWanted.map((option: string) =>
 							<Option key={option} value={option}>
 								{option}
 							</Option>
