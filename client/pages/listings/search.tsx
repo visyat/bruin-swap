@@ -30,6 +30,7 @@ const Search = () => {
 	const fetchTransactions = async () => {
 		const transactionsRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/transactions`);
 		const transactions = transactionsRes.data;
+		console.log(`Getting: ${process.env.NEXT_PUBLIC_API_URI}/transactions`);
 
 		// console.log(JSON.stringify(transactions));
 		
@@ -75,7 +76,9 @@ const Search = () => {
 	}
 
 	useEffect(() => {
+		console.log('Fetching transactions');
 		fetchTransactions();
+		console.log('Fetched transactions');
 	}, []);
 
 	return (
