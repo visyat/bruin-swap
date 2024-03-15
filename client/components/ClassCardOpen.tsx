@@ -13,7 +13,7 @@ import {
 } from '@fluentui/react-components';
 import { ArrowSwapFilled } from '@fluentui/react-icons';
 import { IListing, IOpenTransaction } from '../types/listing';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
@@ -78,8 +78,9 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 		// It is guaranteed that transaction_id will be a number
 		axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/transactions/${transaction_id}`)
 			.then((res) => {
-				swal('Successfully removed!')
+				// swal('Successfully removed!')
 				setDeleted(true);
+				router.refresh()
 			}).catch((err) => {
 				swal('Something went wrong. Please try removing again.');
 			});
@@ -89,8 +90,9 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 		// It is guaranteed that transaction_id will be a number
 		axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/accept-request/${transaction_id}`)
 			.then((res) => {
-				swal('Successfully removed!')
+				// swal('Successfully removed!')
 				setDeleted(true);
+				router.refresh()
 			}).catch((err) => {
 				swal('Something went wrong. Please try removing again.');
 			});
@@ -100,7 +102,8 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 		// It is guaranteed that transaction_id will be a number
 		axios.put(`${process.env.NEXT_PUBLIC_API_URI}/reject-request/${transaction_id}`)
 			.then((res) => {
-				swal('Successfully rejected!')
+				// swal('Successfully rejected!')
+				router.refresh()
 			}).catch((err) => {
 				swal('Something went wrong. Please try removing again.');
 			});

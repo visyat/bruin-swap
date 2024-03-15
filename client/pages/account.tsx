@@ -127,6 +127,7 @@ const Account = () => {
 
 	const fetchWishlist = async () => {
 		// console.log(token);
+		console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
 		const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
 		// console.log(`${process.env.NEXT_PUBLIC_API_URI}/wishlist/${token}`);
 		// console.log('Wishlist');
@@ -259,9 +260,9 @@ const Account = () => {
 						as='button'
 						appearance='primary'
 						shape='rounded'
-						onClick={() => router.push('/add')}
+						onClick={() => router.push('/listing')}
 					>
-						Add to Wishlist
+						Add Listing
 					</Button>
 				</div>
 			</div>
