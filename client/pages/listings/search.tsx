@@ -4,6 +4,7 @@ import {
 	LargeTitle,
 	Dropdown,
 	Option,
+	Label,
 } from '@fluentui/react-components';
 //import { OpenCardMode } from '@fluentui/react';
 import ClassCard from '../../components/classcard';
@@ -39,8 +40,12 @@ const useStyles = makeStyles({
 		width: '80vh',
 		height: '7vh'
 	},
-	classes: {
+	dropdownContainer: {
 		
+	}, dropdowns: {
+		display: 'flex',
+		flexDirection: 'row',
+
 	}
 });
 
@@ -51,20 +56,103 @@ interface TransactionRemote {
 	class_to_drop: string, 
 };
 
+interface ClassRemote {
+	section_code: string;
+	department: string;
+	course_num: string;
+	course_name: string;
+	professor: string;
+	disc_section: string;
+};
+
 const Search = () => {
 	const styles = useStyles();
 	const [listings, setListings] = useState<IListing[]>([]);
-	const [searchTerm, setSearchTerm] = useState('');
+	const [listingRequested, setListingsRequested] = useState<IListing[]>([]);
+
+	const router = useRouter();
 	const [token, setToken] = useState<string | null>(null);
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		setToken(token);
+		if (!token) {
+			router.push('/login');
+		}
 	}, []);
 
-	const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-		setSearchTerm(event.target.value);
-		// You can perform search-related actions here
+	// State variables to store selected values
+	const [department, setDepartment] = useState<string | undefined>(undefined);
+	const [course, setCourse] = useState<string | undefined>(undefined);
+	const [professor, setProfessor] = useState<string | undefined>(undefined);
+	const [lectureSection, setLectureSection] = useState<string>('');
+
+	const [departmentList, setDepartmentList] = useState<string[]>([]);
+	const [courseList, setCourseList] = useState<string[]>([]);
+	const [professorList, setProfessorList] = useState<string[]>([]);
+
+	const [classes, setClasses] = useState<ClassRemote[]>([]);
+
+	const fetchClasses = async () => {
+		console.log('Actually fetching classes');
+		console.log(`${process.env.NEXT_PUBLIC_API_URI}/classes`);
+		axios.get(`${process.env.NEXT_PUBLIC_API_URI}/classes`)
+			.then((res) => {
+				// console.log(JSON.stringify(res.data));
+				const newDeptList = res.data.map((c: ClassRemote) => c.department);
+				const uniqueDeptList = newDeptList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setDepartmentList(uniqueDeptList);
+
+				const newCourseList = res.data.map((c: ClassRemote) => c.course_num);
+				const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setCourseList(uniqueCourseList);
+
+				const newProfessorList = res.data.map((c: ClassRemote) => c.professor);
+				const uniqueProfessorList = newProfessorList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+				setProfessorList(uniqueProfessorList);
+				
+				setClasses(res.data);
+			}).catch((err) => {
+				swal('Something went wrong fetching classes.')
+			});
 	};
+
+	// Update once department selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (department) {
+			console.log(department);
+			const newCourseList = classes.filter((c: ClassRemote) => {
+				// console.log(c.department+ '   ' + department);
+				return c.department === department;
+			}).map((c: ClassRemote) => c.course_num);
+			console.log(`New: ${JSON.stringify(newCourseList)}`)
+			const uniqueCourseList = newCourseList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			console.log(`New: ${JSON.stringify(uniqueCourseList)}`)
+			setCourseList(uniqueCourseList);
+			const newListings = listings.filter((t: IListing) => {
+				return t.classDept === department;
+			});
+			setListingsRequested(newListings);
+		}
+	}, [department]);
+
+	// Update once department & coursenum selected
+	useEffect(() => {
+		console.log('Dept selected');
+		if (department && course) {
+			console.log(department+' '+course);
+			const newProfList = classes.filter((c: ClassRemote) => {
+				return c.department === department && c.course_num === course;
+			}).map((c: ClassRemote) => c.professor);
+			console.log(`New: ${JSON.stringify(newProfList)}`)
+			const uniqueProfList = newProfList.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+			setProfessorList(uniqueProfList);
+			const newListings = listings.filter((t: IListing) => {
+				return t.classDept === department && t.classNum === course;
+			});
+			setListingsRequested(newListings);
+		}
+	}, [course]);
 
 	const fetchTransactions = async () => {
 		const transactionsRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/transactions`);
@@ -111,10 +199,12 @@ const Search = () => {
 
 		const listingsFiltered = listingsUnfiltered.filter((listing: IListing) => listing.classDept !== 'error');
 		setListings(listingsFiltered);
+		setListingsRequested(listingsFiltered);
 	}
 
 	useEffect(() => {
 		fetchTransactions();
+		fetchClasses();
 	}, []);
 
 	return (
@@ -122,13 +212,41 @@ const Search = () => {
 			<div className={styles.centerTitle}>
 				<LargeTitle>Bruin Swap</LargeTitle>
 			<div/>
-				<div>
-					<div className={styles.classes}>
-						{listings.map((listing: IListing) => (
-							<ClassCard data={listing} />
-						))}
-					</div>
+			<div className={styles.dropdowns}>
+				<div className={styles.dropdownContainer}>
+					<Dropdown 
+						placeholder='Select Department'
+						value={department ? department : ''}
+						onOptionSelect={(e, data) => setDepartment(data.optionText)}
+					>
+						{departmentList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
 				</div>
+				<div className={styles.dropdownContainer}>
+					<Dropdown 
+						placeholder='Select Course'
+						value={course ? course : ''}
+						onOptionSelect={(e, data) => setCourse(data.optionText)}
+					>
+						{courseList.map((option: string) =>
+							<Option key={option} value={option}>
+								{option}
+							</Option>
+						)}
+					</Dropdown>
+				</div>
+			</div>
+			<div>
+				<div>
+					{listingRequested.map((listing: IListing) => (
+						<ClassCard data={listing} />
+					))}
+				</div>
+			</div>
 			</div>
 		</div>
 	);
