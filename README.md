@@ -51,10 +51,6 @@ cd client
 npm i
 ```
 
-In the `client` directory, place the following in a file named `.env.local` to allow the browser to connect to the server:
-```
-NEXT_PUBLIC_API_URI="http://localhost:3000"
-```
 To run the completed application, enter the following command: 
 
 ```
@@ -62,8 +58,8 @@ npm run dev
 ```
 
 ## Main Features 
-1. **Creating Posts**: In the "Add Listing" Tab, users can create their own course swap proposal, stating a class they want to offer and a class they would like to get in exchange. 
-2. **Reading and Accepting Posts**: In the "Listings" Tab, users can see posts created by other users, and choose to make those swaps if they have the class being requested. 
+1. **Creating Posts**: In the "Add Listing" Tab, users can create their own course swap proposal, stating a class they want to offer and a class they would like to get in exchange. We provide a number of courses from our database that they can choose from (loaded with test data).
+2. **Reading and Accepting Posts**: In the "Listings" Tab, users can see posts created by other users, and choose to make those swaps if they have the class being requested. Once a request is made, the original poster has the option to either accept or reject those requests. Once a decision is made, the requester is notified/provided a status update. 
 3. **Notification on Transaction**: In the "Account" Tab, users can save courses to their wishlist. When a new post is created offering that course, they will get a notification via email that this was the case, giving them the opportunity to make the trade. 
 
 ## Tech Stack 
