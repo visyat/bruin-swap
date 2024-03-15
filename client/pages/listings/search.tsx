@@ -27,6 +27,9 @@ const useStyles = makeStyles({
 		justifyContent: 'flex-start',
 		width: '80vh',
 		height: '7vh'
+	},
+	classes: {
+		
 	}
 });
 
