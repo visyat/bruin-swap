@@ -74,8 +74,7 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 	const styles = useStyles();
 	const [deleted, setDeleted] = useState(false);
 
-	const handleSwapClick = () => {
-		console.log('Data:', data);
+	const handleDeleteClick = () => {
 		// It is guaranteed that transaction_id will be a number
 		axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/transactions/${transaction_id}`)
 			.then((res) => {
@@ -85,6 +84,27 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 				swal('Something went wrong. Please try removing again.');
 			});
 	};
+
+	const acceptRequest = () => {
+		// It is guaranteed that transaction_id will be a number
+		axios.delete(`${process.env.NEXT_PUBLIC_API_URI}/accept-request/${transaction_id}`)
+			.then((res) => {
+				swal('Successfully removed!')
+				setDeleted(true);
+			}).catch((err) => {
+				swal('Something went wrong. Please try removing again.');
+			});
+	}
+
+	const rejectRequest = () => {
+		// It is guaranteed that transaction_id will be a number
+		axios.put(`${process.env.NEXT_PUBLIC_API_URI}/reject-request/${transaction_id}`)
+			.then((res) => {
+				swal('Successfully rejected!')
+			}).catch((err) => {
+				swal('Something went wrong. Please try removing again.');
+			});
+	}
 
 	if (deleted) return <></>;
 
@@ -103,16 +123,44 @@ const ClassCardOpen: React.FC<CardProps> = ({ data }) => {
 			<CardFooter
 				className={styles.footer}
 				action={
-					(<Button
-						className={styles.swap}
+					(requested 
+					? <>
+						<Button
+							className={styles.swap}
 							icon={<ArrowSwapFilled />}
+							style={{marginRight: '10px'}}
+							as='button'
+							appearance='primary'
+							shape='rounded'
+							onClick={() => acceptRequest()}
+						>
+							Accept Request!
+						</Button>
+						<Button
+							className={styles.swap}
+							icon={<ArrowSwapFilled />}
+							style={{marginLeft: '10px'}}
+							as='button'
+							appearance='primary'
+							shape='rounded'
+							onClick={() => rejectRequest()}
+						>
+							Reject Request!
+						</Button>
+					</>
+					: <>
+					<Button
+						className={styles.swap}
+						icon={<ArrowSwapFilled />}
+						style={{marginLeft: '10px'}}
 						as='button'
 						appearance='primary'
 						shape='rounded'
-						onClick={() => handleSwapClick()}
+						onClick={() => handleDeleteClick()}
 					>
-						{requested ? 'Accepted!' : 'Delete'}
-					</Button>)
+						Delete Transaction
+					</Button>
+					</>)
 				}
 			>
 				<Caption1>Lecture: {lecture}</Caption1>
